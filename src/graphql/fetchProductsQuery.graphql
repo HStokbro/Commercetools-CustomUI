@@ -1,0 +1,17 @@
+query FetchProductsQuery($locale: Locale, $where: String) {
+  products(limit: 100, where: $where) {
+    results {
+      id
+      version
+      productType {
+        id
+        key
+      }
+      masterData {
+        current {
+          name(locale: $locale)
+        }
+      }
+    }
+  }
+}

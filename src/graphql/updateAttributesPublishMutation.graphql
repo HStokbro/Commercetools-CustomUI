@@ -1,0 +1,18 @@
+mutation UpdateAttributesPublishMutation(
+  $id: String
+  $version: Long!
+  $fieldName: String!
+  $value: String!
+) {
+  updateProduct(
+    id: $id
+    version: $version
+    actions: [
+      { setAttributeInAllVariants: { name: $fieldName, value: $value } }
+      { publish: {} }
+    ]
+  ) {
+    id
+    version
+  }
+}
