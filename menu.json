@@ -1,22 +1,25 @@
 {
-  "key": "examples-starter",
-  "uriPath": "examples-starter",
+  "key": "custom",
+  "uriPath": "custom",
   "icon": "RocketIcon",
-  "permissions": ["ViewProducts"],
   "featureToggle": null,
-  "submenu": [],
+  "submenu": [
+    {
+      "key": "bundles",
+      "uriPath": "custom/bundles",
+      "featureToggle": null,
+      "labelAllLocales": [
+        {
+          "locale": "en",
+          "value": "Bundles"
+        }
+      ]
+    }
+  ],
   "labelAllLocales": [
     {
       "locale": "en",
-      "value": "Starter"
-    },
-    {
-      "locale": "de",
-      "value": "Starter"
-    },
-    {
-      "locale": "es",
-      "value": "Starter"
+      "value": "Custom UI"
     }
   ]
 }
