@@ -10,6 +10,7 @@ import ViewOne from '../view-one';
 import ViewTwo from '../view-two';
 import messages from './messages';
 import styles from './main-view.mod.css';
+import Bundles from '../bundles';
 
 const MainView = (props) => {
   const intl = useIntl();
@@ -18,7 +19,7 @@ const MainView = (props) => {
     <Spacings.Inset scale="m">
       <Spacings.Stack scale="m">
         <Text.Headline as="h1" intlMessage={messages.title} />
-        <div className={styles['nav-header']}>
+        {/* <div className={styles['nav-header']}>
           <Spacings.Inline scale="s">
             <FlatButton
               as={Link}
@@ -37,7 +38,9 @@ const MainView = (props) => {
         <Switch>
           <Route path={`${props.match.path}/one`} component={ViewOne} />
           <Route path={`${props.match.path}/two`} component={ViewTwo} />
-        </Switch>
+        </Switch> */}
+
+        <Bundles />
       </Spacings.Stack>
     </Spacings.Inset>
   );
