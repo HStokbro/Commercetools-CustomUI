@@ -17,10 +17,10 @@ const PageUnauthorized = () => (
 
 const ApplicationRoutes = () => {
   const match = useRouteMatch();
-  const canViewProducts = useIsAuthorized({
-    demandedPermissions: [PERMISSIONS.ViewProducts],
+  const canManageProducts = useIsAuthorized({
+    demandedPermissions: [PERMISSIONS.ManageProducts],
   });
-  if (!canViewProducts) {
+  if (!canManageProducts) {
     return <PageUnauthorized />;
   }
   return (
