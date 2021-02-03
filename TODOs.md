@@ -1,0 +1,25 @@
+# TODOs going forward
+
+- OK - Setup GraphQL using hooks (Outdated documentation)
+- OK - Get locale to use for querying (No documentation)
+- OK - Query products (Not much documentation. I miss examples)
+- OK - Use UIKit (datatable, buttons, etc.) (Fair documentation)
+- OK - Show toast notifications (No documentation)
+- OK - Mutate product & variable field (Not much documentation. I miss examples)
+- OK - Investigate menu, routes (Fair documentation)
+- OK - Figure out how to hook into the Commercetools Redux store - (No documentation)
+- Build product bundle with references
+- Try to use UIKit select
+- Try to use UIKit accordion with ex. categories
+- Update version no after mutation
+- Build price setter example
+- Try to setup external API - See 
+- Setup Typescript (No documentation)
+- Try to build Typescript from GraphQL / graphql.schema.json
+- Split GraphQL into fragments
+- Setup path aliases
+- Plan UI & styling
+- Build routes and menu
+- Bulk imports? = https://docs.commercetools.com/import-api/overview
+- Clean up POC, Loading, Handling UI after success
+- Setup permissions (Removed permissions from menu.json, was giving a console error, need to look into why)
