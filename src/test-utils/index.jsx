@@ -19,13 +19,13 @@ const mergeWithDefaultOptions = (options = {}) => ({
 const renderApplication = (ui, options) =>
   renderApp(
     <ApplicationRoutes>{ui}</ApplicationRoutes>,
-    mergeWithDefaultOptions(options)
+    mergeWithDefaultOptions(options),
   );
 
 const renderApplicationWithRedux = (ui, options = {}) =>
   renderAppWithRedux(
     <ApplicationRoutes>{ui}</ApplicationRoutes>,
-    mergeWithDefaultOptions(options)
+    mergeWithDefaultOptions(options),
   );
 
 export { renderApplication, renderApplicationWithRedux };

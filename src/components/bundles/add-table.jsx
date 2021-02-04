@@ -90,6 +90,7 @@ const AddTable = ({ rows, selectionLvl1 }) => {
       id: selectionLvl1[0].id,
       version: selectionLvl1[0].version,
       fieldName,
+      // Value needs to be wrapped in quotes. TODO: Make util for this
       value: `"${JSON.stringify(selected).replaceAll('"', '\\"')}"`,
     };
 

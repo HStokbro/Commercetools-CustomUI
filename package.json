@@ -13,6 +13,7 @@
     "test": "jest --config jest.test.config.js",
     "test:watch": "jest --config jest.test.config.js --watch",
     "update-versions": "bulk-update-versions --match '^@commercetools-frontend/(?!ui-kit)(.*)'",
+    "lint": "eslint . --ext .js,.jsx,.gql,.graphql",
     "generate-schema": "graphql-codegen --config codegen-generate-schema.yml",
     "generate-schema-ts": "graphql-codegen --config codegen-generate-typescript.yml"
   },
@@ -21,6 +22,7 @@
     "@commercetools-frontend/actions-global": "18.2.2",
     "@commercetools-frontend/application-components": "^18.2.2",
     "@commercetools-frontend/application-shell": "18.2.2",
+    "@commercetools-frontend/application-shell-connectors": "^18.2.2",
     "@commercetools-frontend/assets": "18.1.0",
     "@commercetools-frontend/constants": "^18.2.2",
     "@commercetools-frontend/i18n": "18.2.2",

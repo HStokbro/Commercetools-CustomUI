@@ -10,7 +10,7 @@ exports.format = function format(extractedMessages) {
           // Return a simple key/value JSON object.
           [messageId]: extractedMessages[messageId].defaultMessage,
         }),
-        {}
+        {},
       )
   );
 };

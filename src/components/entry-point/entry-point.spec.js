@@ -1,13 +1,12 @@
 import { renderApplicationWithRedux } from '../../test-utils';
 
-const render = (options) => {
-  return renderApplicationWithRedux(null, {
+const render = (options) =>
+  renderApplicationWithRedux(null, {
     permissions: {
       canViewProducts: true,
     },
     ...options,
   });
-};
 
 describe('when route matches', () => {
   it('should render view', async () => {
@@ -34,7 +33,7 @@ describe('without permissions', () => {
       permissions: {},
     });
     await rendered.findByText(
-      /not enough permissions to access this resource/i
+      /not enough permissions to access this resource/i,
     );
   });
 });

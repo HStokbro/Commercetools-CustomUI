@@ -23,11 +23,11 @@ const loadMessages = (lang) => {
       // eslint-disable-next-line no-console
       console.warn(
         `Something went wrong while loading the app messages for ${lang}`,
-        error
+        error,
       );
 
       return {};
-    }
+    },
   );
 };
 

@@ -17,7 +17,7 @@ describe('main view', () => {
     expect(rendered.history.location).toEqual(
       expect.objectContaining({
         pathname: `${initialRoute}/one`,
-      })
+      }),
     );
   });
 });

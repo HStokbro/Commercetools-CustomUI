@@ -9,8 +9,6 @@ import { handleActionError } from '@commercetools-frontend/actions-global';
 import { FEATURE_FLAGS } from '../../constants';
 import loadMessages from '../../load-messages';
 
-require('dotenv').config();
-
 // Here we split up the main (app) bundle with the actual application business logic.
 // Splitting by route is usually recommended and you can potentially have a splitting
 // point for each route. More info at https://reactjs.org/docs/code-splitting.html
