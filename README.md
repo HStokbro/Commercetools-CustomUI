@@ -7,7 +7,7 @@
 
 An improved template for developing a custom Commercetools Merchant Center application.
 
-Its starting point was https://github.com/commercetools/merchant-center-application-kit, but this template is enhanced with linting, schema download, apollo client, utilities, examples, etc.
+Its starting point was https://github.com/commercetools/merchant-center-application-kit, but this template is enhanced with linting, schema download, apollo client, utilities, examples, documentation, etc.
 
 ## Installation
 
@@ -53,6 +53,8 @@ The `custom-application-config.json` has a `env.production` configuration object
 ## What happens at startup
 - index.jsx - renders EntryPoint component
 - components/entry-point/entry-point.jsx
+  - sets up redux
+  - has a comments example for injecting custom reducers
   - sets up global error handling, which uses redux to handle showing ui notifications for errors
   - adds menu items to the Commercetools menu to enter this app
   - wraps app in ApplicationShell, which handles authentication, sets up apollo client and loads app inside Commercetools ui
