@@ -8,6 +8,9 @@
 - OK - Mutate product & variable field (Not much documentation. I miss examples)
 - OK - Investigate menu, routes (Fair documentation)
 - OK - Figure out how to hook into the Commercetools Redux store - (No documentation)
+- OK - Add eslint
+- OK - Download graphql schema
+- OK - Setup Apollo client
 - Build product bundle with references
 - Try to use UIKit select
 - Try to use UIKit accordion with ex. categories

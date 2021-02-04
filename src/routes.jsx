@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { useIsAuthorized } from '@commercetools-frontend/permissions';
 import LockedDiamondSVG from '@commercetools-frontend/assets/images/locked-diamond.svg';
@@ -27,7 +26,7 @@ const ApplicationRoutes = () => {
     <Switch>
       <Route
         path={`${match.path}/some-other-route`}
-        render={() => <div>{'Nothing to see'}</div>}
+        render={() => <div>Nothing to see</div>}
       />
       <Route render={(routerProps) => <MainView match={routerProps.match} />} />
     </Switch>

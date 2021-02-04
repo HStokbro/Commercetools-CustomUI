@@ -60,20 +60,18 @@ const AddTable = ({ rows, selectionLvl1 }) => {
       id: selectionLvl1[0].id,
       version: selectionLvl1[0].version,
       fieldName: 'product-bundle-data',
-      value: `""`,
+      value: '""',
     };
 
-    console.log('loading1', mutationLoading);
-    const update = await updateProduct({
+    await updateProduct({
       variables,
     });
-    console.log('loading2', mutationLoading);
 
     variables = {
       id: selectionLvl1[0].id,
       version: selectionLvl1[0].version,
       fieldName: 'variant-bundle-data',
-      value: `""`,
+      value: '""',
     };
 
     await updateProduct({
@@ -84,11 +82,9 @@ const AddTable = ({ rows, selectionLvl1 }) => {
   const createBundleAsString = async (fieldName) => {
     const selected = rowsWithSelection
       .filter((row) => row.checkbox === true)
-      .map((row) => {
-        return {
-          name: row.masterData.current.name,
-        };
-      });
+      .map((row) => ({
+        name: row.masterData.current.name,
+      }));
 
     const variables = {
       id: selectionLvl1[0].id,
@@ -106,7 +102,7 @@ const AddTable = ({ rows, selectionLvl1 }) => {
 
   const noneSelected = getNumberOfSelectedRows() === 0;
 
-  mutationError && notifyError(`Error: "${mutationError.message}"`);
+  if (mutationError) notifyError(`Error: "${mutationError.message}"`);
 
   return (
     <Spacings.Stack scale="m">

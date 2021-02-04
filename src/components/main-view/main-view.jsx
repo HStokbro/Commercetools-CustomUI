@@ -1,19 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useIntl } from 'react-intl';
-import { Route, Switch, Link } from 'react-router-dom';
-import { ListIcon, TableIcon } from '@commercetools-uikit/icons';
+// import { useIntl } from 'react-intl';
+// import { Route, Switch, Link } from 'react-router-dom';
+// import { ListIcon, TableIcon } from '@commercetools-uikit/icons';
 import Text from '@commercetools-uikit/text';
 import Spacings from '@commercetools-uikit/spacings';
-import FlatButton from '@commercetools-uikit/flat-button';
-import ViewOne from '../view-one';
-import ViewTwo from '../view-two';
+// import FlatButton from '@commercetools-uikit/flat-button';
+// import ViewOne from '../view-one';
+// import ViewTwo from '../view-two';
 import messages from './messages';
-import styles from './main-view.mod.css';
+// import styles from './main-view.mod.css';
 import Bundles from '../bundles';
 
-const MainView = (props) => {
-  const intl = useIntl();
+/* eslint-disable arrow-body-style */
+const MainView = (/* props */) => {
+  // const intl = useIntl();
 
   return (
     <Spacings.Inset scale="m">
@@ -45,6 +46,7 @@ const MainView = (props) => {
     </Spacings.Inset>
   );
 };
+
 MainView.displayName = 'MainView';
 MainView.propTypes = {
   match: PropTypes.shape({

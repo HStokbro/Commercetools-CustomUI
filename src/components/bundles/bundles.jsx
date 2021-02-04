@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useMcQuery } from '@commercetools-frontend/application-shell';
 import Text from '@commercetools-uikit/text';
 import { GRAPHQL_TARGETS } from '@commercetools-frontend/constants';
-import messages from './messages';
+// import messages from './messages';
+import { InfoModalPage } from '@commercetools-frontend/application-components';
 import { FetchProductsQuery } from '../../graphql/fetchProductsQuery.graphql';
 import ProductsTable from './products-table';
 import AddTable from './add-table';
-import { InfoModalPage } from '@commercetools-frontend/application-components';
-import { useIntl } from 'react-intl';
+// import { useIntl } from 'react-intl';
 import getCurrentLocale from '../../utils/getCurrentLocale';
 
 const Bundles = () => {
@@ -39,11 +39,12 @@ const Bundles = () => {
   });
 
   if (products.loading || subscriptions.loading) return 'Loading...';
-  if (products.error || subscriptions.error)
+  if (products.error || subscriptions.error) {
     return `Error! ${products.error.message}`;
+  }
 
-  const returnSelectionLvl1 = (selectionLvl1) => {
-    setSelectionLvl1(selectionLvl1);
+  const returnSelectionLvl1 = (selection) => {
+    setSelectionLvl1(selection);
     setShowNext(true);
   };
 
@@ -58,7 +59,7 @@ const Bundles = () => {
         title="Additions"
         isOpen={showNext}
         onClose={() => setShowNext(false)}
-        subtitle={<Text.Body>{'Add to bundle'}</Text.Body>}
+        subtitle={<Text.Body>Add to bundle</Text.Body>}
         topBarCurrentPathLabel="Additions"
         topBarPreviousPathLabel="Back"
       >
