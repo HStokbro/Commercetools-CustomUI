@@ -2,11 +2,12 @@
   <a href="https://commercetools.com/">
     <img alt="commercetools logo" src="https://unpkg.com/@commercetools-frontend/assets/logos/commercetools_primary-logo_horizontal_RGB.png">
   </a>
-  <b>Custom Merchant Center UI app</b>
+  <b>Custom application</b>
 </p>
 
-This is an improved template for developing a Custom Merchant Center UI application.
-Its starting point was https://github.com/commercetools/merchant-center-application-kit, but the template is enhanced with linting, schema download, apollo client, utilities, examples, etc.
+An improved template for developing a custom Commercetools Merchant Center application.
+
+Its starting point was https://github.com/commercetools/merchant-center-application-kit, but this template is enhanced with linting, schema download, apollo client, utilities, examples, etc.
 
 ## Installation
 
@@ -46,16 +47,8 @@ The `custom-application-config.json` has a `env.production` configuration object
 - Documentation - https://docs.commercetools.com/custom-applications/
 - Template - https://github.com/commercetools/merchant-center-application-kit
 - UI-kit - https://uikit.commercetools.com/
-- Extra UI components (Not in UI-kit) - https://docs.commercetools.com/custom-applications/components/application-shell
+- UI-components - https://docs.commercetools.com/custom-applications/components/application-shell
 - GraphQL Schema builder - https://graphql-code-generator.com/
-
-## Root Structure
-- src/
-  - components/ = The ui
-  - generated/ = GraphQL schema
-  - graphql/ = queries, mutations, fragments
-  - i18n/ = translation files
-  - utils/ = helper functions
 
 ## What happens at startup
 - index.jsx - renders EntryPoint component
