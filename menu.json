@@ -1,25 +1,36 @@
-{
-  "key": "custom",
-  "uriPath": "custom",
-  "icon": "RocketIcon",
-  "featureToggle": null,
-  "submenu": [
-    {
-      "key": "bundles",
-      "uriPath": "custom/bundles",
-      "featureToggle": null,
-      "labelAllLocales": [
-        {
-          "locale": "en",
-          "value": "Bundles"
-        }
-      ]
-    }
-  ],
-  "labelAllLocales": [
-    {
-      "locale": "en",
-      "value": "Custom UI"
-    }
-  ]
-}
+[
+  {
+    "key": "custom",
+    "uriPath": "custom",
+    "icon": "RocketIcon",
+    "shouldRenderDivider": false,
+    "menuVisibility": null,
+    "featureToggle": null,
+    "actionRights": null,
+    "dataFences": null,
+    "permissions": [],
+    "submenu": [
+      {
+        "key": "bundles",
+        "uriPath": "custom/bundles",
+        "menuVisibility": null,
+        "featureToggle": null,
+        "actionRights": null,
+        "dataFences": null,
+        "permissions": [],
+        "labelAllLocales": [
+          {
+            "locale": "en",
+            "value": "Bundles"
+          }
+        ]
+      }
+    ],
+    "labelAllLocales": [
+      {
+        "locale": "en",
+        "value": "Custom UI"
+      }
+    ]
+  }
+]

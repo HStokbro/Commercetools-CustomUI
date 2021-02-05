@@ -1,31 +1,24 @@
 import React from 'react';
 import DataTable, { useRowSelection } from '@commercetools-uikit/data-table';
-import { GRAPHQL_TARGETS } from '@commercetools-frontend/constants';
 import CheckboxInput from '@commercetools-uikit/checkbox-input';
 import PrimaryButton from '@commercetools-uikit/primary-button';
 import SecondaryButton from '@commercetools-uikit/secondary-button';
 import Spacings from '@commercetools-uikit/spacings';
-import { useMcMutation } from '@commercetools-frontend/application-shell';
-import { UpdateAttributesPublishMutation } from '../../graphql/updateAttributesPublishMutation.graphql';
+import { useSetProductAttributesMutation } from '../../generated/graphql';
 import useNotify from '../../utils/useNotify';
+import { GQLTarget } from '../../constants';
+import { ListProduct } from '../../types';
 
 const AddTable = ({ rows, selectionLvl1 }) => {
-  const [
-    updateProduct,
-    { loading: mutationLoading, error: mutationError },
-  ] = useMcMutation(UpdateAttributesPublishMutation, {
-    context: {
-      target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,
-    },
+  const [setProductAttributesMutation, { data, loading, error }] = useSetProductAttributesMutation({
+    ...GQLTarget,
   });
   const { notifySuccess, notifyError } = useNotify();
 
-  const {
-    rows: rowsWithSelection,
-    toggleRow,
-    getIsRowSelected,
-    getNumberOfSelectedRows,
-  } = useRowSelection('checkbox', rows);
+  const { rows: rowsWithSelection, toggleRow, getIsRowSelected, getNumberOfSelectedRows } = useRowSelection(
+    'checkbox',
+    rows,
+  );
 
   const columns = [
     {
@@ -33,12 +26,7 @@ const AddTable = ({ rows, selectionLvl1 }) => {
       label: '',
       shouldIgnoreRowClick: true,
       align: 'center',
-      renderItem: (row) => (
-        <CheckboxInput
-          isChecked={getIsRowSelected(row.id)}
-          onChange={() => toggleRow(row.id)}
-        />
-      ),
+      renderItem: (row) => <CheckboxInput isChecked={getIsRowSelected(row.id)} onChange={() => toggleRow(row.id)} />,
       disableResizing: true,
       width: '50px',
     },
@@ -56,46 +44,41 @@ const AddTable = ({ rows, selectionLvl1 }) => {
   ];
 
   const cleanFields = async () => {
-    let variables = {
-      id: selectionLvl1[0].id,
-      version: selectionLvl1[0].version,
-      fieldName: 'product-bundle-data',
-      value: '""',
-    };
-
-    await updateProduct({
-      variables,
+    const selection: ListProduct = selectionLvl1[0];
+    await setProductAttributesMutation({
+      variables: {
+        id: selection.id,
+        version: selection.version,
+        fieldName: 'product-bundle-data',
+        value: '""',
+      },
     });
 
-    variables = {
-      id: selectionLvl1[0].id,
-      version: selectionLvl1[0].version,
-      fieldName: 'variant-bundle-data',
-      value: '""',
-    };
-
-    await updateProduct({
-      variables,
+    await setProductAttributesMutation({
+      variables: {
+        id: selection.id,
+        version: selection.version,
+        fieldName: 'variant-bundle-data',
+        value: '""',
+      },
     });
   };
 
-  const createBundleAsString = async (fieldName) => {
+  const createBundleAsString = async (fieldName: string) => {
     const selected = rowsWithSelection
       .filter((row) => row.checkbox === true)
       .map((row) => ({
         name: row.masterData.current.name,
       }));
 
-    const variables = {
-      id: selectionLvl1[0].id,
-      version: selectionLvl1[0].version,
-      fieldName,
-      // Value needs to be wrapped in quotes. TODO: Make util for this
-      value: `"${JSON.stringify(selected).replaceAll('"', '\\"')}"`,
-    };
-
-    const result = await updateProduct({
-      variables,
+    const result = await setProductAttributesMutation({
+      variables: {
+        id: selectionLvl1[0].id,
+        version: selectionLvl1[0].version,
+        fieldName,
+        // Value needs to be wrapped in quotes. TODO: Make util for this
+        value: `"${JSON.stringify(selected).replaceAll('"', '\\"')}"`,
+      },
     });
 
     if (result) notifySuccess('Bundle created and published');
@@ -103,15 +86,11 @@ const AddTable = ({ rows, selectionLvl1 }) => {
 
   const noneSelected = getNumberOfSelectedRows() === 0;
 
-  if (mutationError) notifyError(`Error: "${mutationError.message}"`);
+  if (error) notifyError(`Error: "${error.message}"`);
 
   return (
     <Spacings.Stack scale="m">
-      <DataTable
-        rows={rowsWithSelection}
-        columns={columns}
-        maxHeight="max(400px, calc(100vh - 300px))"
-      />
+      <DataTable rows={rowsWithSelection} columns={columns} maxHeight="max(400px, calc(100vh - 300px))" />
       <div>
         <PrimaryButton
           label="Create bundle - data on product"
@@ -127,7 +106,7 @@ const AddTable = ({ rows, selectionLvl1 }) => {
         <br />
         <br />
         <SecondaryButton label="Clear data" onClick={() => cleanFields()} />
-        {mutationLoading && <p>Loading...</p>}
+        {loading && <p>Loading...</p>}
       </div>
     </Spacings.Stack>
   );

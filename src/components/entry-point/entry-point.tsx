@@ -8,6 +8,7 @@ import { Sdk } from '@commercetools-frontend/sdk';
 import { handleActionError } from '@commercetools-frontend/actions-global';
 import { FEATURE_FLAGS } from '../../constants';
 import loadMessages from '../../load-messages';
+import { TNavbarMenu } from '@commercetools-frontend/application-shell/dist/declarations/src/types/generated/proxy';
 
 // Here we split up the main (app) bundle with the actual application business logic.
 // Splitting by route is usually recommended and you can potentially have a splitting
@@ -23,15 +24,19 @@ setupGlobalErrorListener();
 // Prefix the reducer to make sure we don't conflict with Commercetools
 // Example: InjectReducers(fooReducer)
 
-const loadMenu = () =>
-  import('../../../menu.json').then((data) => data.default || data);
+declare global {
+  interface Window {
+    app: any;
+  }
+}
+
+const loadMenu = (): Promise<TNavbarMenu[]> => import('../../../menu.json').then((data) => data.default || data);
 
 const EntryPoint = () => (
   <ApplicationShell
     environment={window.app}
     onRegisterErrorListeners={({ dispatch }) => {
-      Sdk.Get.errorHandler = (error) =>
-        handleActionError(error, 'sdk')(dispatch);
+      Sdk.Get.errorHandler = (error) => handleActionError(error)(dispatch);
     }}
     applicationMessages={loadMessages}
     DEV_ONLY__loadNavbarMenuConfig={loadMenu}

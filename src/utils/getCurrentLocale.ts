@@ -1,3 +1,6 @@
+// Helper for getting the user selected locale
+// Locale is used for querying data
+
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 
 const getCurrentLocale = () => {

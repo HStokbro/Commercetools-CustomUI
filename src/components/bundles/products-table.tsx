@@ -2,14 +2,18 @@ import React from 'react';
 import DataTable, { useRowSelection } from '@commercetools-uikit/data-table';
 import CheckboxInput from '@commercetools-uikit/checkbox-input';
 import PrimaryButton from '@commercetools-uikit/primary-button';
+import { ListProduct } from '../../types';
 
-const ProductsTable = ({ rows, returnSelection }) => {
-  const {
-    rows: rowsWithSelection,
-    toggleRow,
-    getIsRowSelected,
-    getNumberOfSelectedRows,
-  } = useRowSelection('checkbox', rows);
+type Props = {
+  rows: ListProduct[];
+  returnSelection: (selection: ListProduct[]) => void;
+};
+
+const ProductsTable = (props: Props) => {
+  const { rows: rowsWithSelection, toggleRow, getIsRowSelected, getNumberOfSelectedRows } = useRowSelection(
+    'checkbox',
+    props.rows,
+  );
 
   const columns = [
     {
@@ -17,12 +21,7 @@ const ProductsTable = ({ rows, returnSelection }) => {
       label: '',
       shouldIgnoreRowClick: true,
       align: 'center',
-      renderItem: (row) => (
-        <CheckboxInput
-          isChecked={getIsRowSelected(row.id)}
-          onChange={() => toggleRow(row.id)}
-        />
-      ),
+      renderItem: (row) => <CheckboxInput isChecked={getIsRowSelected(row.id)} onChange={() => toggleRow(row.id)} />,
       disableResizing: true,
       width: '50px',
     },
@@ -41,24 +40,16 @@ const ProductsTable = ({ rows, returnSelection }) => {
 
   const doneSelecting = () => {
     const selected = rowsWithSelection.filter((row) => row.checkbox === true);
-    returnSelection(selected);
+    props.returnSelection(selected);
   };
 
   const noneSelected = getNumberOfSelectedRows() === 0;
 
   return (
     <>
-      <DataTable
-        rows={rowsWithSelection}
-        columns={columns}
-        maxHeight="max(400px, calc(100vh - 300px))"
-      />
+      <DataTable rows={rowsWithSelection} columns={columns} maxHeight="max(400px, calc(100vh - 300px))" />
       <div>
-        <PrimaryButton
-          label="Next"
-          onClick={() => doneSelecting()}
-          isDisabled={noneSelected}
-        />
+        <PrimaryButton label="Next" onClick={() => doneSelecting()} isDisabled={noneSelected} />
       </div>
     </>
   );

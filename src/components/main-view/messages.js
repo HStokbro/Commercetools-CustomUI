@@ -4,7 +4,7 @@ export default defineMessages({
   title: {
     id: 'MainView.title',
     description: 'The page title of main view',
-    defaultMessage: 'Hello, world',
+    defaultMessage: 'Bundle builder',
   },
   labelLinkOne: {
     id: 'MainView.labelLinkOne',

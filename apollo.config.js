@@ -6,7 +6,9 @@ module.exports = {
       name: 'Commercetools',
       localSchemaFile: './src/generated/graphql.schema.json',
     },
-    includes: ['./src/**/*.{ts,tsx,js,jsx,graphql}'],
-    excludes: ['**/node_modules/**'],
+    // excludes: ['./src/generated/graphql.tsx'],
+    // Below is a workaround to omit looking at graphql.tsx. It contains dublicate query/mutation names,
+    // and Apollo plugin cannot handle that
+    tagName: 'omitGQLtags',
   },
 };

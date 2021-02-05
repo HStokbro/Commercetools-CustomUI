@@ -1,4 +1,4 @@
-query FetchProductsQuery($locale: Locale, $where: String) {
+query getProducts($locale: Locale, $where: String) {
   products(limit: 100, where: $where) {
     results {
       id
