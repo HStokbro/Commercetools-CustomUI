@@ -13,7 +13,6 @@
 - OK - Setup Apollo client
 - OK - Add documentation in README
 - OK - Setup Typescript (No documentation)
-- Setup path aliases
 - Convert files to typescript
 - Try to build Typescript from GraphQL / graphql.schema.json
 - Use generated typescript
