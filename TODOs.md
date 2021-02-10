@@ -13,9 +13,9 @@
 - OK - Setup Apollo client
 - OK - Add documentation in README
 - OK - Setup Typescript (No documentation)
-- Convert files to typescript
-- Try to build Typescript from GraphQL / graphql.schema.json
-- Use generated typescript
+- OK - Convert files to typescript
+- OK - Build Typescript from GraphQL / graphql.schema.json
+- OK - Use generated typescript
 - Build product bundle with references
 - Try to use UIKit select
 - Try to use UIKit accordion with ex. categories
@@ -26,4 +26,3 @@
 - Build routes and menu
 - Bulk imports? = https://docs.commercetools.com/import-api/overview
 - Clean up POC, Loading, Handling UI after success
-- Setup permissions (Removed permissions from menu.json, was giving an error, need to look into why)
