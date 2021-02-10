@@ -3,7 +3,7 @@
 
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 
-const getCurrentLocale = () => {
+const getCurrentLocale = (): string | null => {
   const { locale } = useApplicationContext((applicationContext) => ({
     locale: applicationContext.dataLocale,
   }));

@@ -6,9 +6,9 @@ import {
 } from '@commercetools-frontend/application-shell';
 import { Sdk } from '@commercetools-frontend/sdk';
 import { handleActionError } from '@commercetools-frontend/actions-global';
-import { FEATURE_FLAGS } from '../../constants';
-import loadMessages from '../../load-messages';
 import { TNavbarMenu } from '@commercetools-frontend/application-shell/dist/declarations/src/types/generated/proxy';
+import loadMessages from '../../load-messages';
+import { FEATURE_FLAGS } from '../../constants';
 
 // Here we split up the main (app) bundle with the actual application business logic.
 // Splitting by route is usually recommended and you can potentially have a splitting
@@ -26,13 +26,13 @@ setupGlobalErrorListener();
 
 declare global {
   interface Window {
-    app: any;
+    app: any; // eslint-disable-line
   }
 }
 
 const loadMenu = (): Promise<TNavbarMenu[]> => import('../../../menu.json').then((data) => data.default || data);
 
-const EntryPoint = () => (
+const EntryPoint = (): JSX.Element => (
   <ApplicationShell
     environment={window.app}
     onRegisterErrorListeners={({ dispatch }) => {

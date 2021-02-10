@@ -13,7 +13,7 @@ import messages from './messages';
 import Bundles from '../bundles';
 
 /* eslint-disable arrow-body-style */
-const MainView = (/* props */) => {
+const MainView = (/* props */): JSX.Element => {
   // const intl = useIntl();
 
   return (

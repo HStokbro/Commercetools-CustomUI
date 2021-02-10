@@ -10,7 +10,7 @@ import getCurrentLocale from '../../utils/getCurrentLocale';
 import { GQLTarget } from '../../constants';
 import { ListProduct } from '../../types';
 
-const Bundles = () => {
+const Bundles = (): JSX.Element => {
   const [showLvl2, setShowLvl2] = useState<boolean>(false);
   const [selectionLvl1, setSelectionLvl1] = useState<ListProduct[]>([]);
 
@@ -24,9 +24,9 @@ const Bundles = () => {
     ...GQLTarget,
   });
 
-  if (loading) return 'Loading...';
+  if (loading) return <>Loading...</>;
   if (error) {
-    return `Error! ${error.message}`;
+    return <>{`Error! ${error.message}`}</>;
   }
 
   const returnSelectionLvl1 = (selection) => {

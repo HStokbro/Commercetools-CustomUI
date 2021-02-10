@@ -14,7 +14,7 @@ const PageUnauthorized = () => (
   />
 );
 
-const ApplicationRoutes = () => {
+const ApplicationRoutes = (): JSX.Element => {
   const match = useRouteMatch();
   const canManageProducts = useIsAuthorized({
     demandedPermissions: [PERMISSIONS.ManageProducts],
@@ -24,10 +24,7 @@ const ApplicationRoutes = () => {
   }
   return (
     <Switch>
-      <Route
-        path={`${match.path}/some-other-route`}
-        render={() => <div>Nothing to see</div>}
-      />
+      <Route path={`${match.path}/some-other-route`} render={() => <div>Nothing to see</div>} />
       <Route render={(routerProps) => <MainView match={routerProps.match} />} />
     </Switch>
   );

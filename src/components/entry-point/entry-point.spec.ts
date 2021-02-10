@@ -32,8 +32,6 @@ describe('without permissions', () => {
       route: '/my-project/examples-starter',
       permissions: {},
     });
-    await rendered.findByText(
-      /not enough permissions to access this resource/i,
-    );
+    await rendered.findByText(/not enough permissions to access this resource/i);
   });
 });

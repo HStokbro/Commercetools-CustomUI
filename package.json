@@ -14,7 +14,7 @@
     "test": "jest --config jest.test.config.js",
     "test:watch": "jest --config jest.test.config.js --watch",
     "update-versions": "bulk-update-versions --match '^@commercetools-frontend/(?!ui-kit)(.*)'",
-    "lint": "eslint . --ext .js,.jsx,.gql,.graphql",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.gql,.graphql",
     "generate-schema": "graphql-codegen --config codegen-generate-schema.yml",
     "generate-typescript": "graphql-codegen --config codegen-generate-typescript.yml --watch"
   },

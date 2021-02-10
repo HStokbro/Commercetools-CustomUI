@@ -11,7 +11,13 @@ import { useShowNotification } from '@commercetools-frontend/actions-global';
  *
  * Note: "showNotification" without hooks does not work for some reason, so need to do this hooks workaround.
  */
-const useNotify = () => {
+
+type UseNotify = {
+  notifySuccess: (text: string) => void;
+  notifyError: (text: string) => void;
+};
+
+const useNotify = (): UseNotify => {
   const show = useShowNotification();
 
   return {

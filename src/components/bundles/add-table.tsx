@@ -9,15 +9,20 @@ import useNotify from '../../utils/useNotify';
 import { GQLTarget } from '../../constants';
 import { ListProduct } from '../../types';
 
-const AddTable = ({ rows, selectionLvl1 }) => {
-  const [setProductAttributesMutation, { data, loading, error }] = useSetProductAttributesMutation({
+type Props = {
+  rows: ListProduct[];
+  selectionLvl1: ListProduct[];
+};
+
+const AddTable = (props: Props): JSX.Element => {
+  const [setProductAttributesMutation, { /* data, */ loading, error }] = useSetProductAttributesMutation({
     ...GQLTarget,
   });
   const { notifySuccess, notifyError } = useNotify();
 
   const { rows: rowsWithSelection, toggleRow, getIsRowSelected, getNumberOfSelectedRows } = useRowSelection(
     'checkbox',
-    rows,
+    props.rows,
   );
 
   const columns = [
@@ -44,7 +49,7 @@ const AddTable = ({ rows, selectionLvl1 }) => {
   ];
 
   const cleanFields = async () => {
-    const selection: ListProduct = selectionLvl1[0];
+    const selection: ListProduct = props.selectionLvl1[0];
     await setProductAttributesMutation({
       variables: {
         id: selection.id,
@@ -73,8 +78,8 @@ const AddTable = ({ rows, selectionLvl1 }) => {
 
     const result = await setProductAttributesMutation({
       variables: {
-        id: selectionLvl1[0].id,
-        version: selectionLvl1[0].version,
+        id: props.selectionLvl1[0].id,
+        version: props.selectionLvl1[0].version,
         fieldName,
         // Value needs to be wrapped in quotes. TODO: Make util for this
         value: `"${JSON.stringify(selected).replaceAll('"', '\\"')}"`,

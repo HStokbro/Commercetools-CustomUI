@@ -32,7 +32,7 @@ module.exports = {
     'implicit-arrow-linebreak': 'off',
     'import/extensions': 'off',
     '@typescript-eslint/explicit-module-boundary-types': [
-      'warning',
+      'warn',
       {
         allowTypedFunctionExpressions: false,
       },
@@ -44,11 +44,12 @@ module.exports = {
         schemaJson: require('./src/generated/graphql.schema.json'),
       },
     ],
+    'react/destructuring-assignment': [0],
   },
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
       },
     },
   },

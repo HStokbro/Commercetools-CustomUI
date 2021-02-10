@@ -9,7 +9,7 @@ type Props = {
   returnSelection: (selection: ListProduct[]) => void;
 };
 
-const ProductsTable = (props: Props) => {
+const ProductsTable = (props: Props): JSX.Element => {
   const { rows: rowsWithSelection, toggleRow, getIsRowSelected, getNumberOfSelectedRows } = useRowSelection(
     'checkbox',
     props.rows,
