@@ -7,6 +7,7 @@ import {
 import { Sdk } from '@commercetools-frontend/sdk';
 import { handleActionError } from '@commercetools-frontend/actions-global';
 import { TNavbarMenu } from '@commercetools-frontend/application-shell/dist/declarations/src/types/generated/proxy';
+import { ApplicationWindow } from '@commercetools-frontend/constants';
 import loadMessages from '../../load-messages';
 import { FEATURE_FLAGS } from '../../constants';
 
@@ -26,25 +27,28 @@ setupGlobalErrorListener();
 
 declare global {
   interface Window {
-    app: any; // eslint-disable-line
+    app;
   }
 }
 
 const loadMenu = (): Promise<TNavbarMenu[]> => import('../../../menu.json').then((data) => data.default || data);
 
-const EntryPoint = (): JSX.Element => (
-  <ApplicationShell
-    environment={window.app}
-    onRegisterErrorListeners={({ dispatch }) => {
-      Sdk.Get.errorHandler = (error) => handleActionError(error)(dispatch);
-    }}
-    applicationMessages={loadMessages}
-    DEV_ONLY__loadNavbarMenuConfig={loadMenu}
-    featureFlags={FEATURE_FLAGS}
-  >
-    <AsyncApplicationRoutes />
-  </ApplicationShell>
-);
+const EntryPoint = (): JSX.Element => {
+  const appWindow: Pick<ApplicationWindow, 'app'> = window;
+  return (
+    <ApplicationShell
+      environment={appWindow.app}
+      onRegisterErrorListeners={({ dispatch }) => {
+        Sdk.Get.errorHandler = (error) => handleActionError(error)(dispatch);
+      }}
+      applicationMessages={loadMessages}
+      DEV_ONLY__loadNavbarMenuConfig={loadMenu}
+      featureFlags={FEATURE_FLAGS}
+    >
+      <AsyncApplicationRoutes />
+    </ApplicationShell>
+  );
+};
 EntryPoint.displayName = 'EntryPoint';
 
 export default EntryPoint;

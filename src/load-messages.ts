@@ -1,5 +1,8 @@
-// eslint-disable-next-line
-const loadMessages = (lang: string): Promise<any> => {
+import logger from './utils/logger';
+
+type Translations = { [key: string]: string };
+
+const loadMessages = (lang: string): Promise<Translations> => {
   let loadAppI18nPromise;
   switch (lang) {
     case 'de':
@@ -15,8 +18,7 @@ const loadMessages = (lang: string): Promise<any> => {
   return loadAppI18nPromise.then(
     (result) => result.default,
     (error) => {
-      // eslint-disable-next-line no-console
-      console.warn(`Something went wrong while loading the app messages for ${lang}`, error);
+      logger.error(`Something went wrong while loading the app messages for ${lang}`, error);
 
       return {};
     },
