@@ -1,3 +1,4 @@
+// TODO: Make this tsx
 /* eslint-disable  */
 import React from 'react';
 import { renderApp, renderAppWithRedux } from '@commercetools-frontend/application-shell/test-utils';

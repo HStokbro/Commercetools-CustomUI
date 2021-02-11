@@ -10821,6 +10821,15 @@ export type ZoneRate = {
 
 
 
+export type AddProductBundleMutationVariables = Exact<{
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  productReferences: Scalars['String'];
+}>;
+
+
+export type AddProductBundleMutation = { createProduct?: Maybe<Pick<Product, 'id' | 'version'>> };
+
 export type SetProductAttributesMutationVariables = Exact<{
   id?: Maybe<Scalars['String']>;
   version: Scalars['Long'];
@@ -10843,6 +10852,43 @@ export type GetProductsQuery = { products: { results: Array<(
     )> } };
 
 
+export const AddProductBundleDocument = gql`
+    mutation AddProductBundle($name: String!, $slug: String!, $productReferences: String!) {
+  createProduct(
+    draft: {name: [{locale: "DA", value: $name}], slug: [{locale: "DA", value: $slug}], productType: {key: "product-bundle"}, masterVariant: {key: "master", attributes: [{name: "product-ref", value: $productReferences}]}, publish: true}
+  ) {
+    id
+    version
+  }
+}
+    `;
+export type AddProductBundleMutationFn = Apollo.MutationFunction<AddProductBundleMutation, AddProductBundleMutationVariables>;
+
+/**
+ * __useAddProductBundleMutation__
+ *
+ * To run a mutation, you first call `useAddProductBundleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddProductBundleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addProductBundleMutation, { data, loading, error }] = useAddProductBundleMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      slug: // value for 'slug'
+ *      productReferences: // value for 'productReferences'
+ *   },
+ * });
+ */
+export function useAddProductBundleMutation(baseOptions?: Apollo.MutationHookOptions<AddProductBundleMutation, AddProductBundleMutationVariables>) {
+        return Apollo.useMutation<AddProductBundleMutation, AddProductBundleMutationVariables>(AddProductBundleDocument, baseOptions);
+      }
+export type AddProductBundleMutationHookResult = ReturnType<typeof useAddProductBundleMutation>;
+export type AddProductBundleMutationResult = Apollo.MutationResult<AddProductBundleMutation>;
+export type AddProductBundleMutationOptions = Apollo.BaseMutationOptions<AddProductBundleMutation, AddProductBundleMutationVariables>;
 export const SetProductAttributesDocument = gql`
     mutation setProductAttributes($id: String, $version: Long!, $fieldName: String!, $value: String!) {
   updateProduct(

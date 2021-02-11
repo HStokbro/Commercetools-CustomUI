@@ -4,10 +4,10 @@ import CheckboxInput from '@commercetools-uikit/checkbox-input';
 import PrimaryButton from '@commercetools-uikit/primary-button';
 import SecondaryButton from '@commercetools-uikit/secondary-button';
 import Spacings from '@commercetools-uikit/spacings';
-import { useSetProductAttributesMutation } from '../../generated/graphql';
+import { useSetProductAttributesMutation, useAddProductBundleMutation } from '../../generated/graphql';
 import useNotify from '../../utils/useNotify';
 import { GQLTarget } from '../../constants';
-import { ListProduct } from '../../types';
+import { ListProduct, ListProductSelection } from '../../types';
 
 type Props = {
   rows: ListProduct[];
@@ -15,9 +15,14 @@ type Props = {
 };
 
 const AddTable = (props: Props): JSX.Element => {
-  const [setProductAttributesMutation, { /* data, */ loading, error }] = useSetProductAttributesMutation({
+  const [setProductAttributesMutation, setProductAttributesState] = useSetProductAttributesMutation({
     ...GQLTarget,
   });
+
+  const [addProductBundleMutation, addProductBundleState] = useAddProductBundleMutation({
+    ...GQLTarget,
+  });
+
   const { notifySuccess, notifyError } = useNotify();
 
   const { rows: rowsWithSelection, toggleRow, getIsRowSelected, getNumberOfSelectedRows } = useRowSelection(
@@ -31,20 +36,22 @@ const AddTable = (props: Props): JSX.Element => {
       label: '',
       shouldIgnoreRowClick: true,
       align: 'center',
-      renderItem: (row) => <CheckboxInput isChecked={getIsRowSelected(row.id)} onChange={() => toggleRow(row.id)} />,
+      renderItem: (row: ListProduct) => (
+        <CheckboxInput isChecked={getIsRowSelected(row.id)} onChange={() => toggleRow(row.id)} />
+      ),
       disableResizing: true,
       width: '50px',
     },
     {
       key: 'name',
       label: 'Product name',
-      renderItem: (item) => item.masterData.current.name,
+      renderItem: (item: ListProduct) => item.masterData.current.name,
       width: '250px',
     },
     {
       key: 'producttype',
       label: 'Product Type',
-      renderItem: (item) => item.productType.key,
+      renderItem: (item: ListProduct) => item.productType.key,
     },
   ];
 
@@ -71,7 +78,7 @@ const AddTable = (props: Props): JSX.Element => {
 
   const createBundleAsString = async (fieldName: string) => {
     const selected = rowsWithSelection
-      .filter((row) => row.checkbox === true)
+      .filter((row: ListProductSelection) => row.checkbox === true)
       .map((row) => ({
         name: row.masterData.current.name,
       }));
@@ -81,8 +88,28 @@ const AddTable = (props: Props): JSX.Element => {
         id: props.selectionLvl1[0].id,
         version: props.selectionLvl1[0].version,
         fieldName,
-        // Value needs to be wrapped in quotes. TODO: Make util for this
+        // String values need to be wrapped in quotes. TODO: Make util for this
         value: `"${JSON.stringify(selected).replaceAll('"', '\\"')}"`,
+      },
+    });
+
+    if (result) notifySuccess('Bundle created and published');
+  };
+
+  const createBundleAsNewProduct = async () => {
+    const selectedAsRef = rowsWithSelection
+      .filter((row: ListProductSelection) => row.checkbox === true)
+      .map((row) => ({
+        id: row.id,
+        typeId: 'product',
+      }));
+
+    const result = await addProductBundleMutation({
+      variables: {
+        name: `bundle-${props.selectionLvl1[0].masterData.current.name}`,
+        slug: `slug-${props.selectionLvl1[0].masterData.current.name.replaceAll(' ', '-')}`,
+        // Need to stringify custom field value, as type is string
+        productReferences: JSON.stringify(selectedAsRef),
       },
     });
 
@@ -91,28 +118,33 @@ const AddTable = (props: Props): JSX.Element => {
 
   const noneSelected = getNumberOfSelectedRows() === 0;
 
-  if (error) notifyError(`Error: "${error.message}"`);
+  if (setProductAttributesState.error) notifyError(`Error: "${setProductAttributesState.error.message}"`);
 
   return (
-    <Spacings.Stack scale="m">
+    <Spacings.Stack scale="s">
       <DataTable rows={rowsWithSelection} columns={columns} maxHeight="max(400px, calc(100vh - 300px))" />
-      <div>
+      <Spacings.Inline scale="m">
         <PrimaryButton
-          label="Create bundle - data on product"
+          label="Create bundle - set attribute on product"
           onClick={() => createBundleAsString('product-bundle-data')}
           isDisabled={noneSelected}
         />
-        &nbsp;&nbsp;
         <PrimaryButton
           label="- on variants"
           onClick={() => createBundleAsString('variant-bundle-data')}
           isDisabled={noneSelected}
         />
-        <br />
-        <br />
         <SecondaryButton label="Clear data" onClick={() => cleanFields()} />
-        {loading && <p>Loading...</p>}
-      </div>
+        {setProductAttributesState.loading && <span>Loading...</span>}
+      </Spacings.Inline>
+      <Spacings.Inline scale="m">
+        <PrimaryButton
+          label="Create bundle - new product"
+          onClick={() => createBundleAsNewProduct()}
+          isDisabled={noneSelected}
+        />
+        {addProductBundleState.loading && <span>Loading...</span>}
+      </Spacings.Inline>
     </Spacings.Stack>
   );
 };

@@ -3,7 +3,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { useIsAuthorized } from '@commercetools-frontend/permissions';
 import LockedDiamondSVG from '@commercetools-frontend/assets/images/locked-diamond.svg';
 import { MaintenancePageLayout } from '@commercetools-frontend/application-components';
-import MainView from './components/main-view';
+import MainView from './views/main-view';
 import { PERMISSIONS } from './constants';
 
 const PageUnauthorized = () => (

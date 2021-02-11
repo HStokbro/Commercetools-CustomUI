@@ -19,7 +19,6 @@ const loadMessages = (lang: string): Promise<Translations> => {
     (result) => result.default,
     (error) => {
       logger.error(`Something went wrong while loading the app messages for ${lang}`, error);
-
       return {};
     },
   );

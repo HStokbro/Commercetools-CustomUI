@@ -16,13 +16,15 @@
 - OK - Convert files to typescript
 - OK - Build Typescript from GraphQL / graphql.schema.json
 - OK - Use generated typescript
-- Build product bundle with references
+- OK - Build product bundle with references
+- Make util for slug escaping
+- Make util for inserting JSON and quote handling
+- Update version no after mutation
 - Try to use UIKit select
 - Try to use UIKit accordion with ex. categories
-- Update version no after mutation
 - Build price setter example
 - Split GraphQL into fragments
 - Plan UI & styling
 - Build routes and menu
-- Bulk imports? = https://docs.commercetools.com/import-api/overview
+- Investigate bulk imports? = https://docs.commercetools.com/import-api/overview
 - Clean up POC, Loading, Handling UI after success
