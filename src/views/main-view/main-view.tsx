@@ -10,7 +10,7 @@ import Spacings from '@commercetools-uikit/spacings';
 // import ViewTwo from '../view-two';
 import messages from './messages';
 // import styles from './main-view.mod.css';
-import Bundles from '../bundles';
+import BundleStart from '../bundle';
 
 /* eslint-disable arrow-body-style */
 const MainView = (/* props */): JSX.Element => {
@@ -41,7 +41,7 @@ const MainView = (/* props */): JSX.Element => {
           <Route path={`${props.match.path}/two`} component={ViewTwo} />
         </Switch> */}
 
-        <Bundles />
+        <BundleStart />
       </Spacings.Stack>
     </Spacings.Inset>
   );

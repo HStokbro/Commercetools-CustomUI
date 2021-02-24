@@ -17,6 +17,9 @@
 - OK - Build Typescript from GraphQL / graphql.schema.json
 - OK - Use generated typescript
 - OK - Build product bundle with references
+- OK - Cleanup bundles code
+- Fix error being shown several times. Maybe useEffect on error?
+- Investigate Custom Objects (Field with reference to key value object)
 - Make util for slug escaping
 - Make util for inserting JSON and quote handling
 - Update version no after mutation

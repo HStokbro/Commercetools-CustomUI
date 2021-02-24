@@ -10855,7 +10855,7 @@ export type GetProductsQuery = { products: { results: Array<(
 export const AddProductBundleDocument = gql`
     mutation AddProductBundle($name: String!, $slug: String!, $productReferences: String!) {
   createProduct(
-    draft: {name: [{locale: "DA", value: $name}], slug: [{locale: "DA", value: $slug}], productType: {key: "product-bundle"}, masterVariant: {key: "master", attributes: [{name: "product-ref", value: $productReferences}]}, publish: true}
+    draft: {name: [{locale: "DA", value: $name}], slug: [{locale: "DA", value: $slug}], productType: {key: "product-bundle"}, masterVariant: {key: $slug, attributes: [{name: "product-ref", value: $productReferences}]}, publish: true}
   ) {
     id
     version

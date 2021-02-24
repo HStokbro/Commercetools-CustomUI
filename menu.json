@@ -11,8 +11,8 @@
     "permissions": [],
     "submenu": [
       {
-        "key": "bundles",
-        "uriPath": "custom/bundles",
+        "key": "bundle",
+        "uriPath": "custom/bundle",
         "menuVisibility": null,
         "featureToggle": null,
         "actionRights": null,
