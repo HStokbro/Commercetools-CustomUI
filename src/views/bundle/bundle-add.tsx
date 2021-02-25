@@ -8,6 +8,7 @@ import BundleAsProductButton from './bundle-as-product-button';
 type Props = {
   rows: ListProduct[];
   selection: ListProduct[];
+  onSuccess: () => void;
 };
 
 const BundleAdd = (props: Props): JSX.Element => {
@@ -18,9 +19,14 @@ const BundleAdd = (props: Props): JSX.Element => {
       <ProductsTable
         rows={props.rows}
         setSelectedRows={(selectedRows: ListProduct[]) => setSelectionAddon(selectedRows)}
+        multiSelect
       />
-      <BundleAsAttributeButton selection={props.selection} selectionAddon={selectionAddon} />
-      <BundleAsProductButton selection={props.selection} selectionAddon={selectionAddon} />
+      <BundleAsAttributeButton
+        selection={props.selection}
+        selectionAddon={selectionAddon}
+        onSuccess={props.onSuccess}
+      />
+      <BundleAsProductButton selection={props.selection} selectionAddon={selectionAddon} onSuccess={props.onSuccess} />
     </Spacings.Stack>
   );
 };

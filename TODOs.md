@@ -32,6 +32,7 @@
   - Split GraphQL in fragments?
   - Use intl & messages
   - Use/remove main view?
+  - Use redux/context
 
 # Note - Things to look out for
 

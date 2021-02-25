@@ -9,6 +9,7 @@ import { ListProduct } from '../../types';
 type Props = {
   selection: ListProduct[];
   selectionAddon: ListProduct[];
+  onSuccess: () => void;
 };
 
 const BundleAsAttributeButton = (props: Props): JSX.Element => {
@@ -36,11 +37,13 @@ const BundleAsAttributeButton = (props: Props): JSX.Element => {
       },
     });
 
-    if (result) notifySuccess('Bundle created and published');
+    if (result) {
+      notifySuccess('Bundle created and published');
+      props.onSuccess();
+    }
   };
 
   const noneSelected = props.selection.length === 0 || props.selectionAddon.length === 0;
-
   return (
     <Spacings.Inline scale="m">
       <PrimaryButton
