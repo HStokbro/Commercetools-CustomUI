@@ -6,8 +6,8 @@ import { useShowNotification } from '@commercetools-frontend/actions-global';
  * Use example:
  *
  * const { notifySuccess, notifyError } = useNotify();
- * notifySuccess('test');
- * notifyError('test');
+ * notifySuccess('foo');
+ * notifyError('bar');
  *
  * Note: "showNotification" without hooks does not work for some reason, so need to do this hooks workaround.
  */

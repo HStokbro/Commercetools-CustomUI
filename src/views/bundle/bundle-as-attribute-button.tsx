@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PrimaryButton from '@commercetools-uikit/primary-button';
 import Spacings from '@commercetools-uikit/spacings';
 import { useSetProductAttributesMutation } from '../../generated/graphql';
@@ -12,11 +12,14 @@ type Props = {
 };
 
 const BundleAsAttributeButton = (props: Props): JSX.Element => {
-  const [setProductAttributesMutation, setProductAttributesState] = useSetProductAttributesMutation({
+  const [setProductAttributesMutation, { loading, error }] = useSetProductAttributesMutation({
     ...GQLTarget,
   });
-
   const { notifySuccess, notifyError } = useNotify();
+
+  useEffect(() => {
+    if (error) notifyError(`Error: "${error.message}"`);
+  }, [error]);
 
   const createBundleAsString = async (fieldName: string) => {
     const selected = props.selectionAddon.map((row) => ({
@@ -28,17 +31,13 @@ const BundleAsAttributeButton = (props: Props): JSX.Element => {
         id: props.selection[0].id,
         version: props.selection[0].version,
         fieldName,
-        // String values need to be wrapped in quotes. TODO: Make util for this
+        // String values need to be wrapped in quotes
         value: `"${JSON.stringify(selected).replaceAll('"', '\\"')}"`,
       },
     });
 
     if (result) notifySuccess('Bundle created and published');
   };
-
-  if (setProductAttributesState.error) {
-    notifyError(`Error: "${setProductAttributesState.error.message}"`);
-  }
 
   const noneSelected = props.selection.length === 0 || props.selectionAddon.length === 0;
 
@@ -54,7 +53,7 @@ const BundleAsAttributeButton = (props: Props): JSX.Element => {
         onClick={() => createBundleAsString('variant-bundle-data')}
         isDisabled={noneSelected}
       />
-      {setProductAttributesState.loading && <span>Loading...</span>}
+      {loading && <span>Loading...</span>}
     </Spacings.Inline>
   );
 };

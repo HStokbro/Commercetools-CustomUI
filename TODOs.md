@@ -18,16 +18,22 @@
 - OK - Use generated typescript
 - OK - Build product bundle with references
 - OK - Cleanup bundles code
-- Fix error being shown several times. Maybe useEffect on error?
+- OK - Fix error being shown several times
+- Make product list without multi select
 - Investigate Custom Objects (Field with reference to key value object)
+- Build price setter example
 - Make util for slug escaping
-- Make util for inserting JSON and quote handling
-- Update version no after mutation
 - Try to use UIKit select
 - Try to use UIKit accordion with ex. categories
-- Build price setter example
-- Split GraphQL into fragments
 - Plan UI & styling
 - Build routes and menu
 - Investigate bulk imports? = https://docs.commercetools.com/import-api/overview
-- Clean up POC, Loading, Handling UI after success
+- Clean up template
+  - Split GraphQL in fragments?
+  - Use intl & messages
+  - Use/remove main view?
+
+# Note - Things to look out for
+
+- Slug and variant key have to be unique
+- Version no. is only updated at initial load

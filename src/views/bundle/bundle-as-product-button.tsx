@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PrimaryButton from '@commercetools-uikit/primary-button';
 import Spacings from '@commercetools-uikit/spacings';
 import { useAddProductBundleMutation } from '../../generated/graphql';
@@ -12,11 +12,14 @@ type Props = {
 };
 
 const BundleAsProductButton = (props: Props): JSX.Element => {
-  const [addProductBundleMutation, addProductBundleState] = useAddProductBundleMutation({
+  const [addProductBundleMutation, { loading, error }] = useAddProductBundleMutation({
     ...GQLTarget,
   });
-
   const { notifySuccess, notifyError } = useNotify();
+
+  useEffect(() => {
+    if (error) notifyError(`Error: "${error.message}"`);
+  }, [error]);
 
   const createBundleAsNewProduct = async () => {
     const selectedAsRef = props.selectionAddon.map((row) => ({
@@ -36,11 +39,6 @@ const BundleAsProductButton = (props: Props): JSX.Element => {
     if (result) notifySuccess('Bundle created and published');
   };
 
-  if (addProductBundleState.error) {
-    notifyError(`Error: "${addProductBundleState.error.message}"`);
-    addProductBundleState.error = null;
-  }
-
   const noneSelected = props.selection.length === 0 || props.selectionAddon.length === 0;
 
   return (
@@ -50,7 +48,7 @@ const BundleAsProductButton = (props: Props): JSX.Element => {
         onClick={() => createBundleAsNewProduct()}
         isDisabled={noneSelected}
       />
-      {addProductBundleState.loading && <span>Loading...</span>}
+      {loading && <span>Loading...</span>}
     </Spacings.Inline>
   );
 };
