@@ -44,7 +44,6 @@ const BundleAsProductButton = (props: Props): JSX.Element => {
   };
 
   const noneSelected = props.selection.length === 0 || props.selectionAddon.length === 0;
-
   return (
     <Spacings.Inline scale="m">
       <PrimaryButton

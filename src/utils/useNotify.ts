@@ -1,6 +1,3 @@
-import { NOTIFICATION_DOMAINS, NOTIFICATION_KINDS_SIDE } from '@commercetools-frontend/constants';
-import { useShowNotification } from '@commercetools-frontend/actions-global';
-
 /**
  * Custom hook (wrapper) to show notifications
  * Use example:
@@ -11,6 +8,8 @@ import { useShowNotification } from '@commercetools-frontend/actions-global';
  *
  * Note: "showNotification" without hooks does not work for some reason, so need to do this hooks workaround.
  */
+import { NOTIFICATION_DOMAINS, NOTIFICATION_KINDS_SIDE } from '@commercetools-frontend/constants';
+import { useShowNotification } from '@commercetools-frontend/actions-global';
 
 type UseNotify = {
   notifySuccess: (text: string) => void;

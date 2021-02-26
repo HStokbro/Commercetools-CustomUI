@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Text from '@commercetools-uikit/text';
 // import messages from './messages';
 import { InfoModalPage } from '@commercetools-frontend/application-components';
-import PrimaryButton from '@commercetools-uikit/primary-button';
 import { useGetProductsLazyQuery } from '../../generated/graphql';
 import ProductsTable from '../../components/products-table';
 import BundleAdd from './bundle-add';
