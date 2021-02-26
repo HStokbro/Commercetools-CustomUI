@@ -8,8 +8,8 @@
 - OK - Mutate product & variable field (Not much documentation. I miss examples)
 - OK - Investigate menu, routes (Fair documentation)
 - OK - Figure out how to hook into the Commercetools Redux store - (No documentation)
-- OK - Add eslint
-- OK - Download graphql schema
+- OK - Setup eslint
+- OK - Script for download of graphql schema
 - OK - Setup Apollo client
 - OK - Add documentation in README
 - OK - Setup Typescript (No documentation)
@@ -19,17 +19,34 @@
 - OK - Build product bundle with references
 - OK - Cleanup bundles code
 - OK - Fix error being shown several times
-- Make product list without multi select
+- OK - Make product list with single select
 - Investigate Custom Objects (Field with reference to key value object)
-- Build price setter example
+- Build price handler example
+  - Products view
+    - Add indicator for no prices
+    - Can open Price view
+  - Price view
+    - References
+      - Multi select field to make references
+      - Can open Reference view
+      - Can remove references
+    - Price fields
+      - Variant price fields (For without references)
+      - Fields for matrix of variants & reference variants
+      - Update when references are updated
+  - Reference view
+    - Multi select product list
+    - Preselect the current references
+  - Save custom object with references and prices
+  - Make reference to custom object on product
+- Build quick variant builder example
+  - Vælg produkt
+  - Udfyld farver med komma, udfyld storage
 - Make util for slug escaping
-- Try to use UIKit select
-- Try to use UIKit accordion with ex. categories
 - Plan UI & styling
 - Build routes and menu
 - Investigate bulk imports? = https://docs.commercetools.com/import-api/overview
 - Clean up template
-  - Split GraphQL in fragments?
   - Use intl & messages
   - Use/remove main view?
   - Use redux/context
