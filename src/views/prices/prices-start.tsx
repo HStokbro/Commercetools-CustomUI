@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import Text from '@commercetools-uikit/text';
-// import messages from './messages';
 import { InfoModalPage } from '@commercetools-frontend/application-components';
 import { useGetProductsLazyQuery } from '../../generated/graphql';
 import ProductsTable from '../../components/products-table';
-import BundleAdd from './bundle-add';
-// import { useIntl } from 'react-intl';
 import getCurrentLocale from '../../utils/getCurrentLocale';
 import { GQLQueryOptions } from '../../constants';
 import { ListProduct } from '../../types';
+import PricesEdit from './prices-edit';
 
-const BundleStart = (): JSX.Element => {
-  const [showLvl2, setShowLvl2] = useState<boolean>(false);
-  const [selection, setSelection] = useState<ListProduct[]>([]);
+const PricesStart = (): JSX.Element => {
+  const [showPrices, setShowPrices] = useState<boolean>(false);
+  const [selection, setSelection] = useState<ListProduct>(null);
 
-  // const subscriptionTypeId = 'a641f681-7923-45fc-8652-190a43b2d433';
   const [getProductsQuery, { data, loading, error }] = useGetProductsLazyQuery({
     variables: {
       locale: getCurrentLocale(),
-      // where: `productType(id!="${subscriptionTypeId}")`,
     },
     ...GQLQueryOptions,
   });
@@ -28,40 +24,39 @@ const BundleStart = (): JSX.Element => {
   }, []);
 
   const init = () => {
-    setSelection([]);
-    setShowLvl2(false);
+    setSelection(null);
+    setShowPrices(false);
   };
 
   if (error) return <>{`Error! ${error.message}`}</>;
   if (loading || !data) return <>Loading...</>;
   return (
     <>
-      <Text.Headline as="h1">Bundles</Text.Headline>
-      <Text.Body>Start bundle with a product</Text.Body>
+      <Text.Headline as="h1">Prices</Text.Headline>
+      <Text.Body>Select a product to edit its prices</Text.Body>
 
       <ProductsTable
         rows={data.products.results}
         setSelectedRows={(selectedRows: ListProduct[]) => {
-          setSelection(selectedRows);
           if (selectedRows.length) {
-            setShowLvl2(true);
+            setSelection(selectedRows[0]);
+            setShowPrices(true);
           }
         }}
       />
 
       <InfoModalPage
-        title="Additions"
-        isOpen={showLvl2}
+        title={`Prices for ${selection?.masterData.current.name}`}
+        isOpen={showPrices}
         onClose={() => init()}
-        subtitle={<Text.Body>Add to bundle</Text.Body>}
-        topBarCurrentPathLabel="Additions"
+        topBarCurrentPathLabel="Prices"
         topBarPreviousPathLabel="Back"
       >
-        <BundleAdd rows={data.products.results} selection={selection} onSuccess={() => init()} />
+        <PricesEdit rows={data.products.results} masterProduct={selection} />
       </InfoModalPage>
     </>
   );
 };
 
-BundleStart.displayName = 'BundleStart';
-export default BundleStart;
+PricesStart.displayName = 'PricesStart';
+export default PricesStart;

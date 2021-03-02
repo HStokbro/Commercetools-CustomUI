@@ -3,7 +3,7 @@ import PrimaryButton from '@commercetools-uikit/primary-button';
 import Spacings from '@commercetools-uikit/spacings';
 import { useAddProductBundleMutation } from '../../generated/graphql';
 import useNotify from '../../utils/useNotify';
-import { GQLTarget } from '../../constants';
+import { GQLContext } from '../../constants';
 import { ListProduct } from '../../types';
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
 
 const BundleAsProductButton = (props: Props): JSX.Element => {
   const [addProductBundleMutation, { loading, error }] = useAddProductBundleMutation({
-    ...GQLTarget,
+    ...GQLContext,
   });
   const { notifySuccess, notifyError } = useNotify();
 

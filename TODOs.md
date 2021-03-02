@@ -22,23 +22,24 @@
 - OK - Make product list with single select
 - Investigate Custom Objects (Field with reference to key value object)
 - Build price handler example
-  - Products view
+  - OK - Products view
     - Add indicator for no prices
-    - Can open Price view
+    - OK - Can open Price view
   - Price view
-    - References
-      - Multi select field to make references
-      - Can open Reference view
-      - Can remove references
+    - OK - References
+      - OK - Multi select field to make references
+      - OK - Can open Reference view
+      - OK - Can remove references
     - Price fields
       - Variant price fields (For without references)
       - Fields for matrix of variants & reference variants
       - Update when references are updated
   - Reference view
-    - Multi select product list
+    - OK - Multi select product list
     - Preselect the current references
   - Save custom object with references and prices
   - Make reference to custom object on product
+  - How to delete prices when deleting products?
 - Build quick variant builder example
   - Vælg produkt
   - Udfyld farver med komma, udfyld storage

@@ -1,0 +1,16 @@
+query getVariants($where: String) {
+  products(limit: 500, where: $where) {
+    results {
+      id
+      version
+      masterData {
+        current {
+          allVariants {
+            id
+            key
+          }
+        }
+      }
+    }
+  }
+}

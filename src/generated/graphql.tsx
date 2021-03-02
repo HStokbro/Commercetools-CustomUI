@@ -10851,6 +10851,16 @@ export type GetProductsQuery = { products: { results: Array<(
       & { productType?: Maybe<Pick<ProductTypeDefinition, 'id' | 'key'>>, masterData: { current?: Maybe<Pick<ProductData, 'name'>> } }
     )> } };
 
+export type GetVariantsQueryVariables = Exact<{
+  where?: Maybe<Scalars['String']>;
+}>;
+
+
+export type GetVariantsQuery = { products: { results: Array<(
+      Pick<Product, 'id' | 'version'>
+      & { masterData: { current?: Maybe<{ allVariants: Array<Pick<ProductVariant, 'id' | 'key'>> }> } }
+    )> } };
+
 
 export const AddProductBundleDocument = gql`
     mutation AddProductBundle($name: String!, $slug: String!, $productReferences: String!) {
@@ -10975,3 +10985,47 @@ export function useGetProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetProductsQueryHookResult = ReturnType<typeof useGetProductsQuery>;
 export type GetProductsLazyQueryHookResult = ReturnType<typeof useGetProductsLazyQuery>;
 export type GetProductsQueryResult = Apollo.QueryResult<GetProductsQuery, GetProductsQueryVariables>;
+export const GetVariantsDocument = gql`
+    query getVariants($where: String) {
+  products(limit: 500, where: $where) {
+    results {
+      id
+      version
+      masterData {
+        current {
+          allVariants {
+            id
+            key
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetVariantsQuery__
+ *
+ * To run a query within a React component, call `useGetVariantsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetVariantsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetVariantsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetVariantsQuery(baseOptions?: Apollo.QueryHookOptions<GetVariantsQuery, GetVariantsQueryVariables>) {
+        return Apollo.useQuery<GetVariantsQuery, GetVariantsQueryVariables>(GetVariantsDocument, baseOptions);
+      }
+export function useGetVariantsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetVariantsQuery, GetVariantsQueryVariables>) {
+          return Apollo.useLazyQuery<GetVariantsQuery, GetVariantsQueryVariables>(GetVariantsDocument, baseOptions);
+        }
+export type GetVariantsQueryHookResult = ReturnType<typeof useGetVariantsQuery>;
+export type GetVariantsLazyQueryHookResult = ReturnType<typeof useGetVariantsLazyQuery>;
+export type GetVariantsQueryResult = Apollo.QueryResult<GetVariantsQuery, GetVariantsQueryVariables>;

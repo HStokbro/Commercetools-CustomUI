@@ -24,6 +24,21 @@
             "value": "Bundles"
           }
         ]
+      },
+      {
+        "key": "price",
+        "uriPath": "custom/prices",
+        "menuVisibility": null,
+        "featureToggle": null,
+        "actionRights": null,
+        "dataFences": null,
+        "permissions": [],
+        "labelAllLocales": [
+          {
+            "locale": "en",
+            "value": "Prices"
+          }
+        ]
       }
     ],
     "labelAllLocales": [

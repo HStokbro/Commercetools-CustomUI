@@ -37,6 +37,7 @@
     "@commercetools-uikit/primary-button": "^10.46.1",
     "@commercetools-uikit/secondary-button": "^10.46.1",
     "@commercetools-uikit/spacings": "^10.44.4",
+    "@commercetools-uikit/tag": "^11.0.1",
     "@commercetools-uikit/text": "^10.45.0",
     "bulk-update-versions": "1.1.2",
     "prop-types": "15.7.2",
