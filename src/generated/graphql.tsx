@@ -10859,10 +10859,10 @@ export type GetCurrenciesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCurrenciesQuery = { project: Pick<ProjectProjection, 'currencies'> };
 
-export type GetProductTypesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetProductTypeDefinitionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProductTypesQuery = { productTypes: (
+export type GetProductTypeDefinitionsQuery = { productTypes: (
     Pick<ProductTypeDefinitionQueryResult, 'total'>
     & { results: Array<Pick<ProductTypeDefinition, 'key' | 'name' | 'description' | 'id'>> }
   ) };
@@ -10873,10 +10873,13 @@ export type GetProductsQueryVariables = Exact<{
 }>;
 
 
-export type GetProductsQuery = { products: { results: Array<(
+export type GetProductsQuery = { products: (
+    Pick<ProductQueryResult, 'total'>
+    & { results: Array<(
       Pick<Product, 'id' | 'version'>
       & { productType?: Maybe<Pick<ProductTypeDefinition, 'id' | 'key'>>, masterData: { current?: Maybe<Pick<ProductData, 'name'>> } }
-    )> } };
+    )> }
+  ) };
 
 export type GetVariantsQueryVariables = Exact<{
   locale?: Maybe<Scalars['Locale']>;
@@ -10884,13 +10887,16 @@ export type GetVariantsQueryVariables = Exact<{
 }>;
 
 
-export type GetVariantsQuery = { products: { results: Array<(
+export type GetVariantsQuery = { products: (
+    Pick<ProductQueryResult, 'total'>
+    & { results: Array<(
       Pick<Product, 'id' | 'version'>
       & { masterData: { current?: Maybe<(
           Pick<ProductData, 'name'>
           & { allVariants: Array<Pick<ProductVariant, 'id' | 'key'>> }
         )> } }
-    )> } };
+    )> }
+  ) };
 
 
 export const AddProductBundleDocument = gql`
@@ -11045,8 +11051,8 @@ export function useGetCurrenciesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetCurrenciesQueryHookResult = ReturnType<typeof useGetCurrenciesQuery>;
 export type GetCurrenciesLazyQueryHookResult = ReturnType<typeof useGetCurrenciesLazyQuery>;
 export type GetCurrenciesQueryResult = Apollo.QueryResult<GetCurrenciesQuery, GetCurrenciesQueryVariables>;
-export const GetProductTypesDocument = gql`
-    query getProductTypes {
+export const GetProductTypeDefinitionsDocument = gql`
+    query getProductTypeDefinitions {
   productTypes {
     total
     results {
@@ -11060,32 +11066,33 @@ export const GetProductTypesDocument = gql`
     `;
 
 /**
- * __useGetProductTypesQuery__
+ * __useGetProductTypeDefinitionsQuery__
  *
- * To run a query within a React component, call `useGetProductTypesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProductTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetProductTypeDefinitionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductTypeDefinitionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetProductTypesQuery({
+ * const { data, loading, error } = useGetProductTypeDefinitionsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetProductTypesQuery(baseOptions?: Apollo.QueryHookOptions<GetProductTypesQuery, GetProductTypesQueryVariables>) {
-        return Apollo.useQuery<GetProductTypesQuery, GetProductTypesQueryVariables>(GetProductTypesDocument, baseOptions);
+export function useGetProductTypeDefinitionsQuery(baseOptions?: Apollo.QueryHookOptions<GetProductTypeDefinitionsQuery, GetProductTypeDefinitionsQueryVariables>) {
+        return Apollo.useQuery<GetProductTypeDefinitionsQuery, GetProductTypeDefinitionsQueryVariables>(GetProductTypeDefinitionsDocument, baseOptions);
       }
-export function useGetProductTypesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductTypesQuery, GetProductTypesQueryVariables>) {
-          return Apollo.useLazyQuery<GetProductTypesQuery, GetProductTypesQueryVariables>(GetProductTypesDocument, baseOptions);
+export function useGetProductTypeDefinitionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductTypeDefinitionsQuery, GetProductTypeDefinitionsQueryVariables>) {
+          return Apollo.useLazyQuery<GetProductTypeDefinitionsQuery, GetProductTypeDefinitionsQueryVariables>(GetProductTypeDefinitionsDocument, baseOptions);
         }
-export type GetProductTypesQueryHookResult = ReturnType<typeof useGetProductTypesQuery>;
-export type GetProductTypesLazyQueryHookResult = ReturnType<typeof useGetProductTypesLazyQuery>;
-export type GetProductTypesQueryResult = Apollo.QueryResult<GetProductTypesQuery, GetProductTypesQueryVariables>;
+export type GetProductTypeDefinitionsQueryHookResult = ReturnType<typeof useGetProductTypeDefinitionsQuery>;
+export type GetProductTypeDefinitionsLazyQueryHookResult = ReturnType<typeof useGetProductTypeDefinitionsLazyQuery>;
+export type GetProductTypeDefinitionsQueryResult = Apollo.QueryResult<GetProductTypeDefinitionsQuery, GetProductTypeDefinitionsQueryVariables>;
 export const GetProductsDocument = gql`
     query getProducts($locale: Locale, $where: String) {
-  products(limit: 100, where: $where) {
+  products(limit: 500, where: $where) {
+    total
     results {
       id
       version
@@ -11132,6 +11139,7 @@ export type GetProductsQueryResult = Apollo.QueryResult<GetProductsQuery, GetPro
 export const GetVariantsDocument = gql`
     query getVariants($locale: Locale, $where: String) {
   products(limit: 500, where: $where) {
+    total
     results {
       id
       version

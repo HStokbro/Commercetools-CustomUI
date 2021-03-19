@@ -1,5 +1,6 @@
 query getProducts($locale: Locale, $where: String) {
-  products(limit: 100, where: $where) {
+  products(limit: 500, where: $where) {
+    total
     results {
       id
       version

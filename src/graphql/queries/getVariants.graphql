@@ -1,5 +1,6 @@
 query getVariants($locale: Locale, $where: String) {
   products(limit: 500, where: $where) {
+    total
     results {
       id
       version

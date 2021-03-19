@@ -1,4 +1,4 @@
-query getProductTypes {
+query getProductTypeDefinitions {
   productTypes {
     total
     results {

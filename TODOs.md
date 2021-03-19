@@ -20,7 +20,9 @@
 - OK - Cleanup bundles code
 - OK - Fix error being shown several times
 - OK - Make product list with single select
-- Use redux/context
+- OK - Build queries for categories, product types, currencies
+- Build types for state
+- Build redux setup
 - Investigate Custom Objects (Field with reference to key value object)
 - Build price handler example
   - OK - Products view
