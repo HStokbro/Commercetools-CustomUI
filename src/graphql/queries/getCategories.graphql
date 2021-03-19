@@ -1,0 +1,14 @@
+query getCategories($locale: Locale, $where: String) {
+  categories(where: $where) {
+    total
+    results {
+      id
+      name(locale: $locale)
+      description(locale: $locale)
+      ancestors {
+        id
+        name(locale: $locale)
+      }
+    }
+  }
+}

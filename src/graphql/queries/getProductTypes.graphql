@@ -1,0 +1,11 @@
+query getProductTypes {
+  productTypes {
+    total
+    results {
+      key
+      name
+      description
+      id
+    }
+  }
+}

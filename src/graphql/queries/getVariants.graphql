@@ -1,10 +1,11 @@
-query getVariants($where: String) {
+query getVariants($locale: Locale, $where: String) {
   products(limit: 500, where: $where) {
     results {
       id
       version
       masterData {
         current {
+          name(locale: $locale)
           allVariants {
             id
             key

@@ -3,24 +3,23 @@ import Text from '@commercetools-uikit/text';
 import { InfoModalPage } from '@commercetools-frontend/application-components';
 import { useGetProductsLazyQuery } from '../../generated/graphql';
 import ProductsTable from '../../components/products-table';
-import getCurrentLocale from '../../utils/getCurrentLocale';
-import { GQLQueryOptions } from '../../constants';
+import { GQLQueryOptions, GQLCurrentLocale } from '../../utils/gqlHelpers';
 import { ListProduct } from '../../types';
 import PricesEdit from './prices-edit';
 
 const PricesStart = (): JSX.Element => {
   const [showPrices, setShowPrices] = useState<boolean>(false);
   const [selection, setSelection] = useState<ListProduct>(null);
+  const locale = GQLCurrentLocale();
 
-  const [getProductsQuery, { data, loading, error }] = useGetProductsLazyQuery({
-    variables: {
-      locale: getCurrentLocale(),
-    },
-    ...GQLQueryOptions,
-  });
+  const [getProductsQuery, { data, loading, error }] = useGetProductsLazyQuery(GQLQueryOptions);
 
   useEffect(() => {
-    getProductsQuery();
+    getProductsQuery({
+      variables: {
+        locale,
+      },
+    });
   }, []);
 
   const init = () => {

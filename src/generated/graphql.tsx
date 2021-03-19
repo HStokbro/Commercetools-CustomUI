@@ -10840,6 +10840,33 @@ export type SetProductAttributesMutationVariables = Exact<{
 
 export type SetProductAttributesMutation = { updateProduct?: Maybe<Pick<Product, 'id' | 'version'>> };
 
+export type GetCategoriesQueryVariables = Exact<{
+  locale?: Maybe<Scalars['Locale']>;
+  where?: Maybe<Scalars['String']>;
+}>;
+
+
+export type GetCategoriesQuery = { categories: (
+    Pick<CategoryQueryResult, 'total'>
+    & { results: Array<(
+      Pick<Category, 'id' | 'name' | 'description'>
+      & { ancestors: Array<Pick<Category, 'id' | 'name'>> }
+    )> }
+  ) };
+
+export type GetCurrenciesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCurrenciesQuery = { project: Pick<ProjectProjection, 'currencies'> };
+
+export type GetProductTypesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProductTypesQuery = { productTypes: (
+    Pick<ProductTypeDefinitionQueryResult, 'total'>
+    & { results: Array<Pick<ProductTypeDefinition, 'key' | 'name' | 'description' | 'id'>> }
+  ) };
+
 export type GetProductsQueryVariables = Exact<{
   locale?: Maybe<Scalars['Locale']>;
   where?: Maybe<Scalars['String']>;
@@ -10852,13 +10879,17 @@ export type GetProductsQuery = { products: { results: Array<(
     )> } };
 
 export type GetVariantsQueryVariables = Exact<{
+  locale?: Maybe<Scalars['Locale']>;
   where?: Maybe<Scalars['String']>;
 }>;
 
 
 export type GetVariantsQuery = { products: { results: Array<(
       Pick<Product, 'id' | 'version'>
-      & { masterData: { current?: Maybe<{ allVariants: Array<Pick<ProductVariant, 'id' | 'key'>> }> } }
+      & { masterData: { current?: Maybe<(
+          Pick<ProductData, 'name'>
+          & { allVariants: Array<Pick<ProductVariant, 'id' | 'key'>> }
+        )> } }
     )> } };
 
 
@@ -10939,6 +10970,119 @@ export function useSetProductAttributesMutation(baseOptions?: Apollo.MutationHoo
 export type SetProductAttributesMutationHookResult = ReturnType<typeof useSetProductAttributesMutation>;
 export type SetProductAttributesMutationResult = Apollo.MutationResult<SetProductAttributesMutation>;
 export type SetProductAttributesMutationOptions = Apollo.BaseMutationOptions<SetProductAttributesMutation, SetProductAttributesMutationVariables>;
+export const GetCategoriesDocument = gql`
+    query getCategories($locale: Locale, $where: String) {
+  categories(where: $where) {
+    total
+    results {
+      id
+      name(locale: $locale)
+      description(locale: $locale)
+      ancestors {
+        id
+        name(locale: $locale)
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoriesQuery({
+ *   variables: {
+ *      locale: // value for 'locale'
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
+        return Apollo.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, baseOptions);
+      }
+export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
+          return Apollo.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, baseOptions);
+        }
+export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
+export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
+export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
+export const GetCurrenciesDocument = gql`
+    query getCurrencies {
+  project {
+    currencies
+  }
+}
+    `;
+
+/**
+ * __useGetCurrenciesQuery__
+ *
+ * To run a query within a React component, call `useGetCurrenciesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrenciesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrenciesQuery(baseOptions?: Apollo.QueryHookOptions<GetCurrenciesQuery, GetCurrenciesQueryVariables>) {
+        return Apollo.useQuery<GetCurrenciesQuery, GetCurrenciesQueryVariables>(GetCurrenciesDocument, baseOptions);
+      }
+export function useGetCurrenciesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCurrenciesQuery, GetCurrenciesQueryVariables>) {
+          return Apollo.useLazyQuery<GetCurrenciesQuery, GetCurrenciesQueryVariables>(GetCurrenciesDocument, baseOptions);
+        }
+export type GetCurrenciesQueryHookResult = ReturnType<typeof useGetCurrenciesQuery>;
+export type GetCurrenciesLazyQueryHookResult = ReturnType<typeof useGetCurrenciesLazyQuery>;
+export type GetCurrenciesQueryResult = Apollo.QueryResult<GetCurrenciesQuery, GetCurrenciesQueryVariables>;
+export const GetProductTypesDocument = gql`
+    query getProductTypes {
+  productTypes {
+    total
+    results {
+      key
+      name
+      description
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProductTypesQuery__
+ *
+ * To run a query within a React component, call `useGetProductTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductTypesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetProductTypesQuery(baseOptions?: Apollo.QueryHookOptions<GetProductTypesQuery, GetProductTypesQueryVariables>) {
+        return Apollo.useQuery<GetProductTypesQuery, GetProductTypesQueryVariables>(GetProductTypesDocument, baseOptions);
+      }
+export function useGetProductTypesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductTypesQuery, GetProductTypesQueryVariables>) {
+          return Apollo.useLazyQuery<GetProductTypesQuery, GetProductTypesQueryVariables>(GetProductTypesDocument, baseOptions);
+        }
+export type GetProductTypesQueryHookResult = ReturnType<typeof useGetProductTypesQuery>;
+export type GetProductTypesLazyQueryHookResult = ReturnType<typeof useGetProductTypesLazyQuery>;
+export type GetProductTypesQueryResult = Apollo.QueryResult<GetProductTypesQuery, GetProductTypesQueryVariables>;
 export const GetProductsDocument = gql`
     query getProducts($locale: Locale, $where: String) {
   products(limit: 100, where: $where) {
@@ -10986,13 +11130,14 @@ export type GetProductsQueryHookResult = ReturnType<typeof useGetProductsQuery>;
 export type GetProductsLazyQueryHookResult = ReturnType<typeof useGetProductsLazyQuery>;
 export type GetProductsQueryResult = Apollo.QueryResult<GetProductsQuery, GetProductsQueryVariables>;
 export const GetVariantsDocument = gql`
-    query getVariants($where: String) {
+    query getVariants($locale: Locale, $where: String) {
   products(limit: 500, where: $where) {
     results {
       id
       version
       masterData {
         current {
+          name(locale: $locale)
           allVariants {
             id
             key
@@ -11016,6 +11161,7 @@ export const GetVariantsDocument = gql`
  * @example
  * const { data, loading, error } = useGetVariantsQuery({
  *   variables: {
+ *      locale: // value for 'locale'
  *      where: // value for 'where'
  *   },
  * });

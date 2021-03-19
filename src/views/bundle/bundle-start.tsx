@@ -6,25 +6,23 @@ import { useGetProductsLazyQuery } from '../../generated/graphql';
 import ProductsTable from '../../components/products-table';
 import BundleAdd from './bundle-add';
 // import { useIntl } from 'react-intl';
-import getCurrentLocale from '../../utils/getCurrentLocale';
-import { GQLQueryOptions } from '../../constants';
+import { GQLQueryOptions, GQLCurrentLocale } from '../../utils/gqlHelpers';
 import { ListProduct } from '../../types';
 
 const BundleStart = (): JSX.Element => {
   const [showLvl2, setShowLvl2] = useState<boolean>(false);
   const [selection, setSelection] = useState<ListProduct[]>([]);
+  const locale = GQLCurrentLocale();
 
-  // const subscriptionTypeId = 'a641f681-7923-45fc-8652-190a43b2d433';
-  const [getProductsQuery, { data, loading, error }] = useGetProductsLazyQuery({
-    variables: {
-      locale: getCurrentLocale(),
-      // where: `productType(id!="${subscriptionTypeId}")`,
-    },
-    ...GQLQueryOptions,
-  });
-
+  const [getProductsQuery, { data, loading, error }] = useGetProductsLazyQuery(GQLQueryOptions);
   useEffect(() => {
-    getProductsQuery();
+    // const subscriptionTypeId = 'a641f681-7923-45fc-8652-190a43b2d433';
+    getProductsQuery({
+      variables: {
+        locale,
+        // where: `productType(id!="${subscriptionTypeId}")`,
+      },
+    });
   }, []);
 
   const init = () => {

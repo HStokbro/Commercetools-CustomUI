@@ -3,7 +3,7 @@ import PrimaryButton from '@commercetools-uikit/primary-button';
 import Spacings from '@commercetools-uikit/spacings';
 import { useSetProductAttributesMutation } from '../../generated/graphql';
 import useNotify from '../../utils/useNotify';
-import { GQLContext } from '../../constants';
+import { GQLContext } from '../../utils/gqlHelpers';
 import { ListProduct } from '../../types';
 
 type Props = {
@@ -13,9 +13,7 @@ type Props = {
 };
 
 const BundleAsAttributeButton = (props: Props): JSX.Element => {
-  const [setProductAttributesMutation, { loading, error }] = useSetProductAttributesMutation({
-    ...GQLContext,
-  });
+  const [setProductAttributesMutation, { loading, error }] = useSetProductAttributesMutation(GQLContext);
   const { notifySuccess, notifyError } = useNotify();
 
   useEffect(() => {
