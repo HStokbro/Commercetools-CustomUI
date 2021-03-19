@@ -20,6 +20,7 @@
 - OK - Cleanup bundles code
 - OK - Fix error being shown several times
 - OK - Make product list with single select
+- Use redux/context
 - Investigate Custom Objects (Field with reference to key value object)
 - Build price handler example
   - OK - Products view
@@ -48,10 +49,11 @@
 - Build routes and menu
 - Investigate bulk imports? = https://docs.commercetools.com/import-api/overview
 - Clean up template
+  - Update Readme
+  - Link to graphQL queries in readme
   - Use intl & messages
   - Use/remove main view?
-  - Use redux/context
-
+  
 # Note - Things to look out for
 
 - Slug and variant key have to be unique
