@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Text from '@commercetools-uikit/text';
 import MoneyField from '@commercetools-uikit/money-field';
 import Card from '@commercetools-uikit/card';
-import { useGetCurrenciesQuery, useGetVariantsLazyQuery } from '../../generated/graphql';
+import { useGetProjectQuery, useGetVariantsLazyQuery } from '../../generated/graphql';
 import { GQLContext, GQLQueryOptions, GQLCurrentLocale } from '../../utils/gqlHelpers';
 import { ListProduct } from '../../types';
 
@@ -15,7 +15,7 @@ const PricesEditPrices = (props: Props): JSX.Element => {
   const readyToLoad = props.references.length;
   const locale = GQLCurrentLocale();
 
-  const currenciesState = useGetCurrenciesQuery(GQLContext);
+  const project = useGetProjectQuery(GQLContext);
 
   const [getMaster, masterState] = useGetVariantsLazyQuery(GQLQueryOptions);
   useEffect(() => {
@@ -53,7 +53,7 @@ const PricesEditPrices = (props: Props): JSX.Element => {
 
   if (!props.masterProduct || !props.references.length || !masterState.data || !referencesState.data) return null;
 
-  const { currencies } = currenciesState.data.project;
+  const { currencies } = project.data.project;
   const master = masterState.data.products.results[0];
   const references = referencesState.data.products.results;
   const masterVariants = master.masterData.current.allVariants;
