@@ -100,7 +100,6 @@ export type AddCartLineItem = {
   externalPrice?: Maybe<BaseMoneyInput>;
   externalTaxRate?: Maybe<ExternalTaxRateDraft>;
   custom?: Maybe<CustomFieldsDraft>;
-  catalog?: Maybe<ReferenceInput>;
   distributionChannel?: Maybe<ResourceIdentifierInput>;
   supplyChannel?: Maybe<ResourceIdentifierInput>;
   variantId?: Maybe<Scalars['Int']>;
@@ -154,7 +153,6 @@ export type AddMyCartLineItem = {
   addedAt?: Maybe<Scalars['DateTime']>;
   shippingDetails?: Maybe<ItemShippingDetailsDraft>;
   custom?: Maybe<CustomFieldsDraft>;
-  catalog?: Maybe<ReferenceInput>;
   distributionChannel?: Maybe<ResourceIdentifierInput>;
   supplyChannel?: Maybe<ResourceIdentifierInput>;
   variantId?: Maybe<Scalars['Int']>;
@@ -169,7 +167,7 @@ export type AddMyPaymentTransaction = {
 
 export type AddOrderDelivery = {
   items?: Maybe<Array<DeliveryItemDraftType>>;
-  parcels?: Maybe<Array<DeliveryItemDraftType>>;
+  parcels?: Maybe<Array<ParcelDataDraftType>>;
   address?: Maybe<AddressInput>;
 };
 
@@ -212,7 +210,6 @@ export type AddPaymentTransaction = {
 export type AddProductAsset = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   position?: Maybe<Scalars['Int']>;
   asset: AssetDraftInput;
@@ -229,7 +226,6 @@ export type AddProductPrice = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
   price: ProductPriceDataInput;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
 };
 
@@ -293,7 +289,7 @@ export type AddStagedOrderCustomLineItemOutput = StagedOrderUpdateActionOutput &
 
 export type AddStagedOrderDelivery = {
   items?: Maybe<Array<DeliveryItemDraftType>>;
-  parcels?: Maybe<Array<DeliveryItemDraftType>>;
+  parcels?: Maybe<Array<ParcelDataDraftType>>;
   address?: Maybe<AddressInput>;
 };
 
@@ -331,7 +327,6 @@ export type AddStagedOrderLineItem = {
   externalPrice?: Maybe<BaseMoneyInput>;
   externalTaxRate?: Maybe<ExternalTaxRateDraft>;
   custom?: Maybe<CustomFieldsDraft>;
-  catalog?: Maybe<ReferenceInput>;
   distributionChannel?: Maybe<ResourceIdentifierInput>;
   supplyChannel?: Maybe<ResourceIdentifierInput>;
   variantId?: Maybe<Scalars['Int']>;
@@ -440,12 +435,12 @@ export type AddressDraft = {
   building?: Maybe<Scalars['String']>;
   apartment?: Maybe<Scalars['String']>;
   pOBox?: Maybe<Scalars['String']>;
-  /** @deprecated Field 'contactInfo' is deprecated. Instead of using e.g. 'contactInfo.email' use 'email' directly. */
-  contactInfo: AddressContactInfo;
   additionalAddressInfo?: Maybe<Scalars['String']>;
   externalId?: Maybe<Scalars['String']>;
   key?: Maybe<Scalars['String']>;
   custom?: Maybe<CustomFieldsCommand>;
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Field 'contactInfo' is deprecated. Instead of using e.g. 'contactInfo.email' use 'email' directly. */
+  contactInfo?: Maybe<AddressContactInfo>;
   phone?: Maybe<Scalars['String']>;
   mobile?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -1057,7 +1052,6 @@ export type ChangePaymentTransactionTimestamp = {
 export type ChangeProductAssetName = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   name: Array<LocalizedStringItemInputType>;
   assetKey?: Maybe<Scalars['String']>;
@@ -1067,7 +1061,6 @@ export type ChangeProductAssetName = {
 export type ChangeProductAssetOrder = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   assetOrder: Array<Scalars['String']>;
 };
@@ -1116,7 +1109,6 @@ export type ChangeProductPrice = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
   price: ProductPriceDataInput;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
 };
 
@@ -1566,8 +1558,7 @@ export type CustomSuggestTokenizer = SuggestTokenizer & {
 };
 
 export type CustomSuggestTokenizerInput = {
-  text: Scalars['String'];
-  suggestTokenizer?: Maybe<BaseSearchKeywordInput>;
+  inputs: Array<Scalars['String']>;
 };
 
 export type CustomerAddressAdded = MessagePayload & {
@@ -2259,10 +2250,6 @@ export type LineItemDraftOutput = {
   externalTotalPrice?: Maybe<ExternalLineItemTotalPrice>;
   shippingDetails?: Maybe<ItemShippingDetailsDraftOutput>;
   addedAt?: Maybe<Scalars['DateTime']>;
-  /** @deprecated Use 'distributionChannelResId' to fetch the resource identifier. */
-  distributionChannel?: Maybe<ResourceIdentifier>;
-  /** @deprecated Use 'supplyChannelResId' to fetch the resource identifier. */
-  supplyChannel?: Maybe<ResourceIdentifier>;
   distributionChannelResId?: Maybe<ResourceIdentifier>;
   supplyChannelResId?: Maybe<ResourceIdentifier>;
 };
@@ -2548,9 +2535,11 @@ export type Mutation = {
   /** The token value is used to reset the password of the customer with the given email. The token is valid only for 10 minutes. */
   customerCreatePasswordResetToken?: Maybe<CustomerPasswordToken>;
   customerCreateEmailVerificationToken: CustomerEmailToken;
-  /** If used with an access token for Anonymous Sessions, all orders and carts belonging to the anonymousId will be assigned to the newly created customer. */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features If used with an access token for Anonymous Sessions, all orders and carts belonging to the anonymousId will be assigned to the newly created customer. */
   customerSignMeUp: CustomerSignInResult;
   /**
+   * BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features
+   *
    * Retrieves the authenticated customer (a customer that matches the given email/password pair).
    *
    * If used with an access token for Anonymous Sessions, all orders and carts belonging to the `anonymousId` will be assigned to the newly created customer.
@@ -2561,10 +2550,15 @@ export type Mutation = {
    * If a cart is is returned as part of the `CustomerSignInResult`, it has been recalculated (it will have up-to-date prices, taxes and discounts, and invalid line items have been removed).
    */
   customerSignMeIn: CustomerSignInResult;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   updateMyCustomer?: Maybe<Customer>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   deleteMyCustomer?: Maybe<Customer>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   customerChangeMyPassword?: Maybe<Customer>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   customerConfirmMyEmail?: Maybe<Customer>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   customerResetMyPassword?: Maybe<Customer>;
   createInventoryEntry?: Maybe<InventoryEntry>;
   updateInventoryEntry?: Maybe<InventoryEntry>;
@@ -2573,12 +2567,16 @@ export type Mutation = {
   updateCart?: Maybe<Cart>;
   deleteCart?: Maybe<Cart>;
   replicateCart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   createMyCart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   updateMyCart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   deleteMyCart?: Maybe<Cart>;
   createOrderFromCart?: Maybe<Order>;
   updateOrder?: Maybe<Order>;
   deleteOrder?: Maybe<Order>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   createMyOrderFromCart?: Maybe<Order>;
   createOrderEdit?: Maybe<OrderEdit>;
   updateOrderEdit?: Maybe<OrderEdit>;
@@ -2586,21 +2584,25 @@ export type Mutation = {
   createShoppingList?: Maybe<ShoppingList>;
   updateShoppingList?: Maybe<ShoppingList>;
   deleteShoppingList?: Maybe<ShoppingList>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   createMyShoppingList?: Maybe<ShoppingList>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   updateMyShoppingList?: Maybe<ShoppingList>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   deleteMyShoppingList?: Maybe<ShoppingList>;
   createPayment?: Maybe<Payment>;
   updatePayment?: Maybe<Payment>;
   deletePayment?: Maybe<Payment>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   createMyPayment?: Maybe<MyPayment>;
   updateMyPayment?: Maybe<MyPayment>;
   deleteMyPayment?: Maybe<MyPayment>;
   updateProject?: Maybe<ProjectProjection>;
-  /** beta feature */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   createStore?: Maybe<Store>;
-  /** beta feature */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   updateStore?: Maybe<Store>;
-  /** beta feature */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   deleteStore?: Maybe<Store>;
   createReview?: Maybe<Review>;
   updateReview?: Maybe<Review>;
@@ -3149,12 +3151,14 @@ export type MutationDeleteShoppingListArgs = {
 
 export type MutationCreateMyShoppingListArgs = {
   draft: MyShoppingListDraft;
+  storeKey?: Maybe<Scalars['KeyReferenceInput']>;
 };
 
 
 export type MutationUpdateMyShoppingListArgs = {
   version: Scalars['Long'];
   actions: Array<MyShoppingListUpdateAction>;
+  storeKey?: Maybe<Scalars['KeyReferenceInput']>;
   id?: Maybe<Scalars['String']>;
   key?: Maybe<Scalars['String']>;
 };
@@ -3162,6 +3166,7 @@ export type MutationUpdateMyShoppingListArgs = {
 
 export type MutationDeleteMyShoppingListArgs = {
   version: Scalars['Long'];
+  storeKey?: Maybe<Scalars['KeyReferenceInput']>;
   id?: Maybe<Scalars['String']>;
   key?: Maybe<Scalars['String']>;
 };
@@ -3772,6 +3777,12 @@ export type ParcelData = {
   measurements?: Maybe<ParcelMeasurements>;
   trackingData?: Maybe<TrackingData>;
   items: Array<DeliveryItem>;
+};
+
+export type ParcelDataDraftType = {
+  measurements?: Maybe<ParcelMeasurementsDraftType>;
+  trackingData?: Maybe<TrackingDataDraftType>;
+  items?: Maybe<Array<DeliveryItemDraftType>>;
 };
 
 export type ParcelItemsUpdated = MessagePayload & {
@@ -4430,7 +4441,6 @@ export type RemoveOrderPayment = {
 export type RemoveProductAsset = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   assetKey?: Maybe<Scalars['String']>;
   assetId?: Maybe<Scalars['String']>;
@@ -4453,7 +4463,6 @@ export type RemoveProductPrice = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
   price?: Maybe<ProductPriceDataInput>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
 };
 
@@ -4714,7 +4723,12 @@ export type ScoreShippingRateInputDraftOutput = ShippingRateInputDraftOutput & {
 
 export type SearchKeywordInput = {
   locale: Scalars['Locale'];
-  keywords: Array<CustomSuggestTokenizerInput>;
+  keywords: Array<SearchKeywordItemInput>;
+};
+
+export type SearchKeywordItemInput = {
+  text: Scalars['String'];
+  suggestTokenizer?: Maybe<BaseSearchKeywordInput>;
 };
 
 /** In order to decide which of the matching items will actually be discounted */
@@ -5506,7 +5520,6 @@ export type SetPaymentStatusInterfaceText = {
 export type SetProductAssetCustomField = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   value?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -5517,7 +5530,6 @@ export type SetProductAssetCustomField = {
 export type SetProductAssetCustomType = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   typeId?: Maybe<Scalars['String']>;
   typeKey?: Maybe<Scalars['String']>;
@@ -5530,7 +5542,6 @@ export type SetProductAssetCustomType = {
 export type SetProductAssetDescription = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   description?: Maybe<Array<LocalizedStringItemInputType>>;
   assetKey?: Maybe<Scalars['String']>;
@@ -5540,7 +5551,6 @@ export type SetProductAssetDescription = {
 export type SetProductAssetKey = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   assetKey?: Maybe<Scalars['String']>;
   assetId: Scalars['String'];
@@ -5549,7 +5559,6 @@ export type SetProductAssetKey = {
 export type SetProductAssetSources = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   sources?: Maybe<Array<AssetSourceInput>>;
   assetKey?: Maybe<Scalars['String']>;
@@ -5559,7 +5568,6 @@ export type SetProductAssetSources = {
 export type SetProductAssetTags = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Scalars['String']>>;
   assetKey?: Maybe<Scalars['String']>;
@@ -5615,7 +5623,6 @@ export type SetProductDiscountValidUntil = {
 export type SetProductDiscountedPrice = {
   priceId: Scalars['String'];
   discounted?: Maybe<DiscountedProductPriceValueInput>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
 };
 
@@ -5655,7 +5662,6 @@ export type SetProductMetaTitle = {
 
 export type SetProductPriceCustomField = {
   priceId: Scalars['String'];
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
   value?: Maybe<Scalars['String']>;
@@ -5663,7 +5669,6 @@ export type SetProductPriceCustomField = {
 
 export type SetProductPriceCustomType = {
   priceId: Scalars['String'];
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
   fields?: Maybe<Array<CustomFieldInput>>;
   type?: Maybe<ResourceIdentifierInput>;
@@ -5675,7 +5680,6 @@ export type SetProductPrices = {
   variantId?: Maybe<Scalars['Int']>;
   sku?: Maybe<Scalars['String']>;
   prices: Array<ProductPriceDataInput>;
-  catalog?: Maybe<ReferenceInput>;
   staged?: Maybe<Scalars['Boolean']>;
 };
 
@@ -7210,11 +7214,11 @@ export type Address = {
   building?: Maybe<Scalars['String']>;
   apartment?: Maybe<Scalars['String']>;
   pOBox?: Maybe<Scalars['String']>;
-  /** @deprecated Field 'contactInfo' is deprecated. Instead of using e.g. 'contactInfo.email' use 'email' directly. */
-  contactInfo: AddressContactInfo;
   additionalAddressInfo?: Maybe<Scalars['String']>;
   externalId?: Maybe<Scalars['String']>;
   key?: Maybe<Scalars['String']>;
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Field 'contactInfo' is deprecated. Instead of using e.g. 'contactInfo.email' use 'email' directly. */
+  contactInfo?: Maybe<AddressContactInfo>;
   phone?: Maybe<Scalars['String']>;
   mobile?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -7244,7 +7248,7 @@ export type Asset = {
   tags: Array<Scalars['String']>;
   /**
    * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
@@ -7360,21 +7364,21 @@ export type Cart = Versioned & {
   locale?: Maybe<Scalars['Locale']>;
   shippingRateInput?: Maybe<ShippingRateInput>;
   origin: CartOrigin;
-  /** beta feature */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   storeRef?: Maybe<KeyReference>;
-  /** beta feature */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   store?: Maybe<Store>;
   itemShippingAddresses: Array<Address>;
   cartState: CartState;
   key?: Maybe<Scalars['String']>;
   /**
    * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFieldsRaw?: Maybe<Array<RawCustomField>>;
   /**
    * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
@@ -7415,7 +7419,7 @@ export type CartDiscount = Versioned & {
   referenceRefs: Array<Reference>;
   /**
    * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
@@ -7451,8 +7455,13 @@ export type CartDiscountDescriptionArgs = {
   acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
 };
 
+export type CartDiscountLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type CartDiscountLimitsProjection = {
-  totalActiveWithoutDiscountCodes: LimitWithCurrent;
+  totalActiveWithoutDiscountCodes: CartDiscountLimitWithCurrent;
 };
 
 export type CartDiscountQueryResult = {
@@ -7470,8 +7479,13 @@ export type CartDiscountValue = {
   type: Scalars['String'];
 };
 
+export type CartLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type CartLimitsProjection = {
-  total: LimitWithCurrent;
+  total: CartLimitWithCurrent;
 };
 
 export enum CartOrigin {
@@ -7548,7 +7562,7 @@ export type Category = Versioned & {
   metaDescriptionAllLocales?: Maybe<Array<LocalizedString>>;
   /**
    * Number of a products in the category subtree.
-   * @deprecated The returned number is representing only staged products. Use 'stagedProductCount' instead
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. The returned number is representing only staged products. Use 'stagedProductCount' instead
    */
   productCount: Scalars['Int'];
   /** Number of staged products in the category subtree. */
@@ -7562,12 +7576,12 @@ export type Category = Versioned & {
   assets: Array<Asset>;
   /**
    * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFieldsRaw?: Maybe<Array<RawCustomField>>;
   /**
    * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
@@ -7617,6 +7631,10 @@ export type CategoryCustomFieldsRawArgs = {
   excludeNames?: Maybe<Array<Scalars['String']>>;
 };
 
+export type CategoryLimitsProjection = {
+  maxCategories: Limit;
+};
+
 export type CategoryOrderHint = {
   categoryId: Scalars['String'];
   orderHint: Scalars['String'];
@@ -7644,7 +7662,7 @@ export type CategorySearch = {
   parentRef?: Maybe<Reference>;
   parent?: Maybe<CategorySearch>;
   externalId?: Maybe<Scalars['String']>;
-  /** @deprecated The returned number is representing only staged products. Use 'stagedProductCount' instead */
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. The returned number is representing only staged products. Use 'stagedProductCount' instead */
   productCount: Scalars['Int'];
   stagedProductCount: Scalars['Int'];
   childCount: Scalars['Int'];
@@ -7689,7 +7707,7 @@ export type ChangeSubscription = {
 
 export type Channel = Versioned & ReviewTarget & {
   id: Scalars['String'];
-  /** @deprecated Use 'channelRef' to fetch the reference. */
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'channelRef' to fetch the reference. */
   typeId: Scalars['String'];
   version: Scalars['Long'];
   key: Scalars['String'];
@@ -7749,7 +7767,7 @@ export type CustomFieldsType = {
   customFieldsRaw?: Maybe<Array<RawCustomField>>;
   /**
    * This field would contain type data
-   * @deprecated Typed custom fields are no longer supported, please use customFieldsRaw instead.
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Typed custom fields are no longer supported, please use customFieldsRaw instead.
    */
   customFields: Type;
 };
@@ -7777,12 +7795,12 @@ export type CustomLineItem = {
   discountedPricePerQuantity: Array<DiscountedLineItemPriceForQuantity>;
   /**
    * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFieldsRaw?: Maybe<Array<RawCustomField>>;
   /**
    * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
@@ -7815,8 +7833,13 @@ export type CustomObject = Versioned & {
   lastModifiedBy?: Maybe<Initiator>;
 };
 
+export type CustomObjectLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type CustomObjectLimitsProjection = {
-  total: LimitWithCurrent;
+  total: CustomObjectLimitWithCurrent;
 };
 
 export type CustomObjectQueryResult = {
@@ -7854,18 +7877,18 @@ export type Customer = Versioned & {
   defaultBillingAddress?: Maybe<Address>;
   shippingAddresses: Array<Address>;
   billingAddresses: Array<Address>;
-  /** beta feature */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   storesRef: Array<KeyReference>;
-  /** beta feature */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   stores: Array<Store>;
   /**
    * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFieldsRaw?: Maybe<Array<RawCustomField>>;
   /**
    * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
@@ -7898,7 +7921,7 @@ export type CustomerActiveCartInterfaceCustomerActiveCartArgs = {
 /** A customer can be a member in a customer group (e.g. reseller, gold member). A customer group can be used in price calculations with special prices being assigned to certain customer groups. */
 export type CustomerGroup = Versioned & {
   id: Scalars['String'];
-  /** @deprecated Use 'customerGroupRef' to fetch the reference. */
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'customerGroupRef' to fetch the reference. */
   typeId: Scalars['String'];
   version: Scalars['Long'];
   name: Scalars['String'];
@@ -7910,8 +7933,13 @@ export type CustomerGroup = Versioned & {
   lastModifiedBy?: Maybe<Initiator>;
 };
 
+export type CustomerGroupLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type CustomerGroupLimitsProjection = {
-  total: LimitWithCurrent;
+  total: CustomerGroupLimitWithCurrent;
 };
 
 export type CustomerGroupQueryResult = {
@@ -7921,8 +7949,13 @@ export type CustomerGroupQueryResult = {
   results: Array<CustomerGroup>;
 };
 
+export type CustomerLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type CustomerLimitsProjection = {
-  total: LimitWithCurrent;
+  total: CustomerLimitWithCurrent;
 };
 
 /** Fields to access customer accounts. Includes direct access to a single customer and searching for customers. */
@@ -8007,12 +8040,12 @@ export type DiscountCode = Versioned & {
   descriptionAllLocales?: Maybe<Array<LocalizedString>>;
   /**
    * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFieldsRaw?: Maybe<Array<RawCustomField>>;
   /**
    * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
@@ -8096,11 +8129,6 @@ export type DiscountedProductPriceValue = {
   value: BaseMoney;
   discountRef: Reference;
   discount?: Maybe<ProductDiscount>;
-  /**
-   * Temporal. Will be renamed some time in the future. Please use 'discount'.
-   * @deprecated Will be removed in the future. Please use 'discount'.
-   */
-  discountRel?: Maybe<ProductDiscount>;
 };
 
 export type EnumAttributeDefinitionType = AttributeDefinitionType & {
@@ -8188,15 +8216,24 @@ export type InStore = CartQueryInterface & CustomerActiveCartInterface & OrderQu
    * It gives access to the data that is specific to the customer or the anonymous session linked to the access token.
    */
   me: InStoreMe;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   shippingMethodsByCart: Array<ShippingMethod>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   customer?: Maybe<Customer>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   customers: CustomerQueryResult;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   cart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   carts: CartQueryResult;
   customerActiveCart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   order?: Maybe<Order>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   orders: OrderQueryResult;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   shoppingList?: Maybe<ShoppingList>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   shoppingLists: ShoppingListQueryResult;
 };
 
@@ -8268,13 +8305,20 @@ export type InStoreShoppingListsArgs = {
 };
 
 export type InStoreMe = MeQueryInterface & CartQueryInterface & ActiveCartInterface & OrderQueryInterface & ShoppingListQueryInterface & {
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   customer?: Maybe<Customer>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   cart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   carts: CartQueryResult;
   activeCart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   order?: Maybe<Order>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   orders: OrderQueryResult;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   shoppingList?: Maybe<ShoppingList>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   shoppingLists: ShoppingListQueryResult;
 };
 
@@ -8324,11 +8368,9 @@ export type Initiator = {
   externalUserId?: Maybe<Scalars['String']>;
   anonymousId?: Maybe<Scalars['String']>;
   clientId?: Maybe<Scalars['String']>;
-  /** @deprecated Use 'customerRef' to fetch the reference. */
-  customer?: Maybe<Reference>;
-  /** @deprecated Use 'userRef' to fetch the reference. */
-  user?: Maybe<Reference>;
   customerRef?: Maybe<Reference>;
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'userRef' to fetch the reference. */
+  user?: Maybe<Reference>;
   userRef?: Maybe<Reference>;
 };
 
@@ -8361,16 +8403,6 @@ export type InventoryEntry = Versioned & {
   expectedDelivery?: Maybe<Scalars['DateTime']>;
   supplyChannel?: Maybe<Channel>;
   supplyChannelRef?: Maybe<Reference>;
-  /**
-   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated Please use 'custom.customFieldsRaw'
-   */
-  customFieldsRaw?: Maybe<Array<RawCustomField>>;
-  /**
-   * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
   id: Scalars['String'];
   version: Scalars['Long'];
@@ -8378,13 +8410,6 @@ export type InventoryEntry = Versioned & {
   lastModifiedAt: Scalars['DateTime'];
   createdBy?: Maybe<Initiator>;
   lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/** Inventory allows you to track stock quantity per SKU and optionally per supply channel */
-export type InventoryEntryCustomFieldsRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type InventoryEntryQueryResult = {
@@ -8443,7 +8468,7 @@ export type Limit = {
 
 export type LimitWithCurrent = {
   limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
+  current?: Maybe<Scalars['Long']>;
 };
 
 /**
@@ -8484,12 +8509,12 @@ export type LineItem = {
   priceMode: LineItemPriceMode;
   /**
    * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFieldsRaw?: Maybe<Array<RawCustomField>>;
   /**
    * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
@@ -8627,15 +8652,24 @@ export type Location = {
 };
 
 export type Me = MeQueryInterface & CartQueryInterface & ActiveCartInterface & OrderQueryInterface & ShoppingListQueryInterface & {
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   customer?: Maybe<Customer>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   cart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   carts: CartQueryResult;
   activeCart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   order?: Maybe<Order>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   orders: OrderQueryResult;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   shoppingList?: Maybe<ShoppingList>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   shoppingLists: ShoppingListQueryResult;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   payment?: Maybe<MyPayment>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   payments: MyPaymentQueryResult;
 };
 
@@ -8821,7 +8855,7 @@ export type MyPaymentQueryResult = {
 };
 
 export type NestedAttributeDefinitionType = AttributeDefinitionType & {
-  /** @deprecated Use 'typeRef' to fetch the reference. */
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'typeRef' to fetch the reference. */
   typeReference: Reference;
   typeRef: Reference;
   name: Scalars['String'];
@@ -8865,9 +8899,9 @@ export type Order = Versioned & {
   locale?: Maybe<Scalars['Locale']>;
   shippingRateInput?: Maybe<ShippingRateInput>;
   origin: CartOrigin;
-  /** beta feature */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   storeRef?: Maybe<KeyReference>;
-  /** beta feature */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   store?: Maybe<Store>;
   itemShippingAddresses: Array<Address>;
   completedAt?: Maybe<Scalars['DateTime']>;
@@ -8884,12 +8918,12 @@ export type Order = Versioned & {
   cart?: Maybe<Cart>;
   /**
    * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFieldsRaw?: Maybe<Array<RawCustomField>>;
   /**
    * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
@@ -8927,8 +8961,13 @@ export type OrderEdit = Versioned & {
   lastModifiedBy?: Maybe<Initiator>;
 };
 
+export type OrderEditLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type OrderEditLimitsProjection = {
-  total: LimitWithCurrent;
+  total: OrderEditLimitWithCurrent;
 };
 
 export type OrderEditQueryResult = {
@@ -9004,28 +9043,10 @@ export type Payment = Versioned & {
   anonymousId?: Maybe<Scalars['String']>;
   interfaceId?: Maybe<Scalars['String']>;
   amountPlanned: Money;
-  /** @deprecated https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes */
-  amountAuthorized?: Maybe<Money>;
-  /** @deprecated https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes */
-  authorizedUntil?: Maybe<Scalars['DateTime']>;
-  /** @deprecated https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes */
-  amountPaid?: Maybe<Money>;
-  /** @deprecated https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes */
-  amountRefunded?: Maybe<Money>;
   paymentMethodInfo: PaymentMethodInfo;
   paymentStatus: PaymentStatus;
   transactions: Array<Transaction>;
   interfaceInteractionsRaw: InterfaceInteractionsRawResult;
-  /**
-   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated Please use 'custom.customFieldsRaw'
-   */
-  customFieldsRaw?: Maybe<Array<RawCustomField>>;
-  /**
-   * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
   id: Scalars['String'];
   version: Scalars['Long'];
@@ -9043,16 +9064,6 @@ export type Payment = Versioned & {
 export type PaymentInterfaceInteractionsRawArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-};
-
-
-/**
- * Payments hold information about the current state of receiving and/or refunding money.
- * [documentation](https://docs.commercetools.com/http-api-projects-payments)
- */
-export type PaymentCustomFieldsRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type PaymentInfo = {
@@ -9114,8 +9125,6 @@ export type Product = Versioned & ReviewTarget & {
   productTypeRef: Reference;
   productType?: Maybe<ProductTypeDefinition>;
   masterData: ProductCatalogData;
-  /** @deprecated only 'masterData' supported */
-  catalogData?: Maybe<ProductCatalogData>;
   skus: Array<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   lastModifiedAt: Scalars['DateTime'];
@@ -9126,11 +9135,6 @@ export type Product = Versioned & ReviewTarget & {
   reviewRatingStatistics?: Maybe<ReviewRatingStatistics>;
   createdBy?: Maybe<Initiator>;
   lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-export type ProductCatalogDataArgs = {
-  id: Scalars['String'];
 };
 
 export type ProductCatalogData = {
@@ -9307,8 +9311,13 @@ export type ProductDiscountDescriptionArgs = {
   acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
 };
 
+export type ProductDiscountLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type ProductDiscountLimitsProjection = {
-  totalActive: LimitWithCurrent;
+  totalActive: ProductDiscountLimitWithCurrent;
 };
 
 export type ProductDiscountQueryResult = {
@@ -9341,12 +9350,12 @@ export type ProductPrice = {
   tiers?: Maybe<Array<ProductPriceTier>>;
   /**
    * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFieldsRaw?: Maybe<Array<RawCustomField>>;
   /**
    * This field would contain type data
-   * @deprecated Please use 'custom.customFieldsRaw'
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
    */
   customFields?: Maybe<Type>;
   custom?: Maybe<CustomFieldsType>;
@@ -9409,7 +9418,7 @@ export type ProductVariant = {
   images: Array<Image>;
   assets: Array<Asset>;
   availability?: Maybe<ProductVariantAvailabilityWithChannels>;
-  /** This field contains non-typed data. Consider using `attributes` as a typed alternative. */
+  /** This field contains raw attributes data */
   attributesRaw: Array<RawProductAttribute>;
 };
 
@@ -9481,6 +9490,7 @@ export type ProjectCustomLimitsProjection = {
   carts: CartLimitsProjection;
   customObjects: CustomObjectLimitsProjection;
   search: SearchLimitsProjection;
+  category: CategoryLimitsProjection;
 };
 
 /** Project contains information about project. */
@@ -9565,9 +9575,9 @@ export type Query = CartQueryInterface & CustomerActiveCartInterface & OrderQuer
   payments: PaymentQueryResult;
   productProjectionsSuggest: SuggestResult;
   project: ProjectProjection;
-  /** beta feature */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   store?: Maybe<Store>;
-  /** beta feature */
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
   stores: StoreQueryResult;
   review?: Maybe<Review>;
   reviews: ReviewQueryResult;
@@ -10040,8 +10050,13 @@ export type ReferenceAttributeDefinitionType = AttributeDefinitionType & {
   name: Scalars['String'];
 };
 
+export type RefreshTokenLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type RefreshTokenLimitsProjection = {
-  total: LimitWithCurrent;
+  total: RefreshTokenLimitWithCurrent;
 };
 
 /** Stores information about returns connected to this order. */
@@ -10135,12 +10150,14 @@ export type SearchIndexingConfiguration = {
 
 export type SearchIndexingConfigurationValues = {
   status?: Maybe<SearchIndexingStatus>;
+  lastModifiedAt?: Maybe<Scalars['DateTime']>;
+  lastModifiedBy?: Maybe<Initiator>;
 };
 
 export enum SearchIndexingStatus {
-  Enabled = 'Enabled',
+  Activated = 'Activated',
   Indexing = 'Indexing',
-  Disabled = 'Disabled'
+  Deactivated = 'Deactivated'
 }
 
 export type SearchKeyword = {
@@ -10194,14 +10211,14 @@ export type ShippingInfo = {
 
 export type ShippingMethod = Versioned & {
   name: Scalars['String'];
-  /** @deprecated Use localizedDescription */
-  description?: Maybe<Scalars['String']>;
   zoneRates: Array<ZoneRate>;
   isDefault: Scalars['Boolean'];
   predicate?: Maybe<Scalars['String']>;
   key?: Maybe<Scalars['String']>;
   taxCategoryRef?: Maybe<Reference>;
   localizedDescriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use localizedDescription */
+  description?: Maybe<Scalars['String']>;
   localizedDescription?: Maybe<Scalars['String']>;
   taxCategory?: Maybe<TaxCategory>;
   custom?: Maybe<CustomFieldsType>;
@@ -10219,8 +10236,13 @@ export type ShippingMethodLocalizedDescriptionArgs = {
   acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
 };
 
+export type ShippingMethodLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type ShippingMethodLimitsProjection = {
-  total: LimitWithCurrent;
+  total: ShippingMethodLimitWithCurrent;
 };
 
 export type ShippingMethodQueryResult = {
@@ -10311,10 +10333,15 @@ export type ShoppingListSlugArgs = {
   acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
 };
 
+export type ShoppingListLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type ShoppingListLimitsProjection = {
   lineItems: Limit;
   textLineItems: Limit;
-  total: LimitWithCurrent;
+  total: ShoppingListLimitWithCurrent;
 };
 
 export type ShoppingListLineItem = {
@@ -10472,8 +10499,13 @@ export type StoreNameArgs = {
   acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
 };
 
+export type StoreLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type StoreLimitsProjection = {
-  total: LimitWithCurrent;
+  total: StoreLimitWithCurrent;
 };
 
 export type StoreQueryResult = {
@@ -10561,8 +10593,6 @@ export type TaxCategory = Versioned & {
   description?: Maybe<Scalars['String']>;
   rates: Array<TaxRate>;
   key?: Maybe<Scalars['String']>;
-  /** @deprecated Use 'taxCategoryRef' to fetch the reference. */
-  typeId: Scalars['String'];
   id: Scalars['String'];
   version: Scalars['Long'];
   createdAt: Scalars['DateTime'];
@@ -10571,8 +10601,13 @@ export type TaxCategory = Versioned & {
   lastModifiedBy?: Maybe<Initiator>;
 };
 
+export type TaxCategoryLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type TaxCategoryLimitsProjection = {
-  total: LimitWithCurrent;
+  total: TaxCategoryLimitWithCurrent;
 };
 
 export type TaxCategoryQueryResult = {
@@ -10802,8 +10837,13 @@ export type Zone = Versioned & {
   lastModifiedBy?: Maybe<Initiator>;
 };
 
+export type ZoneLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
 export type ZoneLimitsProjection = {
-  total: LimitWithCurrent;
+  total: ZoneLimitWithCurrent;
 };
 
 export type ZoneQueryResult = {
@@ -10978,7 +11018,7 @@ export type SetProductAttributesMutationResult = Apollo.MutationResult<SetProduc
 export type SetProductAttributesMutationOptions = Apollo.BaseMutationOptions<SetProductAttributesMutation, SetProductAttributesMutationVariables>;
 export const GetCategoriesDocument = gql`
     query getCategories($locale: Locale, $where: String) {
-  categories(where: $where) {
+  categories(limit: 500, where: $where) {
     total
     results {
       id

@@ -638,18 +638,6 @@
             "deprecationReason": null
           },
           {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "distributionChannel",
             "description": null,
             "type": {
@@ -1082,18 +1070,6 @@
             "deprecationReason": null
           },
           {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "distributionChannel",
             "description": null,
             "type": {
@@ -1234,7 +1210,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "INPUT_OBJECT",
-                  "name": "DeliveryItemDraftType",
+                  "name": "ParcelDataDraftType",
                   "ofType": null
                 }
               }
@@ -1596,18 +1572,6 @@
             "deprecationReason": null
           },
           {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "staged",
             "description": null,
             "type": {
@@ -1756,18 +1720,6 @@
                 "name": "ProductPriceDataInput",
                 "ofType": null
               }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -2425,7 +2377,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "INPUT_OBJECT",
-                  "name": "DeliveryItemDraftType",
+                  "name": "ParcelDataDraftType",
                   "ofType": null
                 }
               }
@@ -2796,18 +2748,6 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "CustomFieldsDraft",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -3855,22 +3795,6 @@
             "deprecationReason": null
           },
           {
-            "name": "contactInfo",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "AddressContactInfo",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Field 'contactInfo' is deprecated. Instead of using e.g. 'contactInfo.email' use 'email' directly."
-          },
-          {
             "name": "additionalAddressInfo",
             "description": null,
             "args": [],
@@ -3917,6 +3841,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "contactInfo",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "AddressContactInfo",
+              "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Field 'contactInfo' is deprecated. Instead of using e.g. 'contactInfo.email' use 'email' directly."
           },
           {
             "name": "phone",
@@ -9764,18 +9700,6 @@
             "deprecationReason": null
           },
           {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "staged",
             "description": null,
             "type": {
@@ -9864,18 +9788,6 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -10288,18 +10200,6 @@
                 "name": "ProductPriceDataInput",
                 "ofType": null
               }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -14251,28 +14151,24 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "text",
+            "name": "inputs",
             "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "suggestTokenizer",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "BaseSearchKeywordInput",
-              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -21249,30 +21145,6 @@
             "deprecationReason": null
           },
           {
-            "name": "distributionChannel",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "ResourceIdentifier",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Use 'distributionChannelResId' to fetch the resource identifier."
-          },
-          {
-            "name": "supplyChannel",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "ResourceIdentifier",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Use 'supplyChannelResId' to fetch the resource identifier."
-          },
-          {
             "name": "distributionChannelResId",
             "description": null,
             "args": [],
@@ -25327,7 +25199,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -25372,7 +25244,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -25441,7 +25313,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -25518,7 +25390,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -25631,7 +25503,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -25700,7 +25572,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -25753,7 +25625,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -25806,7 +25678,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -25875,7 +25747,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -25900,7 +25772,7 @@
           },
           {
             "name": "customerSignMeUp",
-            "description": "If used with an access token for Anonymous Sessions, all orders and carts belonging to the anonymousId will be assigned to the newly created customer.",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features If used with an access token for Anonymous Sessions, all orders and carts belonging to the anonymousId will be assigned to the newly created customer.",
             "args": [
               {
                 "name": "draft",
@@ -25920,7 +25792,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -25945,7 +25817,7 @@
           },
           {
             "name": "customerSignMeIn",
-            "description": "Retrieves the authenticated customer (a customer that matches the given email/password pair).\n\nIf used with an access token for Anonymous Sessions, all orders and carts belonging to the `anonymousId` will be assigned to the newly created customer.\n\n* If the customer does not have a cart yet, the anonymous cart that was modified most recently becomes the customer's cart.\n* If the customer already has a cart, the most recently modified anonymous cart will be handled according to the `AnonymousCartSignInMode`.\n\nIf a cart is is returned as part of the `CustomerSignInResult`, it has been recalculated (it will have up-to-date prices, taxes and discounts, and invalid line items have been removed).",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features\n\nRetrieves the authenticated customer (a customer that matches the given email/password pair).\n\nIf used with an access token for Anonymous Sessions, all orders and carts belonging to the `anonymousId` will be assigned to the newly created customer.\n\n* If the customer does not have a cart yet, the anonymous cart that was modified most recently becomes the customer's cart.\n* If the customer already has a cart, the most recently modified anonymous cart will be handled according to the `AnonymousCartSignInMode`.\n\nIf a cart is is returned as part of the `CustomerSignInResult`, it has been recalculated (it will have up-to-date prices, taxes and discounts, and invalid line items have been removed).",
             "args": [
               {
                 "name": "draft",
@@ -25965,7 +25837,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -25990,7 +25862,7 @@
           },
           {
             "name": "updateMyCustomer",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "version",
@@ -26034,7 +25906,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26055,7 +25927,7 @@
           },
           {
             "name": "deleteMyCustomer",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "version",
@@ -26087,7 +25959,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26108,7 +25980,7 @@
           },
           {
             "name": "customerChangeMyPassword",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "version",
@@ -26160,7 +26032,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26181,7 +26053,7 @@
           },
           {
             "name": "customerConfirmMyEmail",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "tokenValue",
@@ -26201,7 +26073,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26222,7 +26094,7 @@
           },
           {
             "name": "customerResetMyPassword",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "tokenValue",
@@ -26258,7 +26130,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26442,7 +26314,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26507,7 +26379,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26584,7 +26456,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26661,7 +26533,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26682,7 +26554,7 @@
           },
           {
             "name": "createMyCart",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "draft",
@@ -26702,7 +26574,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26723,7 +26595,7 @@
           },
           {
             "name": "updateMyCart",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -26783,7 +26655,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26804,7 +26676,7 @@
           },
           {
             "name": "deleteMyCart",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -26840,7 +26712,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26881,7 +26753,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -26946,7 +26818,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -27023,7 +26895,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -27068,7 +26940,7 @@
           },
           {
             "name": "createMyOrderFromCart",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "draft",
@@ -27088,7 +26960,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -27300,7 +27172,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -27365,7 +27237,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -27442,7 +27314,7 @@
               },
               {
                 "name": "storeKey",
-                "description": "Beta feature. The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
                 "type": {
                   "kind": "SCALAR",
                   "name": "KeyReferenceInput",
@@ -27487,7 +27359,7 @@
           },
           {
             "name": "createMyShoppingList",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "draft",
@@ -27504,6 +27376,18 @@
                 "defaultValue": null,
                 "isDeprecated": false,
                 "deprecationReason": null
+              },
+              {
+                "name": "storeKey",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "KeyReferenceInput",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
               }
             ],
             "type": {
@@ -27516,7 +27400,7 @@
           },
           {
             "name": "updateMyShoppingList",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "version",
@@ -27559,6 +27443,18 @@
                 "deprecationReason": null
               },
               {
+                "name": "storeKey",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "KeyReferenceInput",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "id",
                 "description": "Queries with specified ID",
                 "type": {
@@ -27593,7 +27489,7 @@
           },
           {
             "name": "deleteMyShoppingList",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "version",
@@ -27606,6 +27502,18 @@
                     "name": "Long",
                     "ofType": null
                   }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "storeKey",
+                "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features The mutation is only performed if the resource is part of the store. Can be used with store-specific OAuth permissions.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "KeyReferenceInput",
+                  "ofType": null
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -27817,7 +27725,7 @@
           },
           {
             "name": "createMyPayment",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "draft",
@@ -28013,7 +27921,7 @@
           },
           {
             "name": "createStore",
-            "description": "beta feature",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "draft",
@@ -28042,7 +27950,7 @@
           },
           {
             "name": "updateStore",
-            "description": "beta feature",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "version",
@@ -28119,7 +28027,7 @@
           },
           {
             "name": "deleteStore",
-            "description": "beta feature",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "version",
@@ -33755,6 +33663,61 @@
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "ParcelDataDraftType",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "measurements",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "ParcelMeasurementsDraftType",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "trackingData",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "TrackingDataDraftType",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "items",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "DeliveryItemDraftType",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
@@ -40347,18 +40310,6 @@
             "deprecationReason": null
           },
           {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "staged",
             "description": null,
             "type": {
@@ -40549,18 +40500,6 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "ProductPriceDataInput",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -42979,11 +42918,50 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "CustomSuggestTokenizerInput",
+                    "name": "SearchKeywordItemInput",
                     "ofType": null
                   }
                 }
               }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "SearchKeywordItemInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "text",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "suggestTokenizer",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BaseSearchKeywordInput",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -49122,18 +49100,6 @@
             "deprecationReason": null
           },
           {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "staged",
             "description": null,
             "type": {
@@ -49226,18 +49192,6 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -49372,18 +49326,6 @@
             "deprecationReason": null
           },
           {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "staged",
             "description": null,
             "type": {
@@ -49475,18 +49417,6 @@
             "deprecationReason": null
           },
           {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "staged",
             "description": null,
             "type": {
@@ -49555,18 +49485,6 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -49658,18 +49576,6 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -50127,18 +50033,6 @@
             "deprecationReason": null
           },
           {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "staged",
             "description": null,
             "type": {
@@ -50488,18 +50382,6 @@
             "deprecationReason": null
           },
           {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "staged",
             "description": null,
             "type": {
@@ -50561,18 +50443,6 @@
                 "name": "String",
                 "ofType": null
               }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -50700,18 +50570,6 @@
                   }
                 }
               }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "catalog",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "ReferenceInput",
-              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -64890,22 +64748,6 @@
             "deprecationReason": null
           },
           {
-            "name": "contactInfo",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "AddressContactInfo",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Field 'contactInfo' is deprecated. Instead of using e.g. 'contactInfo.email' use 'email' directly."
-          },
-          {
             "name": "additionalAddressInfo",
             "description": null,
             "args": [],
@@ -64940,6 +64782,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "contactInfo",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "AddressContactInfo",
+              "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Field 'contactInfo' is deprecated. Instead of using e.g. 'contactInfo.email' use 'email' directly."
           },
           {
             "name": "phone",
@@ -65339,7 +65193,7 @@
               "ofType": null
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -66419,7 +66273,7 @@
           },
           {
             "name": "storeRef",
-            "description": "beta feature",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -66431,7 +66285,7 @@
           },
           {
             "name": "store",
-            "description": "beta feature",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -66552,7 +66406,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "customFields",
@@ -66564,7 +66418,7 @@
               "ofType": null
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -66979,7 +66833,7 @@
               "ofType": null
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -67123,6 +66977,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CartDiscountLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CartDiscountLimitsProjection",
         "description": null,
         "fields": [
@@ -67135,7 +67034,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "CartDiscountLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -67334,6 +67233,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CartLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CartLimitsProjection",
         "description": null,
         "fields": [
@@ -67346,7 +67290,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "CartLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -68244,7 +68188,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "The returned number is representing only staged products. Use 'stagedProductCount' instead"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. The returned number is representing only staged products. Use 'stagedProductCount' instead"
           },
           {
             "name": "stagedProductCount",
@@ -68413,7 +68357,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "customFields",
@@ -68425,7 +68369,7 @@
               "ofType": null
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -68472,6 +68416,33 @@
             "ofType": null
           }
         ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CategoryLimitsProjection",
+        "description": null,
+        "fields": [
+          {
+            "name": "maxCategories",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Limit",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
         "enumValues": null,
         "possibleTypes": null
       },
@@ -68951,7 +68922,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "The returned number is representing only staged products. Use 'stagedProductCount' instead"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. The returned number is representing only staged products. Use 'stagedProductCount' instead"
           },
           {
             "name": "stagedProductCount",
@@ -69268,7 +69239,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Use 'channelRef' to fetch the reference."
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'channelRef' to fetch the reference."
           },
           {
             "name": "version",
@@ -69829,7 +69800,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Typed custom fields are no longer supported, please use customFieldsRaw instead."
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Typed custom fields are no longer supported, please use customFieldsRaw instead."
           }
         ],
         "inputFields": null,
@@ -70146,7 +70117,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "customFields",
@@ -70158,7 +70129,7 @@
               "ofType": null
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -70345,6 +70316,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CustomObjectLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CustomObjectLimitsProjection",
         "description": null,
         "fields": [
@@ -70357,7 +70373,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "CustomObjectLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -70844,7 +70860,7 @@
           },
           {
             "name": "storesRef",
-            "description": "beta feature",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -70868,7 +70884,7 @@
           },
           {
             "name": "stores",
-            "description": "beta feature",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -70949,7 +70965,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "customFields",
@@ -70961,7 +70977,7 @@
               "ofType": null
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -71161,7 +71177,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Use 'customerGroupRef' to fetch the reference."
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'customerGroupRef' to fetch the reference."
           },
           {
             "name": "version",
@@ -71289,6 +71305,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CustomerGroupLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CustomerGroupLimitsProjection",
         "description": null,
         "fields": [
@@ -71301,7 +71362,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "CustomerGroupLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -71399,6 +71460,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CustomerLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CustomerLimitsProjection",
         "description": null,
         "fields": [
@@ -71411,7 +71517,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "CustomerLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -72361,7 +72467,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "customFields",
@@ -72373,7 +72479,7 @@
               "ofType": null
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -72905,18 +73011,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "discountRel",
-            "description": "Temporal. Will be renamed some time in the future. Please use 'discount'.",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "ProductDiscount",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Will be removed in the future. Please use 'discount'."
           }
         ],
         "inputFields": null,
@@ -73761,7 +73855,7 @@
           },
           {
             "name": "shippingMethodsByCart",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -73802,7 +73896,7 @@
           },
           {
             "name": "customer",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "emailToken",
@@ -73863,7 +73957,7 @@
           },
           {
             "name": "customers",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -73936,7 +74030,7 @@
           },
           {
             "name": "cart",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -73965,7 +74059,7 @@
           },
           {
             "name": "carts",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -74067,7 +74161,7 @@
           },
           {
             "name": "order",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -74104,7 +74198,7 @@
           },
           {
             "name": "orders",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -74177,7 +74271,7 @@
           },
           {
             "name": "shoppingList",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -74214,7 +74308,7 @@
           },
           {
             "name": "shoppingLists",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -74329,7 +74423,7 @@
         "fields": [
           {
             "name": "customer",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -74341,7 +74435,7 @@
           },
           {
             "name": "cart",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -74370,7 +74464,7 @@
           },
           {
             "name": "carts",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -74455,7 +74549,7 @@
           },
           {
             "name": "order",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -74492,7 +74586,7 @@
           },
           {
             "name": "orders",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -74565,7 +74659,7 @@
           },
           {
             "name": "shoppingList",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -74602,7 +74696,7 @@
           },
           {
             "name": "shoppingLists",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -74759,7 +74853,7 @@
             "deprecationReason": null
           },
           {
-            "name": "customer",
+            "name": "customerRef",
             "description": null,
             "args": [],
             "type": {
@@ -74767,8 +74861,8 @@
               "name": "Reference",
               "ofType": null
             },
-            "isDeprecated": true,
-            "deprecationReason": "Use 'customerRef' to fetch the reference."
+            "isDeprecated": false,
+            "deprecationReason": null
           },
           {
             "name": "user",
@@ -74780,19 +74874,7 @@
               "ofType": null
             },
             "isDeprecated": true,
-            "deprecationReason": "Use 'userRef' to fetch the reference."
-          },
-          {
-            "name": "customerRef",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Reference",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'userRef' to fetch the reference."
           },
           {
             "name": "userRef",
@@ -75103,79 +75185,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "customFieldsRaw",
-            "description": "This field contains non-typed data. Consider using `customFields` as a typed alternative.",
-            "args": [
-              {
-                "name": "includeNames",
-                "description": "The names of the custom fields to include.\n\nIf neither `includeNames` nor `excludeNames` are provided, then all custom fields are returned.",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "excludeNames",
-                "description": "The names of the custom fields to exclude.\n\nIf neither `includeNames` nor `excludeNames` are provided, then all custom fields are returned.",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "RawCustomField",
-                  "ofType": null
-                }
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
-          },
-          {
-            "name": "customFields",
-            "description": "This field would contain type data",
-            "args": [],
-            "type": {
-              "kind": "INTERFACE",
-              "name": "Type",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -75637,7 +75646,7 @@
         "possibleTypes": null
       },
       {
-        "kind": "OBJECT",
+        "kind": "INTERFACE",
         "name": "LimitWithCurrent",
         "description": null,
         "fields": [
@@ -75658,13 +75667,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Long",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -75673,7 +75678,73 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
-        "possibleTypes": null
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "CartDiscountLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "CartLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "CustomObjectLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "CustomerGroupLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "CustomerLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "OrderEditLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ProductDiscountLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "RefreshTokenLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ShippingMethodLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ShoppingListLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "StoreLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "TaxCategoryLimitWithCurrent",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ZoneLimitWithCurrent",
+            "ofType": null
+          }
+        ]
       },
       {
         "kind": "OBJECT",
@@ -76161,7 +76232,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "customFields",
@@ -76173,7 +76244,7 @@
               "ofType": null
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -76749,7 +76820,7 @@
         "fields": [
           {
             "name": "customer",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -76761,7 +76832,7 @@
           },
           {
             "name": "cart",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -76790,7 +76861,7 @@
           },
           {
             "name": "carts",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -76875,7 +76946,7 @@
           },
           {
             "name": "order",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -76912,7 +76983,7 @@
           },
           {
             "name": "orders",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -76985,7 +77056,7 @@
           },
           {
             "name": "shoppingList",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -77022,7 +77093,7 @@
           },
           {
             "name": "shoppingLists",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -77095,7 +77166,7 @@
           },
           {
             "name": "payment",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -77124,7 +77195,7 @@
           },
           {
             "name": "payments",
-            "description": null,
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -78787,7 +78858,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Use 'typeRef' to fetch the reference."
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'typeRef' to fetch the reference."
           },
           {
             "name": "typeRef",
@@ -79295,7 +79366,7 @@
           },
           {
             "name": "storeRef",
-            "description": "beta feature",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -79307,7 +79378,7 @@
           },
           {
             "name": "store",
-            "description": "beta feature",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -79576,7 +79647,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "customFields",
@@ -79588,7 +79659,7 @@
               "ofType": null
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -79913,6 +79984,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "OrderEditLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "OrderEditLimitsProjection",
         "description": null,
         "fields": [
@@ -79925,7 +80041,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "OrderEditLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -80561,54 +80677,6 @@
             "deprecationReason": null
           },
           {
-            "name": "amountAuthorized",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Money",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
-          },
-          {
-            "name": "authorizedUntil",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
-          },
-          {
-            "name": "amountPaid",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Money",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
-          },
-          {
-            "name": "amountRefunded",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Money",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
-          },
-          {
             "name": "paymentMethodInfo",
             "description": null,
             "args": [],
@@ -80704,79 +80772,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "customFieldsRaw",
-            "description": "This field contains non-typed data. Consider using `customFields` as a typed alternative.",
-            "args": [
-              {
-                "name": "includeNames",
-                "description": "The names of the custom fields to include.\n\nIf neither `includeNames` nor `excludeNames` are provided, then all custom fields are returned.",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "excludeNames",
-                "description": "The names of the custom fields to exclude.\n\nIf neither `includeNames` nor `excludeNames` are provided, then all custom fields are returned.",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "RawCustomField",
-                  "ofType": null
-                }
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
-          },
-          {
-            "name": "customFields",
-            "description": "This field would contain type data",
-            "args": [],
-            "type": {
-              "kind": "INTERFACE",
-              "name": "Type",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -81442,35 +81437,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "catalogData",
-            "description": null,
-            "args": [
-              {
-                "name": "id",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "ProductCatalogData",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "only 'masterData' supported"
           },
           {
             "name": "skus",
@@ -82903,6 +82869,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "ProductDiscountLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "ProductDiscountLimitsProjection",
         "description": null,
         "fields": [
@@ -82915,7 +82926,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "ProductDiscountLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -83305,7 +83316,7 @@
               }
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "customFields",
@@ -83317,7 +83328,7 @@
               "ofType": null
             },
             "isDeprecated": true,
-            "deprecationReason": "Please use 'custom.customFieldsRaw'"
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'"
           },
           {
             "name": "custom",
@@ -84000,7 +84011,7 @@
           },
           {
             "name": "attributesRaw",
-            "description": "This field contains non-typed data. Consider using `attributes` as a typed alternative.",
+            "description": "This field contains raw attributes data",
             "args": [
               {
                 "name": "includeNames",
@@ -84625,6 +84636,22 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "SearchLimitsProjection",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "category",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CategoryLimitsProjection",
                 "ofType": null
               }
             },
@@ -87903,7 +87930,7 @@
           },
           {
             "name": "store",
-            "description": "beta feature",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "id",
@@ -87940,7 +87967,7 @@
           },
           {
             "name": "stores",
-            "description": "beta feature",
+            "description": "BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features",
             "args": [
               {
                 "name": "where",
@@ -88720,6 +88747,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "RefreshTokenLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "RefreshTokenLimitsProjection",
         "description": null,
         "fields": [
@@ -88732,7 +88804,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "RefreshTokenLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -89599,6 +89671,30 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "lastModifiedAt",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "lastModifiedBy",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Initiator",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -89615,7 +89711,7 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "Enabled",
+            "name": "Activated",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -89627,7 +89723,7 @@
             "deprecationReason": null
           },
           {
-            "name": "Disabled",
+            "name": "Deactivated",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -90106,18 +90202,6 @@
             "deprecationReason": null
           },
           {
-            "name": "description",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Use localizedDescription"
-          },
-          {
             "name": "zoneRates",
             "description": null,
             "args": [],
@@ -90212,6 +90296,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use localizedDescription"
           },
           {
             "name": "localizedDescription",
@@ -90384,6 +90480,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "ShippingMethodLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "ShippingMethodLimitsProjection",
         "description": null,
         "fields": [
@@ -90396,7 +90537,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "ShippingMethodLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -91227,6 +91368,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "ShoppingListLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "ShoppingListLimitsProjection",
         "description": null,
         "fields": [
@@ -91271,7 +91457,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "ShoppingListLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -93089,6 +93275,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "StoreLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "StoreLimitsProjection",
         "description": null,
         "fields": [
@@ -93101,7 +93332,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "StoreLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -93882,22 +94113,6 @@
             "deprecationReason": null
           },
           {
-            "name": "typeId",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Use 'taxCategoryRef' to fetch the reference."
-          },
-          {
             "name": "id",
             "description": null,
             "args": [],
@@ -93999,6 +94214,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "TaxCategoryLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "TaxCategoryLimitsProjection",
         "description": null,
         "fields": [
@@ -94011,7 +94271,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "TaxCategoryLimitWithCurrent",
                 "ofType": null
               }
             },
@@ -96044,6 +96304,51 @@
       },
       {
         "kind": "OBJECT",
+        "name": "ZoneLimitWithCurrent",
+        "description": null,
+        "fields": [
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Long",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "current",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Long",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [
+          {
+            "kind": "INTERFACE",
+            "name": "LimitWithCurrent",
+            "ofType": null
+          }
+        ],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "ZoneLimitsProjection",
         "description": null,
         "fields": [
@@ -96056,7 +96361,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "LimitWithCurrent",
+                "name": "ZoneLimitWithCurrent",
                 "ofType": null
               }
             },
