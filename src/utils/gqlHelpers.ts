@@ -11,7 +11,7 @@ export const GQLContext: Context = {
   },
 };
 
-export const GQLQueryOptions: BaseQueryOptions = {
+export const GQLQueryOptions: Omit<BaseQueryOptions, 'variables'> = {
   ...GQLContext,
   fetchPolicy: 'no-cache',
 };

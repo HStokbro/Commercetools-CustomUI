@@ -28,7 +28,7 @@ export type ListCategory = Pick<Category, 'id' | 'name' | 'description'> & {
 // Example: WithSelection<ListProduct>
 export type WithSelection<T> = T & { checkbox: boolean };
 
-export enum State {
+export enum Status {
   INITIAL = 'INITIAL',
   LOADING = 'LOADING',
   SAVING = 'SAVING',
@@ -39,7 +39,7 @@ export enum State {
 export enum ReferenceType {
   SUBSCRIPTION = 'SUBSCRIPTION',
   PAYMENT = 'PAYMENT',
-  UPSELLINBUNDLE = 'UPSELLINGROUP',
+  UPSELLINGROUP = 'UPSELLINGROUP',
   UPSELL = 'UPSELL',
 }
 
@@ -69,18 +69,21 @@ export type Reference = {
   links: ReferenceLink[];
 };
 
-// export type Price = {
-//   references: Reference[];
-// };
+// export interface GenericState<T> {
+//   data?: T;
+//   status: Status;
+// }
+
+// export type projectStatus = GenericState<GetProjectQuery>;
+// export type productsStatus = GenericState<GetProductsQuery>;
+// export type productTypesStatus = GenericState<GetProductTypeDefinitionsQuery>;
+// export type categoriesStatus = GenericState<GetCategoriesQuery>;
 
 export type ReduxState = {
-  state: State;
-  project: GetProjectQuery;
-
-  products: GetProductsQuery;
-  productTypes: GetProductTypeDefinitionsQuery;
-  categories: GetCategoriesQuery;
+  projectQuery: GetProjectQuery;
+  productsQuery: GetProductsQuery;
+  productTypesQuery: GetProductTypeDefinitionsQuery;
+  categoriesQuery: GetCategoriesQuery;
 
   references: Reference[];
-  // prices: Price[];
 };

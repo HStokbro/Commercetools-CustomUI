@@ -1,5 +1,5 @@
 query getCategories($locale: Locale, $where: String) {
-  categories(where: $where) {
+  categories(limit: 500, where: $where) {
     total
     results {
       id
