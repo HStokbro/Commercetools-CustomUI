@@ -21,9 +21,9 @@
 - OK - Fix error being shown several times
 - OK - Make product list with single select
 - OK - Build queries for categories, product types, currencies
-- Build types for state
-- Build redux setup
-- Investigate Custom Objects (Field with reference to key value object)
+- OK - Build redux setup
+- Build types for reference state
+- Build types for price state
 - Build price handler example
   - OK - Products view
     - Add indicator for no prices
@@ -46,6 +46,9 @@
 - Build quick variant builder example
   - Vælg produkt
   - Udfyld farver med komma, udfyld storage
+- Hosting somewhere
+- Add custom app to trial
+- Investigate Custom Objects (Field with reference to key value object)
 - Make util for slug escaping
 - Plan UI & styling
 - Build routes and menu

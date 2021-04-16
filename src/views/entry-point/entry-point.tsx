@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  ApplicationShell,
-  setupGlobalErrorListener,
-  // InjectReducers,
-} from '@commercetools-frontend/application-shell';
+import { ApplicationShell, setupGlobalErrorListener } from '@commercetools-frontend/application-shell';
 import { Sdk } from '@commercetools-frontend/sdk';
 import { handleActionError } from '@commercetools-frontend/actions-global';
 import { TNavbarMenu } from '@commercetools-frontend/application-shell/dist/declarations/src/types/generated/proxy';
@@ -19,12 +15,6 @@ const AsyncApplicationRoutes = React.lazy(() => import('../../routes'));
 // Ensure to setup the global error listener before any React component renders
 // in order to catch possible errors on rendering/mounting.
 setupGlobalErrorListener();
-
-// If needed. Inject reducers into Redux store here.
-// Store is already created in @commercetools-frontend/application-shell
-// Prefix the reducer to make sure we don't conflict with Commercetools
-// Example: InjectReducers(fooReducer)
-
 declare global {
   interface Window {
     app;
