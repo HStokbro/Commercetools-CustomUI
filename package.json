@@ -33,6 +33,7 @@
     "@commercetools-uikit/checkbox-input": "^10.44.3",
     "@commercetools-uikit/data-table": "^10.44.2",
     "@commercetools-uikit/flat-button": "^10.45.0",
+    "@commercetools-uikit/grid": "^12.0.0",
     "@commercetools-uikit/icons": "^10.44.4",
     "@commercetools-uikit/loading-spinner": "^10.44.4",
     "@commercetools-uikit/money-field": "^11.1.0",

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Text from '@commercetools-uikit/text';
 import MoneyField from '@commercetools-uikit/money-field';
 import Card from '@commercetools-uikit/card';
+import Spacings from '@commercetools-uikit/spacings';
+import Grid from '@commercetools-uikit/grid';
 import { useGetProjectQuery, useGetVariantsLazyQuery } from '../../generated/graphql';
 import { GQLContext, GQLQueryOptions, GQLCurrentLocale } from '../../utils/gqlHelpers';
 import { ListProduct } from '../../types';
@@ -101,40 +103,47 @@ const PricesEditPrices = (props: Props): JSX.Element => {
 
   return (
     <>
-      {priceObject.variantPrices.map((variantPrice, variantPriceIndex) => (
-        <div key={variantPrice.variant.id}>
-          <Text.Headline as="h2">{variantPrice.variant.key}</Text.Headline>
-          {variantPrice.referencePrices.map((referencePrice, referencePriceIndex) => {
-            const key = referencePrice.references.map((ref) => `${ref.product.id}-${ref.variant.id}`).join('+');
-            const label = referencePrice.references
-              .map((ref) => `${ref.product.name} - ${ref.variant.key}`)
-              .join(' + ');
-            return (
-              <div key={key}>
-                <MoneyField
-                  title={label}
-                  value={referencePrice.price}
-                  onChange={(event) => {
-                    console.log(
-                      priceObject.variantPrices[variantPriceIndex].referencePrices[referencePriceIndex].price.amount,
-                      event.target.value,
-                    );
+      <Grid gridGap="16px" gridAutoColumns="1fr" gridTemplateColumns="repeat(3, 1fr)">
+        {priceObject.variantPrices.map((variantPrice, variantPriceIndex) => (
+          <Grid.Item key={variantPrice.variant.id}>
+            <Card theme="light" type="raised">
+              <Spacings.Stack scale="s">
+                <Text.Headline as="h2">{variantPrice.variant.key}</Text.Headline>
+                {variantPrice.referencePrices.map((referencePrice, referencePriceIndex) => {
+                  const key = referencePrice.references.map((ref) => `${ref.product.id}-${ref.variant.id}`).join('+');
+                  const label = referencePrice.references
+                    .map((ref) => `${ref.variant.key} - ${ref.product.name}`)
+                    .join(' + ');
+                  return (
+                    <MoneyField
+                      title={label}
+                      value={referencePrice.price}
+                      onChange={(event) => {
+                        console.log(
+                          priceObject.variantPrices[variantPriceIndex].referencePrices[referencePriceIndex].price
+                            .amount,
+                          event.target.value,
+                        );
 
-                    priceObject.variantPrices[variantPriceIndex].referencePrices[referencePriceIndex].price.amount =
-                      event.target.value;
+                        priceObject.variantPrices[variantPriceIndex].referencePrices[referencePriceIndex].price.amount =
+                          event.target.value;
 
-                    console.log(
-                      priceObject.variantPrices[variantPriceIndex].referencePrices[referencePriceIndex].price.amount,
-                      event.target.value,
-                    );
-                  }}
-                  currencies={currencies}
-                />
-              </div>
-            );
-          })}
-        </div>
-      ))}
+                        console.log(
+                          priceObject.variantPrices[variantPriceIndex].referencePrices[referencePriceIndex].price
+                            .amount,
+                          event.target.value,
+                        );
+                      }}
+                      currencies={currencies}
+                      key={key}
+                    />
+                  );
+                })}
+              </Spacings.Stack>
+            </Card>
+          </Grid.Item>
+        ))}
+      </Grid>
     </>
   );
 };
