@@ -11,6 +11,21 @@
     "permissions": [],
     "submenu": [
       {
+        "key": "references",
+        "uriPath": "custom/references",
+        "menuVisibility": null,
+        "featureToggle": null,
+        "actionRights": null,
+        "dataFences": null,
+        "permissions": [],
+        "labelAllLocales": [
+          {
+            "locale": "en",
+            "value": "references"
+          }
+        ]
+      },
+      {
         "key": "bundle",
         "uriPath": "custom/bundle",
         "menuVisibility": null,
