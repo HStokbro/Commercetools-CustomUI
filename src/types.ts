@@ -36,54 +36,11 @@ export enum Status {
   SUCCESS = 'SUCCESS',
 }
 
-export enum ReferenceType {
-  SUBSCRIPTION = 'SUBSCRIPTION',
-  PAYMENT = 'PAYMENT',
-  UPSELLINGROUP = 'UPSELLINGROUP',
-  UPSELL = 'UPSELL',
-}
-
-export enum ReferenceLinkType {
-  PRODUCT = 'PRODUCT',
-  PRODUCTTYPE = 'PRODUCTTYPE',
-  CATEGORY = 'CATEGORY',
-}
-
-export type ReferenceProduct = {
-  id: string;
-  variantIds?: string[];
-};
-
-export type ReferenceLink = {
-  ids: string[];
-} & (
-  | { linkType: ReferenceLinkType.PRODUCT; variantIds?: string[] }
-  | {
-      linkType: Exclude<ReferenceLinkType, ReferenceLinkType.PRODUCT>;
-    }
-);
-
-export type Reference = {
-  variantId?: string;
-  type: ReferenceType;
-  links: ReferenceLink[];
-};
-
-// export interface GenericState<T> {
-//   data?: T;
-//   status: Status;
-// }
-
-// export type projectStatus = GenericState<GetProjectQuery>;
-// export type productsStatus = GenericState<GetProductsQuery>;
-// export type productTypesStatus = GenericState<GetProductTypeDefinitionsQuery>;
-// export type categoriesStatus = GenericState<GetCategoriesQuery>;
-
 export type ReduxState = {
   projectQuery: GetProjectQuery;
   productsQuery: GetProductsQuery;
   productTypesQuery: GetProductTypeDefinitionsQuery;
   categoriesQuery: GetCategoriesQuery;
 
-  references: Reference[];
+  selectedProduct: ListProduct;
 };
