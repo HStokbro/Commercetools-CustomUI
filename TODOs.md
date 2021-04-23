@@ -22,7 +22,9 @@
 - OK - Make product list with single select
 - OK - Build queries for categories, product types, currencies
 - OK - Build redux setup
-- Build types for reference state
+- OK - Build types for reference state
+- OK - Remove reference types - Not using it anyway
+- Build example for updating several variant prices at once
 - Build types for price state
 - Build price handler example
   - OK - Products view

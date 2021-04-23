@@ -9,7 +9,12 @@ import {
 } from '../../generated/graphql';
 import { GQLQueryOptions, GQLCurrentLocale } from '../../utils/gqlHelpers';
 import useNotify from '../../utils/useNotify';
-import { setCategories, setProducts, setProductTypes, setProject } from '../../redux/customAppPrices';
+import {
+  setCategoriesQuery,
+  setProductsQuery,
+  setProductTypesQuery,
+  setProjectQuery,
+} from '../../redux/customAppPrices';
 import ReferencesSelectProduct from './references-select-product';
 
 const ReferencesStart = (): JSX.Element => {
@@ -64,11 +69,10 @@ const ReferencesStart = (): JSX.Element => {
   // Storing data in redux
   useEffect(() => {
     if (isDataFetchStarted && !isLoading && !hasError) {
-      console.log('Setting data', projectState.data, productsState.data, productTypesState.data, categoriesState.data);
-      dispatch(setProject(projectState.data));
-      dispatch(setProducts(productsState.data));
-      dispatch(setProductTypes(productTypesState.data));
-      dispatch(setCategories(categoriesState.data));
+      dispatch(setProjectQuery(projectState.data));
+      dispatch(setProductsQuery(productsState.data));
+      dispatch(setProductTypesQuery(productTypesState.data));
+      dispatch(setCategoriesQuery(categoriesState.data));
 
       setIsDataReady(true);
     }
