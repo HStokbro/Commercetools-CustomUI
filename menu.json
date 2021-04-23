@@ -21,22 +21,7 @@
         "labelAllLocales": [
           {
             "locale": "en",
-            "value": "references"
-          }
-        ]
-      },
-      {
-        "key": "bundle",
-        "uriPath": "custom/bundle",
-        "menuVisibility": null,
-        "featureToggle": null,
-        "actionRights": null,
-        "dataFences": null,
-        "permissions": [],
-        "labelAllLocales": [
-          {
-            "locale": "en",
-            "value": "Bundles"
+            "value": "References"
           }
         ]
       },
@@ -52,6 +37,21 @@
           {
             "locale": "en",
             "value": "Prices"
+          }
+        ]
+      },
+      {
+        "key": "bundle",
+        "uriPath": "custom/bundle",
+        "menuVisibility": null,
+        "featureToggle": null,
+        "actionRights": null,
+        "dataFences": null,
+        "permissions": [],
+        "labelAllLocales": [
+          {
+            "locale": "en",
+            "value": "Bundles"
           }
         ]
       }
