@@ -2,13 +2,16 @@
   <a href="https://commercetools.com/">
     <img alt="commercetools logo" src="https://unpkg.com/@commercetools-frontend/assets/logos/commercetools_primary-logo_horizontal_RGB.png">
   </a>
-  <b>Custom application</b>
 </p>
 
+# Custom application with enhancements
+
 CommerceTools has a small template for building Custom Apps here:
+
 https://github.com/commercetools/merchant-center-application-kit
 
 It's a Single Page App built with React (hooks), npm & GraphQL.
+
 All CommerceTools components and ui components are built in React, so it is not possible to switch to Vue for instance.
 
 What you get out of the box is: 
