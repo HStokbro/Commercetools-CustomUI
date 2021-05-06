@@ -24,7 +24,7 @@
 - OK - Build redux setup
 - OK - Build types for reference state
 - OK - Remove reference types - Not using it anyway
-- Build example for updating several variant prices at once
+- Build example for updating several variant prices at once (With price pr. channel)
 - Build types for price state
 - Build price handler example
   - OK - Products view
