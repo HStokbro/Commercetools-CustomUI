@@ -22,9 +22,10 @@ What you get out of the box is:
 - Menu setup & routing
 - Internalization
 - Jest test setup
+- etc.
 
 ## Enhancements
-This is the CommerceTools template, but with a lot of enhancements:
+This is that CommerceTools template, but with a lot of enhancements:
 - Linting setup
 - Prettier setup
 - Typescript setup
