@@ -4,10 +4,9 @@
   </a>
 </p>
 
-# Custom application with enhancements
+# Custom application
 
 CommerceTools has a small template for building Custom Apps [here](https://github.com/commercetools/merchant-center-application-kit)
-
 
 It's a Single Page App built with React (hooks), npm & GraphQL.
 
@@ -23,7 +22,7 @@ What you get out of the box:
 - Jest test setup
 - etc.
 
-## Enhancements
+## Custom application with enhancements
 This is that CommerceTools template, but with a lot of enhancements:
 - Linting setup
 - Prettier setup
