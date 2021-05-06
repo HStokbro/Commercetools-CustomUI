@@ -118,6 +118,7 @@ The `custom-application-config.json` has a `env.production` configuration object
 ### Route - bundle
 
 The focus here was to make POC's for bundles as json data stored on product, variant or as a bundle product.
+
 Note: Should be refactored to use redux, now that we figured out how to inject custom reducer into store.
 
 - views/bundle/bundle-start.tsx
@@ -143,6 +144,7 @@ Note: Should be refactored to use redux, now that we figured out how to inject c
 ### Route - prices
 
 The focus here was to make POC for price field matrix for a product & subscription combination.
+
 Notes:
 - The fields do not work in ui, and there is no handling of data.
 - Should be refactored to use redux, now that we figured out how to inject custom reducer into store.
@@ -150,9 +152,13 @@ Notes:
 ### Route - references
 
 The focus here was to make POC for use of redux.
-Several things are loaded in the start view. 
+
+Several things are loaded in the start view.
+
 Loading status and errors are handled correctly.
+
 Everything is saved in redux, and a list is shown.
+
 User selection in the view, saves the selected product to redux.
 - This approach should be the template for data handling
 
