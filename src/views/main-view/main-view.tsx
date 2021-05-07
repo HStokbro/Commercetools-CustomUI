@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Spacings from '@commercetools-uikit/spacings';
 import BundleStart from '../bundle';
-import PriceProducts from '../prices';
+import PriceProducts from '../prices-json';
 import ReferencesStart from '../references';
 
 type Props = {
@@ -21,7 +21,7 @@ const MainView = (props: Props): JSX.Element => (
       <Switch>
         <Route path={`${props.match.path}/references`} component={ReferencesStart} />
         <Route path={`${props.match.path}/bundle`} component={BundleStart} />
-        <Route path={`${props.match.path}/prices`} component={PriceProducts} />
+        <Route path={`${props.match.path}/prices-json`} component={PriceProducts} />
       </Switch>
     </Spacings.Stack>
   </Spacings.Inset>

@@ -34,6 +34,10 @@ const BundleStart = (): JSX.Element => {
   if (loading || !data) return <>Loading...</>;
   return (
     <>
+      <Text.Subheadline isBold as="h4">
+        Works with the "CustomApp" trial project
+      </Text.Subheadline>
+
       <Text.Headline as="h1">Bundles</Text.Headline>
       <Text.Body>Start bundle with a product</Text.Body>
 

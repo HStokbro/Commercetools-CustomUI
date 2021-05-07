@@ -26,8 +26,8 @@
         ]
       },
       {
-        "key": "price",
-        "uriPath": "custom/prices",
+        "key": "prices-channel",
+        "uriPath": "custom/prices-channel",
         "menuVisibility": null,
         "featureToggle": null,
         "actionRights": null,
@@ -36,7 +36,22 @@
         "labelAllLocales": [
           {
             "locale": "en",
-            "value": "Prices"
+            "value": "Prices (channels)"
+          }
+        ]
+      },
+      {
+        "key": "prices-json",
+        "uriPath": "custom/prices-json",
+        "menuVisibility": null,
+        "featureToggle": null,
+        "actionRights": null,
+        "dataFences": null,
+        "permissions": [],
+        "labelAllLocales": [
+          {
+            "locale": "en",
+            "value": "Prices (json)"
           }
         ]
       },
