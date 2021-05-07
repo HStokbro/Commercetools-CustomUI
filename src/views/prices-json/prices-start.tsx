@@ -31,6 +31,10 @@ const PricesStart = (): JSX.Element => {
   if (loading || !data) return <>Loading...</>;
   return (
     <>
+      <Text.Subheadline isBold as="h4">
+        Works with the "CustomApp" trial project
+      </Text.Subheadline>
+
       <Text.Headline as="h1">Prices</Text.Headline>
       <Text.Body>Select a product to edit its prices</Text.Body>
 
