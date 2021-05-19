@@ -32,7 +32,7 @@ const PricesStart = (): JSX.Element => {
   return (
     <>
       <Text.Subheadline isBold as="h4">
-        Works with the "CustomApp" trial project
+        Works with the &quot;CustomApp&quot; trial project
       </Text.Subheadline>
 
       <Text.Headline as="h1">Prices</Text.Headline>

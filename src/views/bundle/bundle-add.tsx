@@ -20,7 +20,9 @@ const BundleAdd = (props: Props): JSX.Element => {
         rows={props.rows}
         setSelectedRows={(selectedRows: ListProduct[]) => setSelectionAddon(selectedRows)}
         multiSelect
+        maxHeight="max(300px, calc(100vh - 300px))"
       />
+
       <BundleAsAttributeButton
         selection={props.selection}
         selectionAddon={selectionAddon}

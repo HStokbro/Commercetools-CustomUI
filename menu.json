@@ -27,7 +27,7 @@
       },
       {
         "key": "prices-channel",
-        "uriPath": "custom/prices-channel",
+        "uriPath": "custom/prices-channels",
         "menuVisibility": null,
         "featureToggle": null,
         "actionRights": null,

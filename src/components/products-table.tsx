@@ -8,6 +8,7 @@ type Props = {
   rows: ListProduct[];
   setSelectedRows: (selectedRows: ListProduct[]) => void;
   multiSelect?: boolean;
+  maxHeight?: string;
 };
 
 const ProductsTable = (props: Props): JSX.Element => {
@@ -58,7 +59,7 @@ const ProductsTable = (props: Props): JSX.Element => {
     <DataTable
       rows={rowsWithSelection}
       columns={allColumns}
-      maxHeight="max(400px, calc(100vh - 300px))"
+      maxHeight={props.maxHeight || 'max(300px, calc(100vh - 150px))'}
       onRowClick={props.multiSelect ? null : (item) => props.setSelectedRows([item])}
     />
   );
@@ -66,6 +67,7 @@ const ProductsTable = (props: Props): JSX.Element => {
 
 ProductsTable.defaultProps = {
   multiSelect: false,
+  maxHeight: null,
 };
 ProductsTable.displayName = 'ProductsTable';
 export default ProductsTable;

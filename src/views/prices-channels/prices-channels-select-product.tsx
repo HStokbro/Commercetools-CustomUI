@@ -4,7 +4,7 @@ import { setSelectedProduct } from '../../redux/customAppPrices';
 import ProductsTable from '../../components/products-table';
 import { ListProduct, ReduxState } from '../../types';
 
-const ReferencesSelectProduct = (): JSX.Element => {
+const PricesChannelsSelectProduct = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const products: ListProduct[] = useSelector(
@@ -22,5 +22,5 @@ const ReferencesSelectProduct = (): JSX.Element => {
   );
 };
 
-ReferencesSelectProduct.displayName = 'ReferencesSelectProduct';
-export default ReferencesSelectProduct;
+PricesChannelsSelectProduct.displayName = 'PricesChannelsSelectProduct';
+export default PricesChannelsSelectProduct;
