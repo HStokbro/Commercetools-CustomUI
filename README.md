@@ -23,6 +23,7 @@ What you get out of the box:
 - etc.
 
 ## Custom application with enhancements
+
 This is that CommerceTools template, but with a lot of enhancements:
 - Linting setup
 - Prettier setup
@@ -42,6 +43,24 @@ This is that CommerceTools template, but with a lot of enhancements:
 - Examples
 - Documentation
 - etc.
+
+## Being a developer
+
+These are the technologies you should know to build a Commercetools Custom App
+- React https://reactjs.org/
+- React Hooks https://reactjs.org/docs/hooks-intro.html
+- React Redux https://react-redux.js.org/
+- Redux toolkit https://redux-toolkit.js.org/
+- GraphQl https://graphql.org/
+- Typescript https://www.typescriptlang.org/
+- npm https://www.npmjs.com/
+- Intl https://formatjs.io/
+- Jest https://jestjs.io/
+
+Install these extensions in Chrome
+- React Developer Tools https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi
+- Redux devtools https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
+- Apollo https://chrome.google.com/webstore/detail/apollo-client-devtools/jdkknkkbebbapilgoeccciglkfbmbnfm
 
 ## Installation
 
@@ -95,6 +114,7 @@ The `custom-application-config.json` has a `env.production` configuration object
 - UI-kit - https://uikit.commercetools.com/
 - UI-components - https://docs.commercetools.com/custom-applications/components/application-shell
 - GraphQL schema & typescript generator - https://graphql-code-generator.com/
+- GraphiQL (test GraphQL queries & mutations) - https://impex.europe-west1.gcp.commercetools.com/graphiql
 
 ## What happens at startup
 - index.js - renders EntryPoint component
