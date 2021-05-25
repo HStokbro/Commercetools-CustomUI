@@ -1,0 +1,34 @@
+query getProductPrices($locale: Locale, $id: String) {
+  product(id: $id) {
+    id
+    version
+    masterData {
+      current {
+        name(locale: $locale)
+        allVariants {
+          id
+          sku
+          attributesRaw(includeNames: ["Storage", "ColorDescription"]) {
+            name
+            value
+          }
+          prices {
+            id
+            value {
+              type
+              currencyCode
+              centAmount
+              fractionDigits
+            }
+            channel {
+              id
+              name(locale: $locale)
+            }
+            validFrom
+            validUntil
+          }
+        }
+      }
+    }
+  }
+}

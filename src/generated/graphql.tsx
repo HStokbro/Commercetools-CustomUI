@@ -10894,6 +10894,26 @@ export type GetCategoriesQuery = { categories: (
     )> }
   ) };
 
+export type GetProductPricesQueryVariables = Exact<{
+  locale?: Maybe<Scalars['Locale']>;
+  id?: Maybe<Scalars['String']>;
+}>;
+
+
+export type GetProductPricesQuery = { product?: Maybe<(
+    Pick<Product, 'id' | 'version'>
+    & { masterData: { current?: Maybe<(
+        Pick<ProductData, 'name'>
+        & { allVariants: Array<(
+          Pick<ProductVariant, 'id' | 'sku'>
+          & { attributesRaw: Array<Pick<RawProductAttribute, 'name' | 'value'>>, prices?: Maybe<Array<(
+            Pick<ProductPrice, 'id' | 'validFrom' | 'validUntil'>
+            & { value: Pick<HighPrecisionMoney, 'type' | 'currencyCode' | 'centAmount' | 'fractionDigits'> | Pick<Money, 'type' | 'currencyCode' | 'centAmount' | 'fractionDigits'>, channel?: Maybe<Pick<Channel, 'id' | 'name'>> }
+          )>> }
+        )> }
+      )> } }
+  )> };
+
 export type GetProductTypeDefinitionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -11059,6 +11079,69 @@ export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
 export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
 export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
+export const GetProductPricesDocument = gql`
+    query getProductPrices($locale: Locale, $id: String) {
+  product(id: $id) {
+    id
+    version
+    masterData {
+      current {
+        name(locale: $locale)
+        allVariants {
+          id
+          sku
+          attributesRaw(includeNames: ["Storage", "ColorDescription"]) {
+            name
+            value
+          }
+          prices {
+            id
+            value {
+              type
+              currencyCode
+              centAmount
+              fractionDigits
+            }
+            channel {
+              id
+              name(locale: $locale)
+            }
+            validFrom
+            validUntil
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProductPricesQuery__
+ *
+ * To run a query within a React component, call `useGetProductPricesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductPricesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductPricesQuery({
+ *   variables: {
+ *      locale: // value for 'locale'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProductPricesQuery(baseOptions?: Apollo.QueryHookOptions<GetProductPricesQuery, GetProductPricesQueryVariables>) {
+        return Apollo.useQuery<GetProductPricesQuery, GetProductPricesQueryVariables>(GetProductPricesDocument, baseOptions);
+      }
+export function useGetProductPricesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductPricesQuery, GetProductPricesQueryVariables>) {
+          return Apollo.useLazyQuery<GetProductPricesQuery, GetProductPricesQueryVariables>(GetProductPricesDocument, baseOptions);
+        }
+export type GetProductPricesQueryHookResult = ReturnType<typeof useGetProductPricesQuery>;
+export type GetProductPricesLazyQueryHookResult = ReturnType<typeof useGetProductPricesLazyQuery>;
+export type GetProductPricesQueryResult = Apollo.QueryResult<GetProductPricesQuery, GetProductPricesQueryVariables>;
 export const GetProductTypeDefinitionsDocument = gql`
     query getProductTypeDefinitions {
   productTypes {

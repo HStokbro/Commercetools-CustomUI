@@ -7,6 +7,7 @@ import {
   GetProductsQuery,
   GetProductTypeDefinitionsQuery,
   GetProjectQuery,
+  GetProductPricesQuery,
 } from '../generated/graphql';
 import { ListProduct, ReduxState } from '../types';
 
@@ -15,6 +16,7 @@ const initialState: ReduxState = {
   productsQuery: null,
   productTypesQuery: null,
   categoriesQuery: null,
+  pricesQuery: null,
 
   selectedProduct: null,
 };
@@ -40,6 +42,16 @@ const customAppPrices = createSlice({
     setSelectedProduct: (state, action: PayloadAction<ListProduct>) => {
       state.selectedProduct = action.payload;
     },
+    setProductPricesQuery: (state, action: PayloadAction<GetProductPricesQuery>) => {
+      state.pricesQuery = action.payload;
+    },
+    setPrice: (state, action: PayloadAction<{ variantId: number; priceId: string; value: number }>) => {
+      const variant = state.pricesQuery.product.masterData.current.allVariants.find(
+        (x) => x.id === action.payload.variantId,
+      );
+      const price = variant.prices.find((x) => x.id === action.payload.priceId);
+      price.value.centAmount = action.payload.value;
+    },
   },
 });
 
@@ -49,5 +61,6 @@ export const {
   setProductTypesQuery,
   setCategoriesQuery,
   setSelectedProduct,
+  setProductPricesQuery,
 } = customAppPrices.actions;
 export default customAppPrices.reducer;

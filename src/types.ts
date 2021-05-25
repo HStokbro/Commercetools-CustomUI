@@ -3,6 +3,7 @@ import {
   GetProjectQuery,
   GetProductsQuery,
   GetProductTypeDefinitionsQuery,
+  GetProductPricesQuery,
   Maybe,
   Product,
   ProductData,
@@ -41,6 +42,7 @@ export type ReduxState = {
   productsQuery: GetProductsQuery;
   productTypesQuery: GetProductTypeDefinitionsQuery;
   categoriesQuery: GetCategoriesQuery;
+  pricesQuery: GetProductPricesQuery;
 
   selectedProduct: ListProduct;
 };

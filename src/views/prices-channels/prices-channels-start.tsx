@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Text from '@commercetools-uikit/text';
-import { useGetProjectLazyQuery, useGetProductsLazyQuery } from '../../generated/graphql';
+import LoadingSpinner from '@commercetools-uikit/loading-spinner';
+import { useGetProjectLazyQuery, useGetProductsLazyQuery, GetProductsQueryVariables } from '../../generated/graphql';
 import { GQLQueryOptions, GQLCurrentLocale } from '../../utils/gqlHelpers';
 import useNotify from '../../utils/useNotify';
 import { setProductsQuery, setProjectQuery } from '../../redux/customAppPrices';
@@ -23,11 +24,9 @@ const PricesChannelsStart = (): JSX.Element => {
   // Start data fetch
   useEffect(() => {
     getProjectQuery();
-    getProductsQuery({
-      variables: {
-        locale,
-      },
-    });
+
+    const variables: GetProductsQueryVariables = { locale };
+    getProductsQuery({ variables });
 
     setIsDataFetchStarted(true);
   }, []);
@@ -55,11 +54,16 @@ const PricesChannelsStart = (): JSX.Element => {
   if (hasError) return <>An error occurred</>;
   return (
     <>
-      <Text.Headline as="h1">Prices</Text.Headline>
+      <Text.Headline as="h2">Prices</Text.Headline>
 
-      {isLoading && <Text.Body>Loading...</Text.Body>}
+      {isLoading && <LoadingSpinner size="s">Loading products</LoadingSpinner>}
 
-      {isDataReady && <PricesChannelsSelectProduct />}
+      {isDataReady && (
+        <>
+          <Text.Body>Select a product</Text.Body>
+          <PricesChannelsSelectProduct />
+        </>
+      )}
     </>
   );
 };
