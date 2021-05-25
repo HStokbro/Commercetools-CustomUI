@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Text from '@commercetools-uikit/text';
 // import messages from './messages';
 import { InfoModalPage } from '@commercetools-frontend/application-components';
-import { useGetProductsLazyQuery } from '../../generated/graphql';
+import { useGetProductsLazyQuery, GetProductsQueryVariables } from '../../generated/graphql';
 import ProductsTable from '../../components/products-table';
 import BundleAdd from './bundle-add';
 // import { useIntl } from 'react-intl';
@@ -15,14 +15,10 @@ const BundleStart = (): JSX.Element => {
   const locale = GQLCurrentLocale();
 
   const [getProductsQuery, { data, loading, error }] = useGetProductsLazyQuery(GQLQueryOptions);
+
   useEffect(() => {
-    // const subscriptionTypeId = 'a641f681-7923-45fc-8652-190a43b2d433';
-    getProductsQuery({
-      variables: {
-        locale,
-        // where: `productType(id!="${subscriptionTypeId}")`,
-      },
-    });
+    const variables: GetProductsQueryVariables = { locale };
+    getProductsQuery({ variables });
   }, []);
 
   const init = () => {
@@ -34,11 +30,9 @@ const BundleStart = (): JSX.Element => {
   if (loading || !data) return <>Loading...</>;
   return (
     <>
-      <Text.Subheadline isBold as="h4">
-        Works with the &quot;CustomApp&quot; trial project
-      </Text.Subheadline>
+      <Text.Body isBold>Works with the &quot;CustomApp&quot; trial project</Text.Body>
 
-      <Text.Headline as="h1">Bundles</Text.Headline>
+      <Text.Headline as="h2">Bundles</Text.Headline>
       <Text.Body>Start bundle with a product</Text.Body>
 
       <ProductsTable
