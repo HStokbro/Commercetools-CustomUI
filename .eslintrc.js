@@ -45,7 +45,7 @@ module.exports = {
       },
     ],
     'react/destructuring-assignment': [0],
-    'no-param-reassign': ['error', { props: true, ignorePropertyModificationsFor: ['state'] }],
+    'no-param-reassign': ['error', { props: true, ignorePropertyModificationsFor: ['state', 'draft'] }],
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'error',
   },

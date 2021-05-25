@@ -25,7 +25,6 @@
 - OK - Build types for reference state
 - OK - Remove reference types - Not using it anyway
 - Build example for updating several variant prices at once (With price pr. channel)
-- Build types for price state
 - Build price handler example
   - OK - Products view
     - Add indicator for no prices
@@ -48,18 +47,16 @@
 - Build quick variant builder example
   - Vælg produkt
   - Udfyld farver med komma, udfyld storage
+- Init redux state at route start component. Remove data used in other components
 - Hosting somewhere
 - Add custom app to trial
 - Investigate Custom Objects (Field with reference to key value object)
 - Make util for slug escaping
 - Plan UI & styling
 - Build routes and menu
-- Investigate bulk imports? = https://docs.commercetools.com/import-api/overview
-- Clean up template
-  - Update Readme
-  - Link to graphQL queries in readme
-  - Use intl & messages
-  - Use/remove main view?
+- Make a reusable wrapper component for loading data.
+  - Send it an array of lazy query hooks to handle, along with where to store the result
+  - Component takes care of state, ui, errors
   
 # Note - Things to look out for
 

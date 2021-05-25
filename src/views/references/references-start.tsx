@@ -82,7 +82,7 @@ const ReferencesStart = (): JSX.Element => {
   if (hasError) return <>An error occurred</>;
   return (
     <>
-      <Text.Headline as="h1">References</Text.Headline>
+      <Text.Headline as="h2">Redux example</Text.Headline>
 
       {isLoading && <Text.Body>Loading...</Text.Body>}
 
