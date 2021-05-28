@@ -8,7 +8,7 @@ const ReferencesSelectProduct = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const products: ListProduct[] = useSelector(
-    (state) => (state.customAppPrices as ReduxState)?.productsQuery.products.results,
+    (state: any) => (state.customAppPrices as ReduxState)?.productsQuery.products.results,
   );
 
   return (

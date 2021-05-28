@@ -1,3 +1,7 @@
+/**
+ * Displays products in a table
+ * Can have multi or single selection of products. In any case. The selected gets returned as an array.
+ */
 import React, { useEffect } from 'react';
 import DataTable, { useRowSelection } from '@commercetools-uikit/data-table';
 import CheckboxInput from '@commercetools-uikit/checkbox-input';

@@ -4,6 +4,7 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -11,10 +12,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A set. */
-  Set: any;
-  /** Time is a scalar value that represents an ISO8601 formatted time. */
-  Time: any;
+  /** The `BigDecimal` scalar type represents signed fractional values with arbitrary precision. */
+  BigDecimal: any;
   /** [ISO 3166-1](http://en.wikipedia.org/wiki/ISO_3166-1) country code. */
   Country: any;
   /** Represents a currency. Currencies are identified by their [ISO 4217](http://www.iso.org/iso/home/standards/currency_codes.htm) currency codes. */
@@ -29,16 +28,18 @@ export type Scalars = {
   KeyReferenceInput: any;
   /** Locale is a scalar value represented as a string language tag. */
   Locale: any;
+  /** The `Long` scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
+  Long: any;
   /** Search filter. It is represented as a string and has th same format as in REST API: "field:filter_criteria" */
   SearchFilter: any;
   /** Search sort */
   SearchSort: any;
+  /** A set. */
+  Set: any;
+  /** Time is a scalar value that represents an ISO8601 formatted time. */
+  Time: any;
   /** YearMonth is a scalar value that represents an ISO8601 formatted year and month. */
   YearMonth: any;
-  /** The `BigDecimal` scalar type represents signed fractional values with arbitrary precision. */
-  BigDecimal: any;
-  /** The `Long` scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
-  Long: any;
 };
 
 /** API Clients can be used to obtain OAuth 2 access tokens. The secret is only shown once in the response of creating the API Client. */
@@ -49,6 +50,22 @@ export type ApiClientWithSecret = {
   createdAt?: Maybe<Scalars['DateTime']>;
   lastUsedAt?: Maybe<Scalars['Date']>;
   secret: Scalars['String'];
+};
+
+/** API Clients can be used to obtain OAuth 2 access tokens */
+export type ApiClientWithoutSecret = {
+  id: Scalars['String'];
+  name: Scalars['String'];
+  scope: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  lastUsedAt?: Maybe<Scalars['Date']>;
+};
+
+export type ApiClientWithoutSecretQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<ApiClientWithoutSecret>;
 };
 
 export type AwsLambdaDestination = ExtensionDestination & {
@@ -71,6 +88,16 @@ export type AbsoluteDiscountValue = CartDiscountValue & ProductDiscountValue & {
 
 export type AbsoluteDiscountValueInput = {
   money: Array<MoneyInput>;
+};
+
+export enum ActionType {
+  Update = 'Update',
+  Create = 'Create'
+}
+
+/** A field to access the active cart. */
+export type ActiveCartInterface = {
+  activeCart?: Maybe<Cart>;
 };
 
 export type AddCartCustomLineItem = {
@@ -420,6 +447,45 @@ export type AddZoneLocation = {
   location: ZoneLocation;
 };
 
+/** An address represents a postal address. */
+export type Address = {
+  id?: Maybe<Scalars['String']>;
+  streetName?: Maybe<Scalars['String']>;
+  streetNumber?: Maybe<Scalars['String']>;
+  additionalStreetInfo?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  country: Scalars['Country'];
+  company?: Maybe<Scalars['String']>;
+  department?: Maybe<Scalars['String']>;
+  building?: Maybe<Scalars['String']>;
+  apartment?: Maybe<Scalars['String']>;
+  pOBox?: Maybe<Scalars['String']>;
+  additionalAddressInfo?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Field 'contactInfo' is deprecated. Instead of using e.g. 'contactInfo.email' use 'email' directly. */
+  contactInfo?: Maybe<AddressContactInfo>;
+  phone?: Maybe<Scalars['String']>;
+  mobile?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  fax?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  salutation?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  custom?: Maybe<CustomFieldsType>;
+};
+
+export type AddressContactInfo = {
+  phone?: Maybe<Scalars['String']>;
+  mobile?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  fax?: Maybe<Scalars['String']>;
+};
+
 export type AddressDraft = {
   id?: Maybe<Scalars['String']>;
   streetName?: Maybe<Scalars['String']>;
@@ -512,6 +578,40 @@ export type ApplyCartDeltaToLineItemShippingDetailsTargets = {
   targetsDelta: Array<ShippingTargetDraft>;
 };
 
+export type Asset = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  sources: Array<AssetSource>;
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales: Array<LocalizedString>;
+  description?: Maybe<Scalars['String']>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  tags: Array<Scalars['String']>;
+  /**
+   * This field would contain type data
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFields?: Maybe<Type>;
+  custom?: Maybe<CustomFieldsType>;
+};
+
+
+export type AssetNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type AssetDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+export type AssetDimensions = {
+  width: Scalars['Int'];
+  height: Scalars['Int'];
+};
+
 export type AssetDimensionsInput = {
   width: Scalars['Int'];
   height: Scalars['Int'];
@@ -527,6 +627,13 @@ export type AssetDraftInput = {
   type?: Maybe<ResourceIdentifierInput>;
 };
 
+export type AssetSource = {
+  uri: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  dimensions?: Maybe<AssetDimensions>;
+  contentType?: Maybe<Scalars['String']>;
+};
+
 export type AssetSourceInput = {
   uri: Scalars['String'];
   key?: Maybe<Scalars['String']>;
@@ -538,6 +645,42 @@ export type Attribute = {
   name: Scalars['String'];
 };
 
+export enum AttributeConstraint {
+  /** No constraints are applied to the attribute */
+  None = 'None',
+  /** Attribute value should be different in each variant */
+  Unique = 'Unique',
+  /** A set of attributes, that have this constraint, should have different combinations in each variant */
+  CombinationUnique = 'CombinationUnique',
+  /** Attribute value should be the same in all variants */
+  SameForAll = 'SameForAll'
+}
+
+export type AttributeDefinition = {
+  type: AttributeDefinitionType;
+  name: Scalars['String'];
+  label?: Maybe<Scalars['String']>;
+  isRequired: Scalars['Boolean'];
+  attributeConstraint: AttributeConstraint;
+  inputTip?: Maybe<Scalars['String']>;
+  inputHint: TextInputHint;
+  isSearchable: Scalars['Boolean'];
+  labelAllLocales: Array<LocalizedString>;
+  inputTipAllLocales?: Maybe<Array<LocalizedString>>;
+};
+
+
+export type AttributeDefinitionLabelArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type AttributeDefinitionInputTipArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
 export type AttributeDefinitionDraft = {
   type: AttributeTypeDraft;
   name: Scalars['String'];
@@ -547,6 +690,18 @@ export type AttributeDefinitionDraft = {
   inputTip?: Maybe<Array<LocalizedStringItemInputType>>;
   inputHint?: Maybe<TextInputHint>;
   isSearchable: Scalars['Boolean'];
+};
+
+export type AttributeDefinitionResult = {
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  total: Scalars['Int'];
+  results: Array<AttributeDefinition>;
+};
+
+/** (https://docs.commercetools.com/api/projects/productTypes#attributetype)[https://docs.commercetools.com/api/projects/productTypes#attributetype] */
+export type AttributeDefinitionType = {
+  name: Scalars['String'];
 };
 
 export type AttributeSetElementTypeDraft = {
@@ -609,6 +764,13 @@ export type AzureServiceBusDestinationInput = {
   connectionString: Scalars['String'];
 };
 
+export type BaseMoney = {
+  type: Scalars['String'];
+  currencyCode: Scalars['Currency'];
+  centAmount: Scalars['Long'];
+  fractionDigits: Scalars['Int'];
+};
+
 export type BaseMoneyInput = {
   centPrecision?: Maybe<MoneyInput>;
   highPrecision?: Maybe<HighPrecisionMoneyInput>;
@@ -619,8 +781,13 @@ export type BaseSearchKeywordInput = {
   custom?: Maybe<CustomSuggestTokenizerInput>;
 };
 
+
 export type BooleanAttribute = Attribute & {
   value: Scalars['Boolean'];
+  name: Scalars['String'];
+};
+
+export type BooleanAttributeDefinitionType = AttributeDefinitionType & {
   name: Scalars['String'];
 };
 
@@ -631,6 +798,67 @@ export type BooleanField = CustomField & {
 
 export type BooleanType = FieldType & {
   name: Scalars['String'];
+};
+
+/** A shopping cart holds product variants and can be ordered. Each cart either belongs to a registered customer or is an anonymous cart. */
+export type Cart = Versioned & {
+  customerId?: Maybe<Scalars['String']>;
+  customer?: Maybe<Customer>;
+  customerEmail?: Maybe<Scalars['String']>;
+  anonymousId?: Maybe<Scalars['String']>;
+  lineItems: Array<LineItem>;
+  customLineItems: Array<CustomLineItem>;
+  totalPrice: Money;
+  taxedPrice?: Maybe<TaxedPrice>;
+  shippingAddress?: Maybe<Address>;
+  billingAddress?: Maybe<Address>;
+  inventoryMode: InventoryMode;
+  taxMode: TaxMode;
+  taxRoundingMode: RoundingMode;
+  taxCalculationMode: TaxCalculationMode;
+  customerGroup?: Maybe<CustomerGroup>;
+  customerGroupRef?: Maybe<Reference>;
+  country?: Maybe<Scalars['Country']>;
+  shippingInfo?: Maybe<ShippingInfo>;
+  discountCodes: Array<DiscountCodeInfo>;
+  refusedGifts: Array<CartDiscount>;
+  refusedGiftsRefs: Array<Reference>;
+  paymentInfo?: Maybe<PaymentInfo>;
+  locale?: Maybe<Scalars['Locale']>;
+  shippingRateInput?: Maybe<ShippingRateInput>;
+  origin: CartOrigin;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  storeRef?: Maybe<KeyReference>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  store?: Maybe<Store>;
+  itemShippingAddresses: Array<Address>;
+  cartState: CartState;
+  key?: Maybe<Scalars['String']>;
+  /**
+   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFieldsRaw?: Maybe<Array<RawCustomField>>;
+  /**
+   * This field would contain type data
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFields?: Maybe<Type>;
+  custom?: Maybe<CustomFieldsType>;
+  deleteDaysAfterLastModification?: Maybe<Scalars['Int']>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+/** A shopping cart holds product variants and can be ordered. Each cart either belongs to a registered customer or is an anonymous cart. */
+export type CartCustomFieldsRawArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type CartClassificationInput = {
@@ -649,6 +877,63 @@ export type CartCreated = MessagePayload & {
   type: Scalars['String'];
 };
 
+/**
+ * Cart discounts are recalculated every time LineItems or CustomLineItems are added or removed from the Cart or an order is created from the cart.
+ *
+ * The number of active cart discounts that do not require a discount code (isActive=true and requiresDiscountCode=false) is limited to 100.
+ */
+export type CartDiscount = Versioned & {
+  cartPredicate: Scalars['String'];
+  validFrom?: Maybe<Scalars['DateTime']>;
+  validUntil?: Maybe<Scalars['DateTime']>;
+  stackingMode: StackingMode;
+  isActive: Scalars['Boolean'];
+  requiresDiscountCode: Scalars['Boolean'];
+  sortOrder: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  nameAllLocales: Array<LocalizedString>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  referenceRefs: Array<Reference>;
+  /**
+   * This field would contain type data
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFields?: Maybe<Type>;
+  custom?: Maybe<CustomFieldsType>;
+  value: CartDiscountValue;
+  target?: Maybe<CartDiscountTarget>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+/**
+ * Cart discounts are recalculated every time LineItems or CustomLineItems are added or removed from the Cart or an order is created from the cart.
+ *
+ * The number of active cart discounts that do not require a discount code (isActive=true and requiresDiscountCode=false) is limited to 100.
+ */
+export type CartDiscountNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+/**
+ * Cart discounts are recalculated every time LineItems or CustomLineItems are added or removed from the Cart or an order is created from the cart.
+ *
+ * The number of active cart discounts that do not require a discount code (isActive=true and requiresDiscountCode=false) is limited to 100.
+ */
+export type CartDiscountDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
 export type CartDiscountDraft = {
   value: CartDiscountValueInput;
   cartPredicate: Scalars['String'];
@@ -663,6 +948,26 @@ export type CartDiscountDraft = {
   isActive?: Maybe<Scalars['Boolean']>;
   custom?: Maybe<CustomFieldsDraft>;
   key?: Maybe<Scalars['String']>;
+};
+
+export type CartDiscountLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type CartDiscountLimitsProjection = {
+  totalActiveWithoutDiscountCodes: CartDiscountLimitWithCurrent;
+};
+
+export type CartDiscountQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<CartDiscount>;
+};
+
+export type CartDiscountTarget = {
+  type: Scalars['String'];
 };
 
 export type CartDiscountTargetInput = {
@@ -689,6 +994,10 @@ export type CartDiscountUpdateAction = {
   setValidFrom?: Maybe<SetCartDiscountValidFrom>;
   setValidFromAndUntil?: Maybe<SetCartDiscountValidFromAndUntil>;
   setValidUntil?: Maybe<SetCartDiscountValidUntil>;
+};
+
+export type CartDiscountValue = {
+  type: Scalars['String'];
 };
 
 export type CartDiscountValueInput = {
@@ -726,6 +1035,50 @@ export type CartDraft = {
   origin?: Maybe<CartOrigin>;
 };
 
+export type CartLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type CartLimitsProjection = {
+  total: CartLimitWithCurrent;
+};
+
+export enum CartOrigin {
+  /** The cart was created by the merchant on behalf of the customer */
+  Merchant = 'Merchant',
+  /** The cart was created by the customer. This is the default value */
+  Customer = 'Customer'
+}
+
+/** Fields to access carts. Includes direct access to a single cart and searching for carts. */
+export type CartQueryInterface = {
+  cart?: Maybe<Cart>;
+  carts: CartQueryResult;
+};
+
+
+/** Fields to access carts. Includes direct access to a single cart and searching for carts. */
+export type CartQueryInterfaceCartArgs = {
+  id: Scalars['String'];
+};
+
+
+/** Fields to access carts. Includes direct access to a single cart and searching for carts. */
+export type CartQueryInterfaceCartsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+export type CartQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Cart>;
+};
+
 export type CartScoreInput = {
   dummy?: Maybe<Scalars['String']>;
 };
@@ -733,6 +1086,15 @@ export type CartScoreInput = {
 export type CartScoreType = ShippingRateInputType & {
   type: Scalars['String'];
 };
+
+export enum CartState {
+  /** The cart was ordered. No further operations on the cart are allowed. */
+  Ordered = 'Ordered',
+  /** Anonymous cart whose content was merged into a customers cart on signin. No further operations on the cart are allowed. */
+  Merged = 'Merged',
+  /** The cart can be updated and ordered. It is the default state. */
+  Active = 'Active'
+}
 
 export type CartUpdateAction = {
   addCustomLineItem?: Maybe<AddCartCustomLineItem>;
@@ -803,8 +1165,107 @@ export type CartValueType = ShippingRateInputType & {
   type: Scalars['String'];
 };
 
+export type CartsConfiguration = {
+  deleteDaysAfterLastModification?: Maybe<Scalars['Int']>;
+  allowAddingUnpublishedProducts: Scalars['Boolean'];
+  countryTaxRateFallbackEnabled: Scalars['Boolean'];
+};
+
 export type CartsConfigurationInput = {
   deleteDaysAfterLastModification?: Maybe<Scalars['Int']>;
+};
+
+export type Category = Versioned & {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  version: Scalars['Long'];
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales: Array<LocalizedString>;
+  description?: Maybe<Scalars['String']>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  slug?: Maybe<Scalars['String']>;
+  slugAllLocales: Array<LocalizedString>;
+  ancestorsRef: Array<Reference>;
+  ancestors: Array<Category>;
+  parentRef?: Maybe<Reference>;
+  parent?: Maybe<Category>;
+  orderHint: Scalars['String'];
+  externalId?: Maybe<Scalars['String']>;
+  metaTitle?: Maybe<Scalars['String']>;
+  metaTitleAllLocales?: Maybe<Array<LocalizedString>>;
+  metaKeywords?: Maybe<Scalars['String']>;
+  metaKeywordsAllLocales?: Maybe<Array<LocalizedString>>;
+  metaDescription?: Maybe<Scalars['String']>;
+  metaDescriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  /**
+   * Number of a products in the category subtree.
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. The returned number is representing only staged products. Use 'stagedProductCount' instead
+   */
+  productCount: Scalars['Int'];
+  /** Number of staged products in the category subtree. */
+  stagedProductCount: Scalars['Int'];
+  /** Number of direct child categories. */
+  childCount: Scalars['Int'];
+  /** Direct child categories. */
+  children?: Maybe<Array<Category>>;
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  assets: Array<Asset>;
+  /**
+   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFieldsRaw?: Maybe<Array<RawCustomField>>;
+  /**
+   * This field would contain type data
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFields?: Maybe<Type>;
+  custom?: Maybe<CustomFieldsType>;
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+export type CategoryNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type CategoryDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type CategorySlugArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type CategoryMetaTitleArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type CategoryMetaKeywordsArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type CategoryMetaDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type CategoryCustomFieldsRawArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type CategoryCreated = MessagePayload & {
@@ -827,9 +1288,79 @@ export type CategoryDraft = {
   assets?: Maybe<Array<AssetDraftInput>>;
 };
 
+export type CategoryLimitsProjection = {
+  maxCategories: Limit;
+};
+
+export type CategoryOrderHint = {
+  categoryId: Scalars['String'];
+  orderHint: Scalars['String'];
+};
+
 export type CategoryOrderHintInput = {
   uuid: Scalars['String'];
   orderHint: Scalars['String'];
+};
+
+export type CategoryQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Category>;
+};
+
+export type CategorySearch = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  version: Scalars['Long'];
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales: Array<LocalizedString>;
+  description?: Maybe<Scalars['String']>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  slug?: Maybe<Scalars['String']>;
+  slugAllLocales: Array<LocalizedString>;
+  ancestorsRef: Array<Reference>;
+  ancestors: Array<CategorySearch>;
+  parentRef?: Maybe<Reference>;
+  parent?: Maybe<CategorySearch>;
+  externalId?: Maybe<Scalars['String']>;
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. The returned number is representing only staged products. Use 'stagedProductCount' instead */
+  productCount: Scalars['Int'];
+  stagedProductCount: Scalars['Int'];
+  childCount: Scalars['Int'];
+  productTypeNames: Array<Scalars['String']>;
+  /** Direct child categories. */
+  children: Array<CategorySearch>;
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  orderHint: Scalars['String'];
+  assets: Array<Asset>;
+  custom?: Maybe<CustomFieldsType>;
+};
+
+
+export type CategorySearchNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type CategorySearchDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type CategorySearchSlugArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+export type CategorySearchResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Int'];
+  results: Array<CategorySearch>;
 };
 
 export type CategorySlugChanged = MessagePayload & {
@@ -1299,6 +1830,10 @@ export type ChangeStateType = {
   type: StateType;
 };
 
+export type ChangeSubscription = {
+  resourceTypeId: Scalars['String'];
+};
+
 export type ChangeSubscriptionDestination = {
   destination: DestinationInput;
 };
@@ -1353,6 +1888,39 @@ export type ChangeZoneName = {
   name: Scalars['String'];
 };
 
+export type Channel = Versioned & ReviewTarget & {
+  id: Scalars['String'];
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'channelRef' to fetch the reference. */
+  typeId: Scalars['String'];
+  version: Scalars['Long'];
+  key: Scalars['String'];
+  roles: Array<ChannelRole>;
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales?: Maybe<Array<LocalizedString>>;
+  description?: Maybe<Scalars['String']>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  address?: Maybe<Address>;
+  geoLocation?: Maybe<Geometry>;
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  reviewRatingStatistics?: Maybe<ReviewRatingStatistics>;
+  custom?: Maybe<CustomFieldsType>;
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+export type ChannelNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type ChannelDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
 export type ChannelDraft = {
   key: Scalars['String'];
   roles: Array<ChannelRole>;
@@ -1363,11 +1931,31 @@ export type ChannelDraft = {
   geoLocation?: Maybe<GeometryInput>;
 };
 
+export type ChannelQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Channel>;
+};
+
 export type ChannelReferenceIdentifier = {
   typeId: Scalars['String'];
   id?: Maybe<Scalars['String']>;
   key?: Maybe<Scalars['String']>;
 };
+
+export enum ChannelRole {
+  /** Role tells that this channel can be used to track inventory entries.Channels with this role can be treated as warehouses */
+  InventorySupply = 'InventorySupply',
+  /** Role tells that this channel can be used to expose products to a specific distribution channel. It can be used by the cart to select a product price. */
+  ProductDistribution = 'ProductDistribution',
+  /** Role tells that this channel can be used to track order export activities. */
+  OrderExport = 'OrderExport',
+  /** Role tells that this channel can be used to track order import activities. */
+  OrderImport = 'OrderImport',
+  /** This role can be combined with some other roles (e.g. with `InventorySupply`) to represent the fact that this particular channel is the primary/master channel among the channels of the same type. */
+  Primary = 'Primary'
+}
 
 export type ChannelUpdateAction = {
   addRoles?: Maybe<AddChannelRoles>;
@@ -1415,6 +2003,7 @@ export type CloudEventsSubscriptionsFormatInput = {
   cloudEventsVersion: Scalars['String'];
 };
 
+
 export type CreateApiClient = {
   name: Scalars['String'];
   scope: Scalars['String'];
@@ -1435,6 +2024,7 @@ export type CreateZone = {
   description?: Maybe<Scalars['String']>;
   locations?: Maybe<Array<ZoneLocation>>;
 };
+
 
 export type CustomField = {
   name: Scalars['String'];
@@ -1481,6 +2071,67 @@ export type CustomFieldsDraft = {
   typeKey?: Maybe<Scalars['String']>;
   type?: Maybe<ResourceIdentifierInput>;
   fields?: Maybe<Array<CustomFieldInput>>;
+};
+
+export type CustomFieldsType = {
+  typeRef: Reference;
+  type?: Maybe<TypeDefinition>;
+  /** This field contains non-typed data. */
+  customFieldsRaw?: Maybe<Array<RawCustomField>>;
+  /**
+   * This field would contain type data
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Typed custom fields are no longer supported, please use customFieldsRaw instead.
+   */
+  customFields: Type;
+};
+
+
+export type CustomFieldsTypeCustomFieldsRawArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
+};
+
+/** A custom line item is a generic item that can be added to the cart but is not bound to a product. You can use it for discounts (negative money), vouchers, complex cart rules, additional services or fees. You control the lifecycle of this item. */
+export type CustomLineItem = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales: Array<LocalizedString>;
+  money: BaseMoney;
+  totalPrice: Money;
+  slug: Scalars['String'];
+  quantity: Scalars['Long'];
+  state: Array<ItemState>;
+  taxCategory?: Maybe<TaxCategory>;
+  taxCategoryRef?: Maybe<Reference>;
+  taxRate?: Maybe<TaxRate>;
+  taxedPrice?: Maybe<TaxedItemPrice>;
+  discountedPricePerQuantity: Array<DiscountedLineItemPriceForQuantity>;
+  /**
+   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFieldsRaw?: Maybe<Array<RawCustomField>>;
+  /**
+   * This field would contain type data
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFields?: Maybe<Type>;
+  custom?: Maybe<CustomFieldsType>;
+  shippingDetails?: Maybe<ItemShippingDetails>;
+};
+
+
+/** A custom line item is a generic item that can be added to the cart but is not bound to a product. You can use it for discounts (negative money), vouchers, complex cart rules, additional services or fees. You control the lifecycle of this item. */
+export type CustomLineItemNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+/** A custom line item is a generic item that can be added to the cart but is not bound to a product. You can use it for discounts (negative money), vouchers, complex cart rules, additional services or fees. You control the lifecycle of this item. */
+export type CustomLineItemCustomFieldsRawArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type CustomLineItemDraft = {
@@ -1544,12 +2195,40 @@ export type CustomLineItemsTargetInput = {
   predicate: Scalars['String'];
 };
 
+export type CustomObject = Versioned & {
+  container: Scalars['String'];
+  key: Scalars['String'];
+  value: Scalars['Json'];
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
 export type CustomObjectDraft = {
   key: Scalars['String'];
   container: Scalars['String'];
   /** The value should be passed in a form of escaped JSON */
   value: Scalars['String'];
   version?: Maybe<Scalars['Long']>;
+};
+
+export type CustomObjectLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type CustomObjectLimitsProjection = {
+  total: CustomObjectLimitWithCurrent;
+};
+
+export type CustomObjectQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<CustomObject>;
 };
 
 export type CustomSuggestTokenizer = SuggestTokenizer & {
@@ -1559,6 +2238,75 @@ export type CustomSuggestTokenizer = SuggestTokenizer & {
 
 export type CustomSuggestTokenizerInput = {
   inputs: Array<Scalars['String']>;
+};
+
+/** A customer is a person purchasing products. Carts, Orders and Reviews can be associated to a customer. */
+export type Customer = Versioned & {
+  customerNumber?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  password: Scalars['String'];
+  addresses: Array<Address>;
+  defaultShippingAddressId?: Maybe<Scalars['String']>;
+  defaultBillingAddressId?: Maybe<Scalars['String']>;
+  shippingAddressIds: Array<Scalars['String']>;
+  billingAddressIds: Array<Scalars['String']>;
+  isEmailVerified: Scalars['Boolean'];
+  customerGroupRef?: Maybe<Reference>;
+  externalId?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  middleName?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  locale?: Maybe<Scalars['Locale']>;
+  salutation?: Maybe<Scalars['String']>;
+  dateOfBirth?: Maybe<Scalars['Date']>;
+  companyName?: Maybe<Scalars['String']>;
+  vatId?: Maybe<Scalars['String']>;
+  customerGroup?: Maybe<CustomerGroup>;
+  defaultShippingAddress?: Maybe<Address>;
+  defaultBillingAddress?: Maybe<Address>;
+  shippingAddresses: Array<Address>;
+  billingAddresses: Array<Address>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  storesRef: Array<KeyReference>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  stores: Array<Store>;
+  /**
+   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFieldsRaw?: Maybe<Array<RawCustomField>>;
+  /**
+   * This field would contain type data
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFields?: Maybe<Type>;
+  custom?: Maybe<CustomFieldsType>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+/** A customer is a person purchasing products. Carts, Orders and Reviews can be associated to a customer. */
+export type CustomerCustomFieldsRawArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
+};
+
+/** A field to access a customer's active cart. */
+export type CustomerActiveCartInterface = {
+  customerActiveCart?: Maybe<Cart>;
+};
+
+
+/** A field to access a customer's active cart. */
+export type CustomerActiveCartInterfaceCustomerActiveCartArgs = {
+  customerId: Scalars['String'];
 };
 
 export type CustomerAddressAdded = MessagePayload & {
@@ -1612,10 +2360,41 @@ export type CustomerEmailVerified = MessagePayload & {
   type: Scalars['String'];
 };
 
+/** A customer can be a member in a customer group (e.g. reseller, gold member). A customer group can be used in price calculations with special prices being assigned to certain customer groups. */
+export type CustomerGroup = Versioned & {
+  id: Scalars['String'];
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'customerGroupRef' to fetch the reference. */
+  typeId: Scalars['String'];
+  version: Scalars['Long'];
+  name: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  custom?: Maybe<CustomFieldsType>;
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
 export type CustomerGroupDraft = {
   groupName: Scalars['String'];
   key?: Maybe<Scalars['String']>;
   custom?: Maybe<CustomFieldsDraft>;
+};
+
+export type CustomerGroupLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type CustomerGroupLimitsProjection = {
+  total: CustomerGroupLimitWithCurrent;
+};
+
+export type CustomerGroupQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<CustomerGroup>;
 };
 
 export type CustomerGroupReferenceIdentifier = {
@@ -1637,6 +2416,15 @@ export type CustomerGroupUpdateAction = {
   setCustomField?: Maybe<SetCustomerGroupCustomField>;
 };
 
+export type CustomerLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type CustomerLimitsProjection = {
+  total: CustomerLimitWithCurrent;
+};
+
 export type CustomerPasswordToken = Versioned & {
   customerId: Scalars['String'];
   expiresAt: Scalars['DateTime'];
@@ -1652,6 +2440,37 @@ export type CustomerPasswordToken = Versioned & {
 export type CustomerPasswordUpdated = MessagePayload & {
   reset: Scalars['Boolean'];
   type: Scalars['String'];
+};
+
+/** Fields to access customer accounts. Includes direct access to a single customer and searching for customers. */
+export type CustomerQueryInterface = {
+  customer?: Maybe<Customer>;
+  customers: CustomerQueryResult;
+};
+
+
+/** Fields to access customer accounts. Includes direct access to a single customer and searching for customers. */
+export type CustomerQueryInterfaceCustomerArgs = {
+  emailToken?: Maybe<Scalars['String']>;
+  passwordToken?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+/** Fields to access customer accounts. Includes direct access to a single customer and searching for customers. */
+export type CustomerQueryInterfaceCustomersArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+export type CustomerQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Customer>;
 };
 
 export type CustomerSignInDraft = {
@@ -1770,8 +2589,13 @@ export type CustomerUpdateAction = {
   setVatId?: Maybe<SetCustomerVatId>;
 };
 
+
 export type DateAttribute = Attribute & {
   value: Scalars['Date'];
+  name: Scalars['String'];
+};
+
+export type DateAttributeDefinitionType = AttributeDefinitionType & {
   name: Scalars['String'];
 };
 
@@ -1780,8 +2604,13 @@ export type DateField = CustomField & {
   name: Scalars['String'];
 };
 
+
 export type DateTimeAttribute = Attribute & {
   value: Scalars['DateTime'];
+  name: Scalars['String'];
+};
+
+export type DateTimeAttributeDefinitionType = AttributeDefinitionType & {
   name: Scalars['String'];
 };
 
@@ -1798,6 +2627,14 @@ export type DateType = FieldType & {
   name: Scalars['String'];
 };
 
+export type Delivery = {
+  id: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  items: Array<DeliveryItem>;
+  parcels: Array<Parcel>;
+  address?: Maybe<Address>;
+};
+
 export type DeliveryAdded = MessagePayload & {
   delivery: Delivery;
   type: Scalars['String'];
@@ -1808,6 +2645,11 @@ export type DeliveryAddressSet = MessagePayload & {
   address?: Maybe<Address>;
   oldAddress?: Maybe<Address>;
   type: Scalars['String'];
+};
+
+export type DeliveryItem = {
+  id: Scalars['String'];
+  quantity: Scalars['Long'];
 };
 
 export type DeliveryItemDraftType = {
@@ -1827,6 +2669,10 @@ export type DeliveryRemoved = MessagePayload & {
   type: Scalars['String'];
 };
 
+export type Destination = {
+  type: Scalars['String'];
+};
+
 export type DestinationInput = {
   SQS?: Maybe<SqsDestinationInput>;
   SNS?: Maybe<SnsDestinationInput>;
@@ -1835,9 +2681,74 @@ export type DestinationInput = {
   GoogleCloudPubSub?: Maybe<GoogleCloudPubSubDestinationInput>;
 };
 
+export type Dimensions = {
+  width: Scalars['Int'];
+  height: Scalars['Int'];
+};
+
 export type DimensionsInput = {
   width: Scalars['Int'];
   height: Scalars['Int'];
+};
+
+/** With discount codes it is possible to give specific cart discounts to an eligible amount of users. They are defined by a string value which can be added to a cart so that specific cart discounts can be applied to the cart. */
+export type DiscountCode = Versioned & {
+  code: Scalars['String'];
+  isActive: Scalars['Boolean'];
+  maxApplications?: Maybe<Scalars['Long']>;
+  maxApplicationsPerCustomer?: Maybe<Scalars['Long']>;
+  cartPredicate?: Maybe<Scalars['String']>;
+  applicationVersion?: Maybe<Scalars['Long']>;
+  validFrom?: Maybe<Scalars['DateTime']>;
+  validUntil?: Maybe<Scalars['DateTime']>;
+  groups: Array<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  cartDiscounts: Array<CartDiscount>;
+  referenceRefs: Array<Reference>;
+  nameAllLocales?: Maybe<Array<LocalizedString>>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  /**
+   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFieldsRaw?: Maybe<Array<RawCustomField>>;
+  /**
+   * This field would contain type data
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFields?: Maybe<Type>;
+  custom?: Maybe<CustomFieldsType>;
+  /** How many times this discount code was applied (only applications that were part of a successful checkout are considered) */
+  applicationCount: Scalars['Long'];
+  cartDiscountRefs: Array<Reference>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+/** With discount codes it is possible to give specific cart discounts to an eligible amount of users. They are defined by a string value which can be added to a cart so that specific cart discounts can be applied to the cart. */
+export type DiscountCodeNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+/** With discount codes it is possible to give specific cart discounts to an eligible amount of users. They are defined by a string value which can be added to a cart so that specific cart discounts can be applied to the cart. */
+export type DiscountCodeDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+/** With discount codes it is possible to give specific cart discounts to an eligible amount of users. They are defined by a string value which can be added to a cart so that specific cart discounts can be applied to the cart. */
+export type DiscountCodeCustomFieldsRawArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type DiscountCodeDraft = {
@@ -1855,6 +2766,34 @@ export type DiscountCodeDraft = {
   groups?: Maybe<Array<Scalars['String']>>;
 };
 
+export type DiscountCodeInfo = {
+  discountCodeRef: Reference;
+  state?: Maybe<DiscountCodeState>;
+  discountCode?: Maybe<DiscountCode>;
+};
+
+export type DiscountCodeQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<DiscountCode>;
+};
+
+export enum DiscountCodeState {
+  /** The discount code is active and none of the discounts were applied because the discount application was stopped by one discount that has the StackingMode of StopAfterThisDiscount defined */
+  ApplicationStoppedByPreviousDiscount = 'ApplicationStoppedByPreviousDiscount',
+  /** The discount code is not valid or it does not contain any valid cart discounts. Validity is determined based on the validFrom and validUntil dates */
+  NotValid = 'NotValid',
+  /** maxApplications or maxApplicationsPerCustomer for discountCode has been reached. */
+  MaxApplicationReached = 'MaxApplicationReached',
+  /** The discount code is active and it contains at least one active and valid CartDiscount. The discount code cartPredicate matches the cart and at least one of the contained active discount’s cart predicates matches the cart. */
+  MatchesCart = 'MatchesCart',
+  /** The discount code is active and it contains at least one active and valid CartDiscount. But its cart predicate does not match the cart or none of the contained active discount’s cart predicates match the cart */
+  DoesNotMatchCart = 'DoesNotMatchCart',
+  /** The discount code is not active or it does not contain any active cart discounts. */
+  NotActive = 'NotActive'
+}
+
 export type DiscountCodeUpdateAction = {
   changeCartDiscounts?: Maybe<ChangeDiscountCodeCartDiscounts>;
   changeGroups?: Maybe<ChangeDiscountCodeGroups>;
@@ -1871,6 +2810,28 @@ export type DiscountCodeUpdateAction = {
   setValidUntil?: Maybe<SetDiscountCodeValidUntil>;
 };
 
+export type DiscountedLineItemPortion = {
+  discount?: Maybe<CartDiscount>;
+  discountRef: Reference;
+  discountedAmount: BaseMoney;
+};
+
+export type DiscountedLineItemPrice = {
+  value: BaseMoney;
+  includedDiscounts: Array<DiscountedLineItemPortion>;
+};
+
+export type DiscountedLineItemPriceForQuantity = {
+  quantity: Scalars['Long'];
+  discountedPrice: DiscountedLineItemPrice;
+};
+
+export type DiscountedProductPriceValue = {
+  value: BaseMoney;
+  discountRef: Reference;
+  discount?: Maybe<ProductDiscount>;
+};
+
 export type DiscountedProductPriceValueInput = {
   value: BaseMoneyInput;
   discount: ReferenceInput;
@@ -1880,6 +2841,20 @@ export type EnumAttribute = Attribute & {
   key: Scalars['String'];
   label: Scalars['String'];
   name: Scalars['String'];
+};
+
+export type EnumAttributeDefinitionType = AttributeDefinitionType & {
+  values: PlainEnumValueResult;
+  name: Scalars['String'];
+};
+
+
+export type EnumAttributeDefinitionTypeValuesArgs = {
+  includeKeys?: Maybe<Array<Scalars['String']>>;
+  excludeKeys?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  sort?: Maybe<Array<Scalars['String']>>;
 };
 
 export type EnumField = CustomField & {
@@ -1917,6 +2892,23 @@ export type EventGridDestinationInput = {
   accessKey: Scalars['String'];
 };
 
+export type Extension = Versioned & {
+  key?: Maybe<Scalars['String']>;
+  destination: ExtensionDestination;
+  triggers: Array<Trigger>;
+  timeoutInMs?: Maybe<Scalars['Int']>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+export type ExtensionDestination = {
+  type: Scalars['String'];
+};
+
 export type ExtensionDestinationInput = {
   HTTP?: Maybe<HttpDestinationInput>;
   AWSLambda?: Maybe<AwsLambdaDestinationInput>;
@@ -1927,6 +2919,17 @@ export type ExtensionDraft = {
   destination: ExtensionDestinationInput;
   triggers: Array<TriggerInput>;
   timeoutInMs?: Maybe<Scalars['Int']>;
+};
+
+export type ExtensionLimitsProjection = {
+  timeoutInMs: Limit;
+};
+
+export type ExtensionQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Extension>;
 };
 
 export type ExtensionUpdateAction = {
@@ -1952,6 +2955,11 @@ export type ExternalLineItemTotalPrice = {
 export type ExternalLineItemTotalPriceDraft = {
   price: BaseMoneyInput;
   totalPrice: MoneyInput;
+};
+
+export type ExternalOAuth = {
+  url: Scalars['String'];
+  authorizationHeader: Scalars['String'];
 };
 
 export type ExternalOAuthDraft = {
@@ -1987,12 +2995,33 @@ export type ExternalTaxRateDraftOutput = {
   includedInPrice: Scalars['Boolean'];
 };
 
+/** Field definitions describe custom fields and allow you to define some meta-information associated with the field. */
+export type FieldDefinition = {
+  name: Scalars['String'];
+  required: Scalars['Boolean'];
+  inputHint: TextInputHint;
+  label?: Maybe<Scalars['String']>;
+  labelAllLocales: Array<LocalizedString>;
+  type: FieldType;
+};
+
+
+/** Field definitions describe custom fields and allow you to define some meta-information associated with the field. */
+export type FieldDefinitionLabelArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
 export type FieldDefinitionInput = {
   type: FieldTypeInput;
   name: Scalars['String'];
   label: Array<LocalizedStringItemInputType>;
   required: Scalars['Boolean'];
   inputHint: TextInputHint;
+};
+
+export type FieldType = {
+  name: Scalars['String'];
 };
 
 export type FieldTypeEnumTypeDraft = {
@@ -2047,6 +3076,10 @@ export type FixedPriceDiscountValue = CartDiscountValue & {
 
 export type FixedPriceDiscountValueInput = {
   money: Array<MoneyInput>;
+};
+
+export type Geometry = {
+  type: Scalars['String'];
 };
 
 export type GeometryInput = {
@@ -2115,6 +3148,12 @@ export type HttpDestinationInput = {
   authentication?: Maybe<HttpDestinationAuthenticationInput>;
 };
 
+export type Image = {
+  url: Scalars['String'];
+  dimensions: Dimensions;
+  label?: Maybe<Scalars['String']>;
+};
+
 export type ImageInput = {
   url: Scalars['String'];
   label?: Maybe<Scalars['String']>;
@@ -2151,6 +3190,209 @@ export type ImportStagedOrderLineItemStateOutput = StagedOrderUpdateActionOutput
   type: Scalars['String'];
   lineItemId: Scalars['String'];
   state: Scalars['Set'];
+};
+
+export type InStore = CartQueryInterface & CustomerActiveCartInterface & OrderQueryInterface & CustomerQueryInterface & ShippingMethodsByCartInterface & MeFieldInterface & {
+  /**
+   * This field can only be used with an access token created with the password flow or with an anonymous session.
+   *
+   * It gives access to the data that is specific to the customer or the anonymous session linked to the access token.
+   */
+  me: InStoreMe;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  shippingMethodsByCart: Array<ShippingMethod>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  customer?: Maybe<Customer>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  customers: CustomerQueryResult;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  cart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  carts: CartQueryResult;
+  customerActiveCart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  order?: Maybe<Order>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  orders: OrderQueryResult;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  shoppingList?: Maybe<ShoppingList>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  shoppingLists: ShoppingListQueryResult;
+};
+
+
+export type InStoreShippingMethodsByCartArgs = {
+  id: Scalars['String'];
+};
+
+
+export type InStoreCustomerArgs = {
+  emailToken?: Maybe<Scalars['String']>;
+  passwordToken?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type InStoreCustomersArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type InStoreCartArgs = {
+  id: Scalars['String'];
+};
+
+
+export type InStoreCartsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type InStoreCustomerActiveCartArgs = {
+  customerId: Scalars['String'];
+};
+
+
+export type InStoreOrderArgs = {
+  id?: Maybe<Scalars['String']>;
+  orderNumber?: Maybe<Scalars['String']>;
+};
+
+
+export type InStoreOrdersArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type InStoreShoppingListArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type InStoreShoppingListsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+export type InStoreMe = MeQueryInterface & CartQueryInterface & ActiveCartInterface & OrderQueryInterface & ShoppingListQueryInterface & {
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  customer?: Maybe<Customer>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  cart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  carts: CartQueryResult;
+  activeCart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  order?: Maybe<Order>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  orders: OrderQueryResult;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  shoppingList?: Maybe<ShoppingList>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  shoppingLists: ShoppingListQueryResult;
+};
+
+
+export type InStoreMeCartArgs = {
+  id: Scalars['String'];
+};
+
+
+export type InStoreMeCartsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type InStoreMeOrderArgs = {
+  id?: Maybe<Scalars['String']>;
+  orderNumber?: Maybe<Scalars['String']>;
+};
+
+
+export type InStoreMeOrdersArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type InStoreMeShoppingListArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type InStoreMeShoppingListsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+export type Initiator = {
+  isPlatformClient?: Maybe<Scalars['Boolean']>;
+  externalUserId?: Maybe<Scalars['String']>;
+  anonymousId?: Maybe<Scalars['String']>;
+  clientId?: Maybe<Scalars['String']>;
+  customerRef?: Maybe<Reference>;
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'userRef' to fetch the reference. */
+  user?: Maybe<Reference>;
+  userRef?: Maybe<Reference>;
+};
+
+export type InterfaceInteractionsRaw = {
+  typeRef: Reference;
+  type?: Maybe<TypeDefinition>;
+  fields: Array<RawCustomField>;
+};
+
+
+export type InterfaceInteractionsRawFieldsArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
+};
+
+export type InterfaceInteractionsRawResult = {
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  total: Scalars['Int'];
+  results: Array<InterfaceInteractionsRaw>;
+};
+
+/** Inventory allows you to track stock quantity per SKU and optionally per supply channel */
+export type InventoryEntry = Versioned & {
+  sku: Scalars['String'];
+  quantityOnStock: Scalars['Long'];
+  availableQuantity: Scalars['Long'];
+  key?: Maybe<Scalars['String']>;
+  restockableInDays?: Maybe<Scalars['Int']>;
+  expectedDelivery?: Maybe<Scalars['DateTime']>;
+  supplyChannel?: Maybe<Channel>;
+  supplyChannelRef?: Maybe<Reference>;
+  custom?: Maybe<CustomFieldsType>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
 };
 
 export type InventoryEntryCreated = MessagePayload & {
@@ -2196,6 +3438,13 @@ export type InventoryEntryQuantitySet = MessagePayload & {
   type: Scalars['String'];
 };
 
+export type InventoryEntryQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<InventoryEntry>;
+};
+
 export type InventoryEntryUpdateAction = {
   addQuantity?: Maybe<AddInventoryEntryQuantity>;
   changeQuantity?: Maybe<ChangeInventoryEntryQuantity>;
@@ -2205,6 +3454,31 @@ export type InventoryEntryUpdateAction = {
   setSupplyChannel?: Maybe<SetInventoryEntrySupplyChannel>;
   setCustomType?: Maybe<SetInventoryEntryCustomType>;
   setCustomField?: Maybe<SetInventoryEntryCustomField>;
+};
+
+export enum InventoryMode {
+  /**
+   * Adding items to cart and ordering is independent of inventory. No inventory checks or modifications.
+   * This is the default mode for a new cart.
+   */
+  None = 'None',
+  /**
+   * Creating an order will fail with an OutOfStock error if an unavailable line item exists. Line items in the cart
+   * are only reserved for the duration of the ordering transaction.
+   */
+  ReserveOnOrder = 'ReserveOnOrder',
+  /**
+   * Orders are tracked on inventory. That means, ordering a LineItem will decrement the available quantity on the
+   * respective InventoryEntry. Creating an order will succeed even if the line item’s available quantity is zero or
+   * negative. But creating an order will fail with an OutOfStock error if no matching inventory entry exists for a
+   * line item.
+   */
+  TrackOnly = 'TrackOnly'
+}
+
+export type ItemShippingDetails = {
+  targets: Array<ItemShippingTarget>;
+  valid: Scalars['Boolean'];
 };
 
 export type ItemShippingDetailsDraft = {
@@ -2219,9 +3493,138 @@ export type ItemShippingDetailsDraftType = {
   targets: Array<ShippingTargetDraftType>;
 };
 
+export type ItemShippingTarget = {
+  addressKey: Scalars['String'];
+  quantity: Scalars['Long'];
+};
+
+export type ItemState = {
+  quantity: Scalars['Long'];
+  stateRef: Reference;
+  state?: Maybe<State>;
+};
+
 export type ItemStateDraftType = {
   quantity: Scalars['Long'];
   state: ReferenceInput;
+};
+
+
+export type KeyReference = {
+  typeId: Scalars['String'];
+  key: Scalars['String'];
+};
+
+
+export type Limit = {
+  limit?: Maybe<Scalars['Long']>;
+};
+
+export type LimitWithCurrent = {
+  limit?: Maybe<Scalars['Long']>;
+  current?: Maybe<Scalars['Long']>;
+};
+
+/**
+ * A line item is a snapshot of a product variant at the time it was added to the cart.
+ *
+ * Since a product variant may change at any time, the ProductVariant data is copied into the field variant.
+ * The relation to the Product is kept but the line item will not automatically update if the product variant changes.
+ * On the cart, the line item can be updated manually. The productSlug refers to the current version of the product.
+ * It can be used to link to the product. If the product has been deleted, the line item remains but refers to a
+ * non-existent product and the productSlug is left empty.
+ *
+ * Please also note that creating an order is impossible if the product or product variant a line item relates to has been deleted.
+ */
+export type LineItem = {
+  id: Scalars['String'];
+  productId: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales: Array<LocalizedString>;
+  productSlug?: Maybe<Scalars['String']>;
+  productSlugAllLocales?: Maybe<Array<LocalizedString>>;
+  productType?: Maybe<ProductTypeDefinition>;
+  productTypeRef?: Maybe<Reference>;
+  variant?: Maybe<ProductVariant>;
+  price: ProductPrice;
+  taxedPrice?: Maybe<TaxedItemPrice>;
+  totalPrice?: Maybe<Money>;
+  quantity: Scalars['Long'];
+  addedAt?: Maybe<Scalars['DateTime']>;
+  lastModifiedAt?: Maybe<Scalars['DateTime']>;
+  state: Array<ItemState>;
+  taxRate?: Maybe<TaxRate>;
+  supplyChannel?: Maybe<Channel>;
+  supplyChannelRef?: Maybe<Reference>;
+  distributionChannel?: Maybe<Channel>;
+  distributionChannelRef?: Maybe<Reference>;
+  discountedPricePerQuantity: Array<DiscountedLineItemPriceForQuantity>;
+  lineItemMode: LineItemMode;
+  priceMode: LineItemPriceMode;
+  /**
+   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFieldsRaw?: Maybe<Array<RawCustomField>>;
+  /**
+   * This field would contain type data
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFields?: Maybe<Type>;
+  custom?: Maybe<CustomFieldsType>;
+  shippingDetails?: Maybe<ItemShippingDetails>;
+  inventoryMode?: Maybe<ItemShippingDetails>;
+};
+
+
+/**
+ * A line item is a snapshot of a product variant at the time it was added to the cart.
+ *
+ * Since a product variant may change at any time, the ProductVariant data is copied into the field variant.
+ * The relation to the Product is kept but the line item will not automatically update if the product variant changes.
+ * On the cart, the line item can be updated manually. The productSlug refers to the current version of the product.
+ * It can be used to link to the product. If the product has been deleted, the line item remains but refers to a
+ * non-existent product and the productSlug is left empty.
+ *
+ * Please also note that creating an order is impossible if the product or product variant a line item relates to has been deleted.
+ */
+export type LineItemNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+/**
+ * A line item is a snapshot of a product variant at the time it was added to the cart.
+ *
+ * Since a product variant may change at any time, the ProductVariant data is copied into the field variant.
+ * The relation to the Product is kept but the line item will not automatically update if the product variant changes.
+ * On the cart, the line item can be updated manually. The productSlug refers to the current version of the product.
+ * It can be used to link to the product. If the product has been deleted, the line item remains but refers to a
+ * non-existent product and the productSlug is left empty.
+ *
+ * Please also note that creating an order is impossible if the product or product variant a line item relates to has been deleted.
+ */
+export type LineItemProductSlugArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+/**
+ * A line item is a snapshot of a product variant at the time it was added to the cart.
+ *
+ * Since a product variant may change at any time, the ProductVariant data is copied into the field variant.
+ * The relation to the Product is kept but the line item will not automatically update if the product variant changes.
+ * On the cart, the line item can be updated manually. The productSlug refers to the current version of the product.
+ * It can be used to link to the product. If the product has been deleted, the line item remains but refers to a
+ * non-existent product and the productSlug is left empty.
+ *
+ * Please also note that creating an order is impossible if the product or product variant a line item relates to has been deleted.
+ */
+export type LineItemCustomFieldsRawArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type LineItemDraft = {
@@ -2253,6 +3656,31 @@ export type LineItemDraftOutput = {
   distributionChannelResId?: Maybe<ResourceIdentifier>;
   supplyChannelResId?: Maybe<ResourceIdentifier>;
 };
+
+export enum LineItemMode {
+  /**
+   * The line item was added automatically, because a discount has added a free gift to the cart.
+   * The quantity can not be increased, and it won’t be merged when the same product variant is added.
+   * If the gift is removed, an entry is added to the "refusedGifts" array and the discount won’t be applied again
+   * to the cart. The price can not be changed externally.
+   * All other updates, such as the ones related to custom fields, can be used.
+   */
+  GiftLineItem = 'GiftLineItem',
+  /**
+   * The line item was added during cart creation or with the update action addLineItem. Its quantity can be
+   * changed without restrictions.
+   */
+  Standard = 'Standard'
+}
+
+export enum LineItemPriceMode {
+  /** The price is selected form the product variant. This is the default mode. */
+  Platform = 'Platform',
+  /** The line item price was set externally. Cart discounts can apply to line items with this price mode. All update actions that change the quantity of a line item with this price mode require the externalPrice field to be given. */
+  ExternalPrice = 'ExternalPrice',
+  /** The line item price with the total was set externally. */
+  ExternalTotal = 'ExternalTotal'
+}
 
 export type LineItemReturnItem = ReturnItem & {
   type: Scalars['String'];
@@ -2286,8 +3714,46 @@ export type LineItemsTargetInput = {
   predicate: Scalars['String'];
 };
 
+
+export type LocalizableEnumAttributeDefinitionType = AttributeDefinitionType & {
+  values: LocalizableEnumValueTypeResult;
+  name: Scalars['String'];
+};
+
+
+export type LocalizableEnumAttributeDefinitionTypeValuesArgs = {
+  includeKeys?: Maybe<Array<Scalars['String']>>;
+  excludeKeys?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+};
+
 export type LocalizableEnumTypeDraft = {
   values: Array<LocalizedEnumValueDraft>;
+};
+
+export type LocalizableEnumValueType = {
+  key: Scalars['String'];
+  label?: Maybe<Scalars['String']>;
+  labelAllLocales: Array<LocalizedString>;
+};
+
+
+export type LocalizableEnumValueTypeLabelArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+export type LocalizableEnumValueTypeResult = {
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  total: Scalars['Int'];
+  results: Array<LocalizableEnumValueType>;
+};
+
+export type LocalizableTextAttributeDefinitionType = AttributeDefinitionType & {
+  name: Scalars['String'];
 };
 
 export type LocalizedEnumAttribute = Attribute & {
@@ -2339,6 +3805,11 @@ export type LocalizedEnumValueInput = {
   label: Array<LocalizedStringItemInputType>;
 };
 
+export type LocalizedString = {
+  locale: Scalars['Locale'];
+  value: Scalars['String'];
+};
+
 export type LocalizedStringAttribute = Attribute & {
   value?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -2368,9 +3839,183 @@ export type LocalizedStringType = FieldType & {
   name: Scalars['String'];
 };
 
+export type LocalizedText = {
+  text: Scalars['String'];
+  locale: Scalars['Locale'];
+};
+
+export type Location = {
+  country: Scalars['Country'];
+  state?: Maybe<Scalars['String']>;
+};
+
+
+export type Me = MeQueryInterface & CartQueryInterface & ActiveCartInterface & OrderQueryInterface & ShoppingListQueryInterface & {
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  customer?: Maybe<Customer>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  cart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  carts: CartQueryResult;
+  activeCart?: Maybe<Cart>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  order?: Maybe<Order>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  orders: OrderQueryResult;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  shoppingList?: Maybe<ShoppingList>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  shoppingLists: ShoppingListQueryResult;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  payment?: Maybe<MyPayment>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  payments: MyPaymentQueryResult;
+};
+
+
+export type MeCartArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MeCartsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type MeOrderArgs = {
+  id?: Maybe<Scalars['String']>;
+  orderNumber?: Maybe<Scalars['String']>;
+};
+
+
+export type MeOrdersArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type MeShoppingListArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type MeShoppingListsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type MePaymentArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MePaymentsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+/** The me field gives access to the data that is specific to the customer or anonymous session linked to the access token. */
+export type MeFieldInterface = {
+  me: MeQueryInterface;
+};
+
+export type MeQueryInterface = {
+  cart?: Maybe<Cart>;
+  carts: CartQueryResult;
+  activeCart?: Maybe<Cart>;
+  order?: Maybe<Order>;
+  orders: OrderQueryResult;
+  shoppingList?: Maybe<ShoppingList>;
+  shoppingLists: ShoppingListQueryResult;
+};
+
+
+export type MeQueryInterfaceCartArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MeQueryInterfaceCartsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type MeQueryInterfaceOrderArgs = {
+  id?: Maybe<Scalars['String']>;
+  orderNumber?: Maybe<Scalars['String']>;
+};
+
+
+export type MeQueryInterfaceOrdersArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type MeQueryInterfaceShoppingListArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type MeQueryInterfaceShoppingListsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+export type Message = Versioned & {
+  id: Scalars['String'];
+  type: Scalars['String'];
+  sequenceNumber: Scalars['Long'];
+  resourceRef: Reference;
+  resourceVersion: Scalars['Long'];
+  userProvidedIdentifiers?: Maybe<UserProvidedIdentifiers>;
+  payload: MessagePayload;
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
 export type MessageId = {
   id: Scalars['String'];
   sequenceNumber: Scalars['Long'];
+};
+
+export type MessagePayload = {
+  type: Scalars['String'];
+};
+
+export type MessageQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Message>;
+};
+
+export type MessageSubscription = {
+  resourceTypeId: Scalars['String'];
+  types: Array<Scalars['String']>;
 };
 
 export type MessageSubscriptionInput = {
@@ -2378,14 +4023,31 @@ export type MessageSubscriptionInput = {
   types?: Maybe<Array<Scalars['String']>>;
 };
 
+export type MessagesConfiguration = {
+  enabled: Scalars['Boolean'];
+  deleteDaysAfterCreation?: Maybe<Scalars['Int']>;
+};
+
 export type MessagesConfigurationDraft = {
   enabled: Scalars['Boolean'];
   deleteDaysAfterCreation: Scalars['Int'];
 };
 
+export type Money = BaseMoney & {
+  type: Scalars['String'];
+  currencyCode: Scalars['Currency'];
+  centAmount: Scalars['Long'];
+  /** For the `Money` it equals to the default number of fraction digits used with the currency. */
+  fractionDigits: Scalars['Int'];
+};
+
 export type MoneyAttribute = Attribute & {
   centAmount: Scalars['Long'];
   currencyCode: Scalars['Currency'];
+  name: Scalars['String'];
+};
+
+export type MoneyAttributeDefinitionType = AttributeDefinitionType & {
   name: Scalars['String'];
 };
 
@@ -3399,11 +5061,34 @@ export type MyLineItemDraft = {
   addedAt?: Maybe<Scalars['DateTime']>;
 };
 
+/**
+ * My Payments endpoint provides access to payments scoped to a specific user.
+ * [documentation](https://docs.commercetools.com/http-api-projects-me-payments#mypayment)
+ */
+export type MyPayment = {
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  customerRef?: Maybe<Reference>;
+  customer?: Maybe<Customer>;
+  anonymousId?: Maybe<Scalars['String']>;
+  paymentMethodInfo: PaymentMethodInfo;
+  amountPlanned: Money;
+  transactions: Array<Transaction>;
+  custom?: Maybe<CustomFieldsType>;
+};
+
 export type MyPaymentDraft = {
   amountPlanned: MoneyInput;
   paymentMethodInfo?: Maybe<PaymentMethodInfoInput>;
   custom?: Maybe<CustomFieldsDraft>;
   transaction?: Maybe<MyTransactionDraft>;
+};
+
+export type MyPaymentQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<MyPayment>;
 };
 
 export type MyPaymentUpdateAction = {
@@ -3454,12 +5139,27 @@ export type MyTransactionDraft = {
   interactionId?: Maybe<Scalars['String']>;
 };
 
+export type NestedAttributeDefinitionType = AttributeDefinitionType & {
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'typeRef' to fetch the reference. */
+  typeReference: Reference;
+  typeRef: Reference;
+  name: Scalars['String'];
+};
+
 export type NotProcessed = OrderEditResult & {
+  type: Scalars['String'];
+};
+
+export type NotificationFormat = {
   type: Scalars['String'];
 };
 
 export type NumberAttribute = Attribute & {
   value: Scalars['BigDecimal'];
+  name: Scalars['String'];
+};
+
+export type NumberAttributeDefinitionType = AttributeDefinitionType & {
   name: Scalars['String'];
 };
 
@@ -3470,6 +5170,82 @@ export type NumberField = CustomField & {
 
 export type NumberType = FieldType & {
   name: Scalars['String'];
+};
+
+/**
+ * An order can be created from a cart, usually after a checkout process has been completed.
+ * [documentation](https://docs.commercetools.com/http-api-projects-orders.html)
+ */
+export type Order = Versioned & {
+  customerId?: Maybe<Scalars['String']>;
+  customer?: Maybe<Customer>;
+  customerEmail?: Maybe<Scalars['String']>;
+  anonymousId?: Maybe<Scalars['String']>;
+  lineItems: Array<LineItem>;
+  customLineItems: Array<CustomLineItem>;
+  totalPrice: Money;
+  taxedPrice?: Maybe<TaxedPrice>;
+  shippingAddress?: Maybe<Address>;
+  billingAddress?: Maybe<Address>;
+  inventoryMode: InventoryMode;
+  taxMode: TaxMode;
+  taxRoundingMode: RoundingMode;
+  taxCalculationMode: TaxCalculationMode;
+  customerGroup?: Maybe<CustomerGroup>;
+  customerGroupRef?: Maybe<Reference>;
+  country?: Maybe<Scalars['Country']>;
+  shippingInfo?: Maybe<ShippingInfo>;
+  discountCodes: Array<DiscountCodeInfo>;
+  refusedGifts: Array<CartDiscount>;
+  refusedGiftsRefs: Array<Reference>;
+  paymentInfo?: Maybe<PaymentInfo>;
+  locale?: Maybe<Scalars['Locale']>;
+  shippingRateInput?: Maybe<ShippingRateInput>;
+  origin: CartOrigin;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  storeRef?: Maybe<KeyReference>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  store?: Maybe<Store>;
+  itemShippingAddresses: Array<Address>;
+  completedAt?: Maybe<Scalars['DateTime']>;
+  orderNumber?: Maybe<Scalars['String']>;
+  orderState: OrderState;
+  stateRef?: Maybe<Reference>;
+  state?: Maybe<State>;
+  shipmentState?: Maybe<ShipmentState>;
+  paymentState?: Maybe<PaymentState>;
+  syncInfo: Array<SyncInfo>;
+  returnInfo: Array<ReturnInfo>;
+  lastMessageSequenceNumber: Scalars['Long'];
+  cartRef?: Maybe<Reference>;
+  cart?: Maybe<Cart>;
+  /**
+   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFieldsRaw?: Maybe<Array<RawCustomField>>;
+  /**
+   * This field would contain type data
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFields?: Maybe<Type>;
+  custom?: Maybe<CustomFieldsType>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+/**
+ * An order can be created from a cart, usually after a checkout process has been completed.
+ * [documentation](https://docs.commercetools.com/http-api-projects-orders.html)
+ */
+export type OrderCustomFieldsRawArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type OrderBillingAddressSet = MessagePayload & {
@@ -3570,6 +5346,22 @@ export type OrderDiscountCodeStateSet = MessagePayload & {
   type: Scalars['String'];
 };
 
+export type OrderEdit = Versioned & {
+  key?: Maybe<Scalars['String']>;
+  resourceRef: Reference;
+  resource?: Maybe<Order>;
+  stagedActions: Array<StagedOrderUpdateActionOutput>;
+  result: OrderEditResult;
+  comment?: Maybe<Scalars['String']>;
+  custom?: Maybe<CustomFieldsType>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
 export type OrderEditApplied = MessagePayload & {
   result: Applied;
   edit?: Maybe<OrderEdit>;
@@ -3584,6 +5376,26 @@ export type OrderEditDraft = {
   custom?: Maybe<CustomFieldsDraft>;
   comment?: Maybe<Scalars['String']>;
   dryRun?: Maybe<Scalars['Boolean']>;
+};
+
+export type OrderEditLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type OrderEditLimitsProjection = {
+  total: OrderEditLimitWithCurrent;
+};
+
+export type OrderEditQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<OrderEdit>;
+};
+
+export type OrderEditResult = {
+  type: Scalars['String'];
 };
 
 export type OrderEditUpdateAction = {
@@ -3661,6 +5473,35 @@ export type OrderPaymentStateChanged = MessagePayload & {
   type: Scalars['String'];
 };
 
+/** Fields to access orders. Includes direct access to a single order and searching for orders. */
+export type OrderQueryInterface = {
+  order?: Maybe<Order>;
+  orders: OrderQueryResult;
+};
+
+
+/** Fields to access orders. Includes direct access to a single order and searching for orders. */
+export type OrderQueryInterfaceOrderArgs = {
+  id?: Maybe<Scalars['String']>;
+  orderNumber?: Maybe<Scalars['String']>;
+};
+
+
+/** Fields to access orders. Includes direct access to a single order and searching for orders. */
+export type OrderQueryInterfaceOrdersArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+export type OrderQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Order>;
+};
+
 export type OrderReturnShipmentStateChanged = MessagePayload & {
   returnItemId: Scalars['String'];
   returnShipmentState: ReturnShipmentState;
@@ -3690,6 +5531,13 @@ export type OrderShippingRateInputSet = MessagePayload & {
   oldShippingRateInput?: Maybe<ShippingRateInput>;
   type: Scalars['String'];
 };
+
+export enum OrderState {
+  Confirmed = 'Confirmed',
+  Cancelled = 'Cancelled',
+  Complete = 'Complete',
+  Open = 'Open'
+}
 
 export type OrderStateChanged = MessagePayload & {
   orderId: Scalars['String'];
@@ -3767,6 +5615,14 @@ export type OrderUpdateAction = {
   updateSyncInfo?: Maybe<UpdateOrderSyncInfo>;
 };
 
+export type Parcel = {
+  id: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  measurements?: Maybe<ParcelMeasurements>;
+  trackingData?: Maybe<TrackingData>;
+  items: Array<DeliveryItem>;
+};
+
 export type ParcelAddedToDelivery = MessagePayload & {
   delivery: Delivery;
   parcel: Parcel;
@@ -3791,6 +5647,13 @@ export type ParcelItemsUpdated = MessagePayload & {
   items: Array<DeliveryItem>;
   oldItems: Array<DeliveryItem>;
   type: Scalars['String'];
+};
+
+export type ParcelMeasurements = {
+  heightInMillimeter?: Maybe<Scalars['Int']>;
+  lengthInMillimeter?: Maybe<Scalars['Int']>;
+  widthInMillimeter?: Maybe<Scalars['Int']>;
+  weightInGram?: Maybe<Scalars['Int']>;
 };
 
 export type ParcelMeasurementsDraftType = {
@@ -3820,6 +5683,40 @@ export type ParcelTrackingDataUpdated = MessagePayload & {
   type: Scalars['String'];
 };
 
+/**
+ * Payments hold information about the current state of receiving and/or refunding money.
+ * [documentation](https://docs.commercetools.com/http-api-projects-payments)
+ */
+export type Payment = Versioned & {
+  key?: Maybe<Scalars['String']>;
+  customerRef?: Maybe<Reference>;
+  customer?: Maybe<Customer>;
+  anonymousId?: Maybe<Scalars['String']>;
+  interfaceId?: Maybe<Scalars['String']>;
+  amountPlanned: Money;
+  paymentMethodInfo: PaymentMethodInfo;
+  paymentStatus: PaymentStatus;
+  transactions: Array<Transaction>;
+  interfaceInteractionsRaw: InterfaceInteractionsRawResult;
+  custom?: Maybe<CustomFieldsType>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+/**
+ * Payments hold information about the current state of receiving and/or refunding money.
+ * [documentation](https://docs.commercetools.com/http-api-projects-payments)
+ */
+export type PaymentInterfaceInteractionsRawArgs = {
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
 export type PaymentCreated = MessagePayload & {
   payment: Payment;
   type: Scalars['String'];
@@ -3838,15 +5735,55 @@ export type PaymentDraft = {
   interfaceInteractions?: Maybe<Array<CustomFieldsDraft>>;
 };
 
+export type PaymentInfo = {
+  payments: Array<Payment>;
+  paymentRefs: Array<Reference>;
+};
+
 export type PaymentInteractionAdded = MessagePayload & {
   interaction: CustomFieldsType;
   type: Scalars['String'];
+};
+
+export type PaymentMethodInfo = {
+  paymentInterface?: Maybe<Scalars['String']>;
+  method?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales?: Maybe<Array<LocalizedString>>;
+};
+
+
+export type PaymentMethodInfoNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
 };
 
 export type PaymentMethodInfoInput = {
   paymentInterface?: Maybe<Scalars['String']>;
   method?: Maybe<Scalars['String']>;
   name?: Maybe<Array<LocalizedStringItemInputType>>;
+};
+
+export type PaymentQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Payment>;
+};
+
+export enum PaymentState {
+  Paid = 'Paid',
+  CreditOwed = 'CreditOwed',
+  Pending = 'Pending',
+  Failed = 'Failed',
+  BalanceDue = 'BalanceDue'
+}
+
+export type PaymentStatus = {
+  interfaceCode?: Maybe<Scalars['String']>;
+  interfaceText?: Maybe<Scalars['String']>;
+  stateRef?: Maybe<Reference>;
+  state?: Maybe<State>;
 };
 
 export type PaymentStatusInput = {
@@ -3904,9 +5841,21 @@ export type PaymentUpdateAction = {
   transitionState?: Maybe<TransitionPaymentState>;
 };
 
+export type PlainEnumValue = {
+  key: Scalars['String'];
+  label: Scalars['String'];
+};
+
 export type PlainEnumValueDraft = {
   key: Scalars['String'];
   label: Scalars['String'];
+};
+
+export type PlainEnumValueResult = {
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  total: Scalars['Int'];
+  results: Array<PlainEnumValue>;
 };
 
 export type PlatformFormat = NotificationFormat & {
@@ -3942,6 +5891,25 @@ export type PriceFunctionDraft = {
   currencyCode: Scalars['Currency'];
 };
 
+export type Product = Versioned & ReviewTarget & {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  version: Scalars['Long'];
+  productTypeRef: Reference;
+  productType?: Maybe<ProductTypeDefinition>;
+  masterData: ProductCatalogData;
+  skus: Array<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  stateRef?: Maybe<Reference>;
+  state?: Maybe<State>;
+  taxCategoryRef?: Maybe<Reference>;
+  taxCategory?: Maybe<TaxCategory>;
+  reviewRatingStatistics?: Maybe<ReviewRatingStatistics>;
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
 export type ProductAddedToCategory = MessagePayload & {
   category: ReferenceId;
   staged: Scalars['Boolean'];
@@ -3953,15 +5921,189 @@ export type ProductAttributeInput = {
   value: Scalars['String'];
 };
 
+export type ProductCatalogData = {
+  current?: Maybe<ProductData>;
+  staged?: Maybe<ProductData>;
+  published: Scalars['Boolean'];
+  hasStagedChanges: Scalars['Boolean'];
+};
+
 export type ProductCreated = MessagePayload & {
   productProjection: ProductProjectionMessagePayload;
   type: Scalars['String'];
+};
+
+export type ProductData = {
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  nameAllLocales: Array<LocalizedString>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  slug?: Maybe<Scalars['String']>;
+  slugAllLocales: Array<LocalizedString>;
+  categoryOrderHint?: Maybe<Scalars['String']>;
+  categoryOrderHints: Array<CategoryOrderHint>;
+  categoriesRef: Array<Reference>;
+  categories: Array<Category>;
+  searchKeyword?: Maybe<Array<SearchKeyword>>;
+  searchKeywords: Array<SearchKeywords>;
+  metaTitle?: Maybe<Scalars['String']>;
+  metaTitleAllLocales?: Maybe<Array<LocalizedString>>;
+  metaKeywords?: Maybe<Scalars['String']>;
+  metaKeywordsAllLocales?: Maybe<Array<LocalizedString>>;
+  metaDescription?: Maybe<Scalars['String']>;
+  metaDescriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  masterVariant: ProductVariant;
+  variants: Array<ProductVariant>;
+  allVariants: Array<ProductVariant>;
+  variant?: Maybe<ProductVariant>;
+  skus: Array<Scalars['String']>;
+};
+
+
+export type ProductDataNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type ProductDataDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type ProductDataSlugArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type ProductDataCategoryOrderHintArgs = {
+  categoryId: Scalars['String'];
+};
+
+
+export type ProductDataSearchKeywordArgs = {
+  locale: Scalars['Locale'];
+};
+
+
+export type ProductDataMetaTitleArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type ProductDataMetaKeywordsArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type ProductDataMetaDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type ProductDataVariantsArgs = {
+  skus?: Maybe<Array<Scalars['String']>>;
+  isOnStock?: Maybe<Scalars['Boolean']>;
+  stockChannelIds?: Maybe<Array<Scalars['String']>>;
+  hasImages?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type ProductDataAllVariantsArgs = {
+  skus?: Maybe<Array<Scalars['String']>>;
+  isOnStock?: Maybe<Scalars['Boolean']>;
+  stockChannelIds?: Maybe<Array<Scalars['String']>>;
+  hasImages?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type ProductDataVariantArgs = {
+  sku?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
 };
 
 export type ProductDeleted = MessagePayload & {
   removedImageUrls: Scalars['Set'];
   currentProjection?: Maybe<ProductProjectionMessagePayload>;
   type: Scalars['String'];
+};
+
+/**
+ * A product price can be discounted in two ways:
+ *
+ * * with a relative or an absolute product discount, which will be automatically applied to all prices in a product that match a discount predicate.
+ *   A relative discount reduces the matching price by a fraction (for example 10 % off). An absolute discount reduces the matching price by a fixed amount (for example 10€ off). If more than one product discount matches a price, the discount sort order determines which one will be applied.
+ * * with an external product discount, which can then be used to explicitly set a discounted value on a particular product price.
+ *
+ * The discounted price is stored in the discounted field of the Product Price.
+ *
+ * Note that when a discount is created, updated or removed it can take up to 15 minutes to update all the prices with the discounts.
+ *
+ * The maximum number of ProductDiscounts that can be active at the same time is **200**.
+ */
+export type ProductDiscount = Versioned & {
+  predicate: Scalars['String'];
+  validFrom?: Maybe<Scalars['DateTime']>;
+  validUntil?: Maybe<Scalars['DateTime']>;
+  isActive: Scalars['Boolean'];
+  isValid: Scalars['Boolean'];
+  sortOrder: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  referenceRefs: Array<Reference>;
+  nameAllLocales: Array<LocalizedString>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  value: ProductDiscountValue;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+/**
+ * A product price can be discounted in two ways:
+ *
+ * * with a relative or an absolute product discount, which will be automatically applied to all prices in a product that match a discount predicate.
+ *   A relative discount reduces the matching price by a fraction (for example 10 % off). An absolute discount reduces the matching price by a fixed amount (for example 10€ off). If more than one product discount matches a price, the discount sort order determines which one will be applied.
+ * * with an external product discount, which can then be used to explicitly set a discounted value on a particular product price.
+ *
+ * The discounted price is stored in the discounted field of the Product Price.
+ *
+ * Note that when a discount is created, updated or removed it can take up to 15 minutes to update all the prices with the discounts.
+ *
+ * The maximum number of ProductDiscounts that can be active at the same time is **200**.
+ */
+export type ProductDiscountNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+/**
+ * A product price can be discounted in two ways:
+ *
+ * * with a relative or an absolute product discount, which will be automatically applied to all prices in a product that match a discount predicate.
+ *   A relative discount reduces the matching price by a fraction (for example 10 % off). An absolute discount reduces the matching price by a fixed amount (for example 10€ off). If more than one product discount matches a price, the discount sort order determines which one will be applied.
+ * * with an external product discount, which can then be used to explicitly set a discounted value on a particular product price.
+ *
+ * The discounted price is stored in the discounted field of the Product Price.
+ *
+ * Note that when a discount is created, updated or removed it can take up to 15 minutes to update all the prices with the discounts.
+ *
+ * The maximum number of ProductDiscounts that can be active at the same time is **200**.
+ */
+export type ProductDiscountDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
 };
 
 export type ProductDiscountDraft = {
@@ -3976,6 +6118,22 @@ export type ProductDiscountDraft = {
   key?: Maybe<Scalars['String']>;
 };
 
+export type ProductDiscountLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type ProductDiscountLimitsProjection = {
+  totalActive: ProductDiscountLimitWithCurrent;
+};
+
+export type ProductDiscountQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<ProductDiscount>;
+};
+
 export type ProductDiscountUpdateAction = {
   changeIsActive?: Maybe<ChangeProductDiscountIsActive>;
   changeName?: Maybe<ChangeProductDiscountName>;
@@ -3987,6 +6145,10 @@ export type ProductDiscountUpdateAction = {
   setValidFrom?: Maybe<SetProductDiscountValidFrom>;
   setValidFromAndUntil?: Maybe<SetProductDiscountValidFromAndUntil>;
   setValidUntil?: Maybe<SetProductDiscountValidUntil>;
+};
+
+export type ProductDiscountValue = {
+  type: Scalars['String'];
 };
 
 export type ProductDiscountValueInput = {
@@ -4019,6 +6181,42 @@ export type ProductImageAdded = MessagePayload & {
   image: Image;
   staged: Scalars['Boolean'];
   type: Scalars['String'];
+};
+
+export type ProductLimitsProjection = {
+  pricesPerVariant: Limit;
+  variants: Limit;
+};
+
+export type ProductPrice = {
+  id?: Maybe<Scalars['String']>;
+  value: BaseMoney;
+  country?: Maybe<Scalars['Country']>;
+  customerGroup?: Maybe<CustomerGroup>;
+  customerGroupRef?: Maybe<Reference>;
+  channel?: Maybe<Channel>;
+  channelRef?: Maybe<Reference>;
+  validFrom?: Maybe<Scalars['DateTime']>;
+  validUntil?: Maybe<Scalars['DateTime']>;
+  discounted?: Maybe<DiscountedProductPriceValue>;
+  tiers?: Maybe<Array<ProductPriceTier>>;
+  /**
+   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFieldsRaw?: Maybe<Array<RawCustomField>>;
+  /**
+   * This field would contain type data
+   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
+   */
+  customFields?: Maybe<Type>;
+  custom?: Maybe<CustomFieldsType>;
+};
+
+
+export type ProductPriceCustomFieldsRawArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type ProductPriceDataInput = {
@@ -4054,6 +6252,11 @@ export type ProductPriceExternalDiscountSet = MessagePayload & {
   discounted?: Maybe<DiscountedProductPriceValue>;
   staged: Scalars['Boolean'];
   type: Scalars['String'];
+};
+
+export type ProductPriceTier = {
+  minimumQuantity: Scalars['Int'];
+  value: BaseMoney;
 };
 
 export type ProductPriceTierInput = {
@@ -4138,6 +6341,13 @@ export type ProductPublished = MessagePayload & {
   type: Scalars['String'];
 };
 
+export type ProductQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Product>;
+};
+
 export type ProductReferenceIdentifier = {
   typeId: Scalars['String'];
   id?: Maybe<Scalars['String']>;
@@ -4180,6 +6390,35 @@ export type ProductStateTransition = MessagePayload & {
   state?: Maybe<State>;
   stateRef: Reference;
   type: Scalars['String'];
+};
+
+export type ProductTypeDefinition = Versioned & {
+  key?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  description: Scalars['String'];
+  attributeDefinitions: AttributeDefinitionResult;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+export type ProductTypeDefinitionAttributeDefinitionsArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+};
+
+export type ProductTypeDefinitionQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<ProductTypeDefinition>;
 };
 
 export type ProductTypeDraft = {
@@ -4266,10 +6505,73 @@ export type ProductUpdateAction = {
   setProductVariantKey?: Maybe<SetProductVariantKey>;
 };
 
+export type ProductVariant = {
+  id: Scalars['Int'];
+  key?: Maybe<Scalars['String']>;
+  sku?: Maybe<Scalars['String']>;
+  prices?: Maybe<Array<ProductPrice>>;
+  /** Returns a single price based on the price selection rules. */
+  price?: Maybe<ProductPrice>;
+  images: Array<Image>;
+  assets: Array<Asset>;
+  availability?: Maybe<ProductVariantAvailabilityWithChannels>;
+  /** This field contains raw attributes data */
+  attributesRaw: Array<RawProductAttribute>;
+};
+
+
+export type ProductVariantPriceArgs = {
+  currency: Scalars['Currency'];
+  country?: Maybe<Scalars['Country']>;
+  customerGroupId?: Maybe<Scalars['String']>;
+  channelId?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['DateTime']>;
+};
+
+
+export type ProductVariantAttributesRawArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
+};
+
 export type ProductVariantAdded = MessagePayload & {
   variant: ProductVariant;
   staged: Scalars['Boolean'];
   type: Scalars['String'];
+};
+
+/** Product variant availabilities */
+export type ProductVariantAvailabilitiesResult = {
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  total: Scalars['Int'];
+  results: Array<ProductVariantAvailabilityWithChannel>;
+};
+
+/** Product variant availability */
+export type ProductVariantAvailability = {
+  isOnStock: Scalars['Boolean'];
+  restockableInDays?: Maybe<Scalars['Int']>;
+  availableQuantity?: Maybe<Scalars['Long']>;
+};
+
+export type ProductVariantAvailabilityWithChannel = {
+  channelRef: Reference;
+  channel?: Maybe<Channel>;
+  availability: ProductVariantAvailability;
+};
+
+export type ProductVariantAvailabilityWithChannels = {
+  noChannel?: Maybe<ProductVariantAvailability>;
+  channels: ProductVariantAvailabilitiesResult;
+};
+
+
+export type ProductVariantAvailabilityWithChannelsChannelsArgs = {
+  includeChannelIds?: Maybe<Array<Scalars['String']>>;
+  excludeChannelIds?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
 };
 
 export type ProductVariantDeleted = MessagePayload & {
@@ -4285,6 +6587,46 @@ export type ProductVariantInput = {
   images?: Maybe<Array<ImageInput>>;
   attributes?: Maybe<Array<ProductAttributeInput>>;
   assets?: Maybe<Array<AssetDraftInput>>;
+};
+
+/** Contains information about the limits of your project. */
+export type ProjectCustomLimitsProjection = {
+  query: QueryLimitsProjection;
+  products: ProductLimitsProjection;
+  shoppingLists: ShoppingListLimitsProjection;
+  extensions: ExtensionLimitsProjection;
+  productDiscounts: ProductDiscountLimitsProjection;
+  cartDiscounts: CartDiscountLimitsProjection;
+  orderEdits: OrderEditLimitsProjection;
+  stores: StoreLimitsProjection;
+  customers: CustomerLimitsProjection;
+  customerGroups: CustomerGroupLimitsProjection;
+  zones: ZoneLimitsProjection;
+  taxCategories: TaxCategoryLimitsProjection;
+  refreshTokens: RefreshTokenLimitsProjection;
+  shippingMethods: ShippingMethodLimitsProjection;
+  carts: CartLimitsProjection;
+  customObjects: CustomObjectLimitsProjection;
+  search: SearchLimitsProjection;
+  category: CategoryLimitsProjection;
+};
+
+/** Project contains information about project. */
+export type ProjectProjection = {
+  key: Scalars['String'];
+  name: Scalars['String'];
+  languages: Array<Scalars['Locale']>;
+  createdAt: Scalars['DateTime'];
+  trialUntil?: Maybe<Scalars['YearMonth']>;
+  carts: CartsConfiguration;
+  shoppingLists: ShoppingListsConfiguration;
+  version: Scalars['Long'];
+  externalOAuth?: Maybe<ExternalOAuth>;
+  searchIndexing?: Maybe<SearchIndexingConfiguration>;
+  messages: MessagesConfiguration;
+  countries: Array<Scalars['Country']>;
+  currencies: Array<Scalars['Currency']>;
+  shippingRateInputType?: Maybe<ShippingRateInputType>;
 };
 
 export type ProjectSettingsUpdateAction = {
@@ -4313,6 +6655,535 @@ export enum PublishScope {
   Prices = 'Prices'
 }
 
+export type Query = CartQueryInterface & CustomerActiveCartInterface & OrderQueryInterface & CustomerQueryInterface & ShoppingListQueryInterface & ShippingMethodsByCartInterface & MeFieldInterface & {
+  /**
+   * This field can only be used with an access token created with the password flow or with an anonymous session.
+   *
+   * It gives access to the data that is specific to the customer or the anonymous session linked to the access token.
+   */
+  me: Me;
+  /** This field gives access to the resources (such as carts) that are inside the given store. Currently in beta. */
+  inStore: InStore;
+  /** This field gives access to the resources (such as carts) that are inside one of the given stores. Currently in beta. */
+  inStores: InStore;
+  customerGroup?: Maybe<CustomerGroup>;
+  customerGroups: CustomerGroupQueryResult;
+  category?: Maybe<Category>;
+  categories: CategoryQueryResult;
+  /** Autocomplete the categories based on category fields like name, description, etc. */
+  categoryAutocomplete: CategorySearchResult;
+  /** Search the categories using full-text search, filtering and sorting */
+  categorySearch: CategorySearchResult;
+  channel?: Maybe<Channel>;
+  channels: ChannelQueryResult;
+  customObject?: Maybe<CustomObject>;
+  customObjects: CustomObjectQueryResult;
+  productType?: Maybe<ProductTypeDefinition>;
+  productTypes: ProductTypeDefinitionQueryResult;
+  typeDefinition?: Maybe<TypeDefinition>;
+  typeDefinitions: TypeDefinitionQueryResult;
+  shippingMethod?: Maybe<ShippingMethod>;
+  shippingMethods: ShippingMethodQueryResult;
+  shippingMethodsByCart: Array<ShippingMethod>;
+  shippingMethodsByLocation: Array<ShippingMethod>;
+  zone?: Maybe<Zone>;
+  zones: ZoneQueryResult;
+  taxCategory?: Maybe<TaxCategory>;
+  taxCategories: TaxCategoryQueryResult;
+  discountCode?: Maybe<DiscountCode>;
+  discountCodes: DiscountCodeQueryResult;
+  cartDiscount?: Maybe<CartDiscount>;
+  cartDiscounts: CartDiscountQueryResult;
+  productDiscount?: Maybe<ProductDiscount>;
+  productDiscounts: ProductDiscountQueryResult;
+  product?: Maybe<Product>;
+  products: ProductQueryResult;
+  state?: Maybe<State>;
+  states: StateQueryResult;
+  customer?: Maybe<Customer>;
+  customers: CustomerQueryResult;
+  inventoryEntry?: Maybe<InventoryEntry>;
+  inventoryEntries: InventoryEntryQueryResult;
+  cart?: Maybe<Cart>;
+  carts: CartQueryResult;
+  customerActiveCart?: Maybe<Cart>;
+  message?: Maybe<Message>;
+  messages: MessageQueryResult;
+  order?: Maybe<Order>;
+  orders: OrderQueryResult;
+  orderEdit?: Maybe<OrderEdit>;
+  orderEdits: OrderEditQueryResult;
+  shoppingList?: Maybe<ShoppingList>;
+  shoppingLists: ShoppingListQueryResult;
+  payment?: Maybe<Payment>;
+  payments: PaymentQueryResult;
+  productProjectionsSuggest: SuggestResult;
+  project: ProjectProjection;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  store?: Maybe<Store>;
+  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
+  stores: StoreQueryResult;
+  review?: Maybe<Review>;
+  reviews: ReviewQueryResult;
+  subscription?: Maybe<Subscription>;
+  subscriptions: SubscriptionQueryResult;
+  extension?: Maybe<Extension>;
+  extensions: ExtensionQueryResult;
+  apiClient?: Maybe<ApiClientWithoutSecret>;
+  apiClients: ApiClientWithoutSecretQueryResult;
+  limits: ProjectCustomLimitsProjection;
+};
+
+
+export type QueryInStoreArgs = {
+  key: Scalars['KeyReferenceInput'];
+};
+
+
+export type QueryInStoresArgs = {
+  keys: Array<Scalars['KeyReferenceInput']>;
+};
+
+
+export type QueryCustomerGroupArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryCustomerGroupsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryCategoryArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryCategoriesArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryCategoryAutocompleteArgs = {
+  locale: Scalars['Locale'];
+  text: Scalars['String'];
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  filters?: Maybe<Array<Scalars['SearchFilter']>>;
+};
+
+
+export type QueryCategorySearchArgs = {
+  fulltext?: Maybe<LocalizedText>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  queryFilters?: Maybe<Array<Scalars['SearchFilter']>>;
+  filters?: Maybe<Array<Scalars['SearchFilter']>>;
+  sorts?: Maybe<Array<Scalars['SearchSort']>>;
+};
+
+
+export type QueryChannelArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryChannelsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryCustomObjectArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+  container?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryCustomObjectsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  container: Scalars['String'];
+};
+
+
+export type QueryProductTypeArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryProductTypesArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryTypeDefinitionArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryTypeDefinitionsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryShippingMethodArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryShippingMethodsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryShippingMethodsByCartArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryShippingMethodsByLocationArgs = {
+  country: Scalars['Country'];
+  state?: Maybe<Scalars['String']>;
+  currency?: Maybe<Scalars['Currency']>;
+};
+
+
+export type QueryZoneArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryZonesArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryTaxCategoryArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryTaxCategoriesArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryDiscountCodeArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryDiscountCodesArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryCartDiscountArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryCartDiscountsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryProductDiscountArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryProductDiscountsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryProductArgs = {
+  sku?: Maybe<Scalars['String']>;
+  variantKey?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryProductsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  skus?: Maybe<Array<Scalars['String']>>;
+};
+
+
+export type QueryStateArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryStatesArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryCustomerArgs = {
+  emailToken?: Maybe<Scalars['String']>;
+  passwordToken?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryCustomersArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryInventoryEntryArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryInventoryEntriesArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryCartArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryCartsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryCustomerActiveCartArgs = {
+  customerId: Scalars['String'];
+};
+
+
+export type QueryMessageArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryMessagesArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryOrderArgs = {
+  id?: Maybe<Scalars['String']>;
+  orderNumber?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryOrdersArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryOrderEditArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryOrderEditsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryShoppingListArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryShoppingListsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryPaymentArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryPaymentsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryProductProjectionsSuggestArgs = {
+  searchKeywords: Array<SearchKeywordArgument>;
+  fuzzy?: Maybe<Scalars['Boolean']>;
+  limit?: Maybe<Scalars['Int']>;
+  staged?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type QueryStoreArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryStoresArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryReviewArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryReviewsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QuerySubscriptionArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QuerySubscriptionsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryExtensionArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryExtensionsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryApiClientArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryApiClientsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+export type QueryLimitsProjection = {
+  offset: Limit;
+};
+
+export type RawCustomField = {
+  name: Scalars['String'];
+  value: Scalars['Json'];
+};
+
+export type RawProductAttribute = {
+  name: Scalars['String'];
+  value: Scalars['Json'];
+  attributeDefinition?: Maybe<AttributeDefinition>;
+};
+
 export type RecalculateCart = {
   updateProductData?: Maybe<Scalars['Boolean']>;
 };
@@ -4326,9 +7197,19 @@ export type RecalculateStagedOrderOutput = StagedOrderUpdateActionOutput & {
   updateProductData: Scalars['Boolean'];
 };
 
+export type Reference = {
+  typeId: Scalars['String'];
+  id: Scalars['String'];
+};
+
 export type ReferenceAttribute = Attribute & {
   typeId: Scalars['String'];
   id: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type ReferenceAttributeDefinitionType = AttributeDefinitionType & {
+  referenceTypeId: Scalars['String'];
   name: Scalars['String'];
 };
 
@@ -4355,6 +7236,15 @@ export type ReferenceType = FieldType & {
 
 export type ReferenceTypeDefinitionDraft = {
   referenceTypeId: Scalars['String'];
+};
+
+export type RefreshTokenLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type RefreshTokenLimitsProjection = {
+  total: RefreshTokenLimitWithCurrent;
 };
 
 export type RelativeDiscountValue = CartDiscountValue & ProductDiscountValue & {
@@ -4595,9 +7485,27 @@ export type ResourceIdentifierInput = {
   key?: Maybe<Scalars['String']>;
 };
 
+/** Stores information about returns connected to this order. */
+export type ReturnInfo = {
+  items: Array<ReturnItem>;
+  returnTrackingId?: Maybe<Scalars['String']>;
+  returnDate?: Maybe<Scalars['DateTime']>;
+};
+
 export type ReturnInfoAdded = MessagePayload & {
   returnInfo: ReturnInfo;
   type: Scalars['String'];
+};
+
+export type ReturnItem = {
+  type: Scalars['String'];
+  id: Scalars['String'];
+  quantity: Scalars['Long'];
+  comment?: Maybe<Scalars['String']>;
+  shipmentState: ReturnShipmentState;
+  paymentState: ReturnPaymentState;
+  lastModifiedAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime'];
 };
 
 export type ReturnItemDraftType = {
@@ -4616,12 +7524,50 @@ export type ReturnItemDraftTypeOutput = {
   shipmentState: ReturnShipmentState;
 };
 
+export enum ReturnPaymentState {
+  NotRefunded = 'NotRefunded',
+  Refunded = 'Refunded',
+  Initial = 'Initial',
+  NonRefundable = 'NonRefundable'
+}
+
+export enum ReturnShipmentState {
+  Unusable = 'Unusable',
+  BackInStock = 'BackInStock',
+  Returned = 'Returned',
+  Advised = 'Advised'
+}
+
 export type RevertStagedChanges = {
   dummy?: Maybe<Scalars['String']>;
 };
 
 export type RevertStagedVariantChanges = {
   variantId: Scalars['Int'];
+};
+
+export type Review = Versioned & {
+  key?: Maybe<Scalars['String']>;
+  uniquenessValue?: Maybe<Scalars['String']>;
+  locale?: Maybe<Scalars['Locale']>;
+  authorName?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  text?: Maybe<Scalars['String']>;
+  targetRef?: Maybe<Reference>;
+  target?: Maybe<ReviewTarget>;
+  rating?: Maybe<Scalars['Int']>;
+  stateRef?: Maybe<Reference>;
+  state?: Maybe<State>;
+  includedInStatistics: Scalars['Boolean'];
+  customerRef?: Maybe<Reference>;
+  customer?: Maybe<Customer>;
+  custom?: Maybe<CustomFieldsType>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
 };
 
 export type ReviewCreated = MessagePayload & {
@@ -4643,6 +7589,13 @@ export type ReviewDraft = {
   custom?: Maybe<CustomFieldsDraft>;
 };
 
+export type ReviewQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Review>;
+};
+
 export type ReviewRatingSet = MessagePayload & {
   oldRating?: Maybe<Scalars['Int']>;
   newRating?: Maybe<Scalars['Int']>;
@@ -4650,6 +7603,14 @@ export type ReviewRatingSet = MessagePayload & {
   target?: Maybe<ReviewTarget>;
   targetRef?: Maybe<Reference>;
   type: Scalars['String'];
+};
+
+export type ReviewRatingStatistics = {
+  averageRating: Scalars['Float'];
+  highestRating: Scalars['Int'];
+  lowestRating: Scalars['Int'];
+  count: Scalars['Long'];
+  ratingsDistribution: Scalars['Json'];
 };
 
 export type ReviewStateTransition = MessagePayload & {
@@ -4665,6 +7626,10 @@ export type ReviewStateTransition = MessagePayload & {
   type: Scalars['String'];
 };
 
+export type ReviewTarget = {
+  id: Scalars['String'];
+};
+
 export type ReviewUpdateAction = {
   setAuthorName?: Maybe<SetReviewAuthorName>;
   setCustomField?: Maybe<SetReviewCustomField>;
@@ -4678,6 +7643,15 @@ export type ReviewUpdateAction = {
   setTitle?: Maybe<SetReviewTitle>;
   transitionState?: Maybe<TransitionReviewState>;
 };
+
+export enum RoundingMode {
+  /** [Round half down](https://en.wikipedia.org/wiki/Rounding#Round_half_down). Rounding mode used by, e.g., [Avalara Sales TaxII](https://help.avalara.com/kb/001/How_does_Rounding_with_SalesTaxII_work%3F) */
+  HalfDown = 'HalfDown',
+  /** [Round half up](https://en.wikipedia.org/wiki/Rounding#Round_half_up) */
+  HalfUp = 'HalfUp',
+  /** [Round half to even](https://en.wikipedia.org/wiki/Rounding#Round_half_to_even). Default rounding mode as used in IEEE 754 computing functions and operators. */
+  HalfEven = 'HalfEven'
+}
 
 export type SnsDestination = Destination & {
   topicArn: Scalars['String'];
@@ -4721,6 +7695,33 @@ export type ScoreShippingRateInputDraftOutput = ShippingRateInputDraftOutput & {
   type: Scalars['String'];
 };
 
+
+export type SearchIndexingConfiguration = {
+  products?: Maybe<SearchIndexingConfigurationValues>;
+};
+
+export type SearchIndexingConfigurationValues = {
+  status?: Maybe<SearchIndexingStatus>;
+  lastModifiedAt?: Maybe<Scalars['DateTime']>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+export enum SearchIndexingStatus {
+  Activated = 'Activated',
+  Indexing = 'Indexing',
+  Deactivated = 'Deactivated'
+}
+
+export type SearchKeyword = {
+  text: Scalars['String'];
+  suggestTokenizer?: Maybe<SuggestTokenizer>;
+};
+
+export type SearchKeywordArgument = {
+  searchKeyword: Scalars['String'];
+  locale: Scalars['Locale'];
+};
+
 export type SearchKeywordInput = {
   locale: Scalars['Locale'];
   keywords: Array<SearchKeywordItemInput>;
@@ -4731,12 +7732,27 @@ export type SearchKeywordItemInput = {
   suggestTokenizer?: Maybe<BaseSearchKeywordInput>;
 };
 
+export type SearchKeywords = {
+  locale: Scalars['Locale'];
+  searchKeywords: Array<SearchKeyword>;
+};
+
+export type SearchLimitsProjection = {
+  maxTextSize: Limit;
+};
+
+
 /** In order to decide which of the matching items will actually be discounted */
 export enum SelectionMode {
   MostExpensive = 'MostExpensive',
   Cheapest = 'Cheapest'
 }
 
+
+export type SetAttributeDefinitionType = AttributeDefinitionType & {
+  elementType: AttributeDefinitionType;
+  name: Scalars['String'];
+};
 
 export type SetCartAnonymousId = {
   anonymousId?: Maybe<Scalars['String']>;
@@ -6463,6 +9479,57 @@ export type SetZoneKey = {
   key?: Maybe<Scalars['String']>;
 };
 
+export enum ShipmentState {
+  Delayed = 'Delayed',
+  Backorder = 'Backorder',
+  Partial = 'Partial',
+  Pending = 'Pending',
+  Ready = 'Ready',
+  Shipped = 'Shipped'
+}
+
+export type ShippingInfo = {
+  shippingMethodName: Scalars['String'];
+  price: Money;
+  shippingRate: ShippingRate;
+  taxRate?: Maybe<TaxRate>;
+  deliveries: Array<Delivery>;
+  discountedPrice?: Maybe<DiscountedLineItemPrice>;
+  taxedPrice?: Maybe<TaxedItemPrice>;
+  shippingMethodState: ShippingMethodState;
+  shippingMethod?: Maybe<ShippingMethod>;
+  shippingMethodRef?: Maybe<Reference>;
+  taxCategory?: Maybe<TaxCategory>;
+  taxCategoryRef?: Maybe<Reference>;
+};
+
+export type ShippingMethod = Versioned & {
+  name: Scalars['String'];
+  zoneRates: Array<ZoneRate>;
+  isDefault: Scalars['Boolean'];
+  predicate?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+  taxCategoryRef?: Maybe<Reference>;
+  localizedDescriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use localizedDescription */
+  description?: Maybe<Scalars['String']>;
+  localizedDescription?: Maybe<Scalars['String']>;
+  taxCategory?: Maybe<TaxCategory>;
+  custom?: Maybe<CustomFieldsType>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+export type ShippingMethodLocalizedDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
 export type ShippingMethodDraft = {
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
@@ -6474,6 +9541,29 @@ export type ShippingMethodDraft = {
   key?: Maybe<Scalars['String']>;
   custom?: Maybe<CustomFieldsDraft>;
 };
+
+export type ShippingMethodLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type ShippingMethodLimitsProjection = {
+  total: ShippingMethodLimitWithCurrent;
+};
+
+export type ShippingMethodQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<ShippingMethod>;
+};
+
+export enum ShippingMethodState {
+  /** Either there is no predicate defined for the ShippingMethod or the given predicate matches the cart */
+  MatchesCart = 'MatchesCart',
+  /** The ShippingMethod predicate does not match the cart. Ordering this cart will fail with error ShippingMethodDoesNotMatchCart */
+  DoesNotMatchCart = 'DoesNotMatchCart'
+}
 
 export type ShippingMethodUpdateAction = {
   addShippingRate?: Maybe<AddShippingMethodShippingRate>;
@@ -6489,6 +9579,25 @@ export type ShippingMethodUpdateAction = {
   setKey?: Maybe<SetShippingMethodKey>;
   setLocalizedDescription?: Maybe<SetShippingMethodLocalizedDescription>;
   setPredicate?: Maybe<SetShippingMethodPredicate>;
+};
+
+/** A field to retrieve available shipping methods for a cart. */
+export type ShippingMethodsByCartInterface = {
+  shippingMethodsByCart: Array<ShippingMethod>;
+};
+
+
+/** A field to retrieve available shipping methods for a cart. */
+export type ShippingMethodsByCartInterfaceShippingMethodsByCartArgs = {
+  id: Scalars['String'];
+};
+
+/** Shipping Rate */
+export type ShippingRate = {
+  price: Money;
+  freeAbove?: Maybe<Money>;
+  isMatching?: Maybe<Scalars['Boolean']>;
+  tiers: Array<ShippingRatePriceTier>;
 };
 
 export type ShippingRateCartClassificationPriceTier = ShippingRatePriceTier & {
@@ -6519,6 +9628,10 @@ export type ShippingRateDraft = {
   tiers?: Maybe<Array<ShippingRatePriceTierDraft>>;
 };
 
+export type ShippingRateInput = {
+  type: Scalars['String'];
+};
+
 export type ShippingRateInputDraft = {
   Classification?: Maybe<ClassificationShippingRateInputDraft>;
   Score?: Maybe<ScoreShippingRateInputDraft>;
@@ -6540,10 +9653,18 @@ export type ShippingRateInputLocalizedEnumValueLabelArgs = {
   acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
 };
 
+export type ShippingRateInputType = {
+  type: Scalars['String'];
+};
+
 export type ShippingRateInputTypeInput = {
   CartValue?: Maybe<CartValueInput>;
   CartClassification?: Maybe<CartClassificationInput>;
   CartScore?: Maybe<CartScoreInput>;
+};
+
+export type ShippingRatePriceTier = {
+  type: Scalars['String'];
 };
 
 export type ShippingRatePriceTierCartClassificationDraft = {
@@ -6586,6 +9707,49 @@ export type ShippingTargetInput = {
   dummy?: Maybe<Scalars['String']>;
 };
 
+export type ShoppingList = Versioned & {
+  key?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales: Array<LocalizedString>;
+  description?: Maybe<Scalars['String']>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  slug?: Maybe<Scalars['String']>;
+  slugAllLocales?: Maybe<Array<LocalizedString>>;
+  customerRef?: Maybe<Reference>;
+  customer?: Maybe<Customer>;
+  storeRef?: Maybe<KeyReference>;
+  store?: Maybe<Store>;
+  anonymousId?: Maybe<Scalars['String']>;
+  lineItems: Array<ShoppingListLineItem>;
+  textLineItems: Array<TextLineItem>;
+  custom?: Maybe<CustomFieldsType>;
+  deleteDaysAfterLastModification?: Maybe<Scalars['Int']>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+export type ShoppingListNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type ShoppingListDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type ShoppingListSlugArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
 export type ShoppingListDraft = {
   name: Array<LocalizedStringItemInputType>;
   description?: Maybe<Array<LocalizedStringItemInputType>>;
@@ -6599,6 +9763,46 @@ export type ShoppingListDraft = {
   anonymousId?: Maybe<Scalars['String']>;
 };
 
+export type ShoppingListLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type ShoppingListLimitsProjection = {
+  lineItems: Limit;
+  textLineItems: Limit;
+  total: ShoppingListLimitWithCurrent;
+};
+
+export type ShoppingListLineItem = {
+  id: Scalars['String'];
+  productId: Scalars['String'];
+  variantId?: Maybe<Scalars['Int']>;
+  productTypeRef: Reference;
+  productType: ProductTypeDefinition;
+  quantity: Scalars['Int'];
+  addedAt: Scalars['DateTime'];
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales: Array<LocalizedString>;
+  deactivatedAt?: Maybe<Scalars['DateTime']>;
+  custom?: Maybe<CustomFieldsType>;
+  productSlug?: Maybe<Scalars['String']>;
+  productSlugAllLocales?: Maybe<Array<LocalizedString>>;
+  variant?: Maybe<ProductVariant>;
+};
+
+
+export type ShoppingListLineItemNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type ShoppingListLineItemProductSlugArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
 export type ShoppingListLineItemDraft = {
   productId?: Maybe<Scalars['String']>;
   sku?: Maybe<Scalars['String']>;
@@ -6606,6 +9810,35 @@ export type ShoppingListLineItemDraft = {
   quantity?: Maybe<Scalars['Int']>;
   custom?: Maybe<CustomFieldsDraft>;
   addedAt?: Maybe<Scalars['DateTime']>;
+};
+
+/** Fields to access shopping lists. Includes direct access to a single list and searching for shopping lists. */
+export type ShoppingListQueryInterface = {
+  shoppingList?: Maybe<ShoppingList>;
+  shoppingLists: ShoppingListQueryResult;
+};
+
+
+/** Fields to access shopping lists. Includes direct access to a single list and searching for shopping lists. */
+export type ShoppingListQueryInterfaceShoppingListArgs = {
+  id?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+
+/** Fields to access shopping lists. Includes direct access to a single list and searching for shopping lists. */
+export type ShoppingListQueryInterfaceShoppingListsArgs = {
+  where?: Maybe<Scalars['String']>;
+  sort?: Maybe<Array<Scalars['String']>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+export type ShoppingListQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<ShoppingList>;
 };
 
 export type ShoppingListUpdateAction = {
@@ -6635,6 +9868,10 @@ export type ShoppingListUpdateAction = {
   setTextLineItemDescription?: Maybe<SetShoppingListTextLineItemDescription>;
 };
 
+export type ShoppingListsConfiguration = {
+  deleteDaysAfterLastModification?: Maybe<Scalars['Int']>;
+};
+
 export type ShoppingListsConfigurationInput = {
   deleteDaysAfterLastModification?: Maybe<Scalars['Int']>;
 };
@@ -6646,6 +9883,14 @@ export type SimpleAttributeTypeDraft = {
 export type SimpleFieldTypeDraft = {
   dummy?: Maybe<Scalars['String']>;
 };
+
+/** Describes how this discount interacts with other discounts */
+export enum StackingMode {
+  /** Don’t apply any more matching discounts after this one. */
+  StopAfterThisDiscount = 'StopAfterThisDiscount',
+  /** Default. Continue applying other matching discounts after applying this one. */
+  Stacking = 'Stacking'
+}
 
 export type StagedOrderUpdateAction = {
   addCustomLineItem?: Maybe<AddStagedOrderCustomLineItem>;
@@ -6730,6 +9975,45 @@ export type StagedOrderUpdateAction = {
   updateSyncInfo?: Maybe<UpdateStagedOrderSyncInfo>;
 };
 
+export type StagedOrderUpdateActionOutput = {
+  type: Scalars['String'];
+};
+
+/** [State](https://docs.commercetools.com/api/projects/states) */
+export type State = Versioned & {
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  key?: Maybe<Scalars['String']>;
+  type: StateType;
+  roles: Array<StateRole>;
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales?: Maybe<Array<LocalizedString>>;
+  description?: Maybe<Scalars['String']>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  builtIn: Scalars['Boolean'];
+  transitionsRef?: Maybe<Array<Reference>>;
+  transitions?: Maybe<Array<State>>;
+  initial: Scalars['Boolean'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+/** [State](https://docs.commercetools.com/api/projects/states) */
+export type StateNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+/** [State](https://docs.commercetools.com/api/projects/states) */
+export type StateDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
 export type StateDraft = {
   key: Scalars['String'];
   type: StateType;
@@ -6739,6 +10023,26 @@ export type StateDraft = {
   roles?: Maybe<Array<StateRole>>;
   transitions?: Maybe<Array<ReferenceInput>>;
 };
+
+export type StateQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<State>;
+};
+
+export enum StateRole {
+  Return = 'Return',
+  ReviewIncludedInStatistics = 'ReviewIncludedInStatistics'
+}
+
+export enum StateType {
+  OrderState = 'OrderState',
+  ProductState = 'ProductState',
+  ReviewState = 'ReviewState',
+  PaymentState = 'PaymentState',
+  LineItemState = 'LineItemState'
+}
 
 export type StateUpdateAction = {
   addRoles?: Maybe<AddStateRoles>;
@@ -6750,6 +10054,48 @@ export type StateUpdateAction = {
   setName?: Maybe<SetStateName>;
   setRoles?: Maybe<SetStateRoles>;
   setTransitions?: Maybe<SetStateTransitions>;
+};
+
+/** [BETA] Stores allow defining different contexts for a project. */
+export type Store = Versioned & {
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  key: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales?: Maybe<Array<LocalizedString>>;
+  languages?: Maybe<Array<Scalars['Locale']>>;
+  distributionChannelsRef: Array<Reference>;
+  distributionChannels: Array<Channel>;
+  supplyChannelsRef: Array<Reference>;
+  supplyChannels: Array<Channel>;
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  custom?: Maybe<CustomFieldsType>;
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+/** [BETA] Stores allow defining different contexts for a project. */
+export type StoreNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+export type StoreLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type StoreLimitsProjection = {
+  total: StoreLimitWithCurrent;
+};
+
+export type StoreQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Store>;
 };
 
 export type StoreUpdateAction = {
@@ -6779,9 +10125,29 @@ export type StringType = FieldType & {
   name: Scalars['String'];
 };
 
+export type SubRate = {
+  name: Scalars['String'];
+  amount: Scalars['Float'];
+};
+
 export type SubRateDraft = {
   name: Scalars['String'];
   amount: Scalars['Float'];
+};
+
+export type Subscription = Versioned & {
+  key?: Maybe<Scalars['String']>;
+  destination: Destination;
+  messages: Array<MessageSubscription>;
+  changes: Array<ChangeSubscription>;
+  format: NotificationFormat;
+  status: SubscriptionHealthStatus;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
 };
 
 export type SubscriptionDraft = {
@@ -6797,6 +10163,20 @@ export type SubscriptionFormatInput = {
   CloudEvents?: Maybe<CloudEventsSubscriptionsFormatInput>;
 };
 
+export enum SubscriptionHealthStatus {
+  TemporaryError = 'TemporaryError',
+  ConfigurationErrorDeliveryStopped = 'ConfigurationErrorDeliveryStopped',
+  ConfigurationError = 'ConfigurationError',
+  Healthy = 'Healthy'
+}
+
+export type SubscriptionQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Subscription>;
+};
+
 export type SubscriptionUpdateAction = {
   changeDestination?: Maybe<ChangeSubscriptionDestination>;
   setChanges?: Maybe<SetSubscriptionChanges>;
@@ -6804,10 +10184,62 @@ export type SubscriptionUpdateAction = {
   setMessages?: Maybe<SetSubscriptionMessages>;
 };
 
+export type SuggestResult = {
+  searchKeywords: Array<SuggestResultEntry>;
+};
+
+export type SuggestResultEntry = {
+  locale: Scalars['Locale'];
+  suggestions: Array<Suggestion>;
+};
+
+export type SuggestTokenizer = {
+  type: Scalars['String'];
+};
+
+export type Suggestion = {
+  text: Scalars['String'];
+};
+
+/** Stores information about order synchronization activities (like export or import). */
+export type SyncInfo = {
+  channelRef: Reference;
+  channel?: Maybe<Channel>;
+  externalId?: Maybe<Scalars['String']>;
+  syncedAt: Scalars['DateTime'];
+};
+
 export type TargetReferenceInput = {
   typeId: Scalars['String'];
   id?: Maybe<Scalars['String']>;
   key?: Maybe<Scalars['String']>;
+};
+
+export enum TaxCalculationMode {
+  /**
+   * This calculation mode calculates the taxes on the unit price before multiplying with the quantity.
+   * E.g. `($1.08 * 1.19 = $1.2852 -> $1.29 rounded) * 3 = $3.87`
+   */
+  UnitPriceLevel = 'UnitPriceLevel',
+  /**
+   * Default. This calculation mode calculates the taxes after the unit price is multiplied with the quantity.
+   * E.g. `($1.08 * 3 = $3.24) * 1.19 = $3.8556 -> $3.86 rounded`
+   */
+  LineItemLevel = 'LineItemLevel'
+}
+
+/** Tax Categories define how products are to be taxed in different countries. */
+export type TaxCategory = Versioned & {
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  rates: Array<TaxRate>;
+  key?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
 };
 
 export type TaxCategoryAddTaxRate = {
@@ -6823,6 +10255,22 @@ export type TaxCategoryDraft = {
   description?: Maybe<Scalars['String']>;
   rates?: Maybe<Array<TaxRateDraft>>;
   key?: Maybe<Scalars['String']>;
+};
+
+export type TaxCategoryLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type TaxCategoryLimitsProjection = {
+  total: TaxCategoryLimitWithCurrent;
+};
+
+export type TaxCategoryQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<TaxCategory>;
 };
 
 export type TaxCategoryRemoveTaxRate = {
@@ -6847,10 +10295,54 @@ export type TaxCategoryUpdateAction = {
   setKey?: Maybe<SetTaxCategoryKey>;
 };
 
+export enum TaxMode {
+  /** No taxes are added to the cart. */
+  Disabled = 'Disabled',
+  /**
+   * The tax amounts and the tax rates as well as the tax portions are set externally per ExternalTaxAmountDraft.
+   * A cart with this tax mode can only be ordered if the cart itself and all line items, all custom line items and
+   * the shipping method have an external tax amount and rate set
+   */
+  ExternalAmount = 'ExternalAmount',
+  /**
+   * The tax rates are set externally per ExternalTaxRateDraft. A cart with this tax mode can only be ordered if all
+   * line items, all custom line items and the shipping method have an external tax rate set. The totalNet and
+   * totalGross as well as the taxPortions fields are calculated by the platform according to the taxRoundingMode.
+   */
+  External = 'External',
+  /**
+   * The tax rates are selected by the platform from the TaxCategories based on the cart shipping address.
+   * The totalNet and totalGross as well as the taxPortions fields are calculated by the platform according to the
+   * taxRoundingMode.
+   */
+  Platform = 'Platform'
+}
+
+/**
+ * Represents the portions that sum up to the totalGross field of a TaxedPrice. The portions are calculated
+ * from the TaxRates. If a tax rate has SubRates, they are used and can be identified by name. Tax portions
+ * from line items that have the same rate and name will be accumulated to the same tax portion.
+ */
+export type TaxPortion = {
+  rate: Scalars['Float'];
+  amount: Money;
+  name?: Maybe<Scalars['String']>;
+};
+
 export type TaxPortionDraft = {
   name?: Maybe<Scalars['String']>;
   rate: Scalars['Float'];
   amount: MoneyInput;
+};
+
+export type TaxRate = {
+  name: Scalars['String'];
+  amount: Scalars['Float'];
+  includedInPrice: Scalars['Boolean'];
+  country: Scalars['Country'];
+  state?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  subRates: Array<SubRate>;
 };
 
 export type TaxRateDraft = {
@@ -6860,6 +10352,50 @@ export type TaxRateDraft = {
   country: Scalars['Country'];
   state?: Maybe<Scalars['String']>;
   subRates?: Maybe<Array<SubRateDraft>>;
+};
+
+export type TaxedItemPrice = {
+  totalNet: Money;
+  totalGross: Money;
+};
+
+export type TaxedPrice = {
+  totalNet: Money;
+  totalGross: Money;
+  taxPortions: Array<TaxPortion>;
+};
+
+export type TextAttributeDefinitionType = AttributeDefinitionType & {
+  name: Scalars['String'];
+};
+
+/** UI hint telling what kind of edit control should be displayed for a text attribute. */
+export enum TextInputHint {
+  SingleLine = 'SingleLine',
+  MultiLine = 'MultiLine'
+}
+
+export type TextLineItem = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  nameAllLocales: Array<LocalizedString>;
+  description?: Maybe<Scalars['String']>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  quantity: Scalars['Int'];
+  custom?: Maybe<CustomFieldsType>;
+  addedAt: Scalars['DateTime'];
+};
+
+
+export type TextLineItemNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+export type TextLineItemDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
 };
 
 export type TextLineItemDraft = {
@@ -6876,6 +10412,10 @@ export type TimeAttribute = Attribute & {
   name: Scalars['String'];
 };
 
+export type TimeAttributeDefinitionType = AttributeDefinitionType & {
+  name: Scalars['String'];
+};
+
 export type TimeField = CustomField & {
   value: Scalars['Time'];
   name: Scalars['String'];
@@ -6883,6 +10423,14 @@ export type TimeField = CustomField & {
 
 export type TimeType = FieldType & {
   name: Scalars['String'];
+};
+
+export type TrackingData = {
+  trackingId?: Maybe<Scalars['String']>;
+  carrier?: Maybe<Scalars['String']>;
+  provider?: Maybe<Scalars['String']>;
+  providerTransaction?: Maybe<Scalars['String']>;
+  isReturn: Scalars['Boolean'];
 };
 
 export type TrackingDataDraftType = {
@@ -6893,6 +10441,15 @@ export type TrackingDataDraftType = {
   isReturn?: Maybe<Scalars['Boolean']>;
 };
 
+export type Transaction = {
+  id: Scalars['String'];
+  timestamp?: Maybe<Scalars['DateTime']>;
+  type?: Maybe<TransactionType>;
+  amount: Money;
+  interactionId?: Maybe<Scalars['String']>;
+  state: TransactionState;
+};
+
 export type TransactionDraft = {
   timestamp?: Maybe<Scalars['DateTime']>;
   type: TransactionType;
@@ -6900,6 +10457,21 @@ export type TransactionDraft = {
   interactionId?: Maybe<Scalars['String']>;
   state?: Maybe<TransactionState>;
 };
+
+export enum TransactionState {
+  Failure = 'Failure',
+  Success = 'Success',
+  Pending = 'Pending',
+  Initial = 'Initial'
+}
+
+export enum TransactionType {
+  Chargeback = 'Chargeback',
+  Refund = 'Refund',
+  Charge = 'Charge',
+  CancelAuthorization = 'CancelAuthorization',
+  Authorization = 'Authorization'
+}
 
 export type TransitionOrderCustomLineItemState = {
   customLineItemId: Scalars['String'];
@@ -6982,9 +10554,57 @@ export type TransitionStagedOrderStateOutput = StagedOrderUpdateActionOutput & {
   force: Scalars['Boolean'];
 };
 
+export type Trigger = {
+  resourceTypeId: Scalars['String'];
+  actions: Array<ActionType>;
+};
+
 export type TriggerInput = {
   resourceTypeId: Scalars['String'];
   actions?: Maybe<Array<ActionType>>;
+};
+
+export type Type = {
+  typeRef: Reference;
+  type?: Maybe<TypeDefinition>;
+};
+
+/** Types define the structure of custom fields which can be attached to different entities throughout the platform. */
+export type TypeDefinition = Versioned & {
+  key: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  nameAllLocales: Array<LocalizedString>;
+  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
+  resourceTypeIds: Array<Scalars['String']>;
+  fieldDefinitions: Array<FieldDefinition>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+
+/** Types define the structure of custom fields which can be attached to different entities throughout the platform. */
+export type TypeDefinitionNameArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+/** Types define the structure of custom fields which can be attached to different entities throughout the platform. */
+export type TypeDefinitionDescriptionArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+
+/** Types define the structure of custom fields which can be attached to different entities throughout the platform. */
+export type TypeDefinitionFieldDefinitionsArgs = {
+  includeNames?: Maybe<Array<Scalars['String']>>;
+  excludeNames?: Maybe<Array<Scalars['String']>>;
 };
 
 export type TypeDefinitionDraft = {
@@ -6993,6 +10613,13 @@ export type TypeDefinitionDraft = {
   description?: Maybe<Array<LocalizedStringItemInputType>>;
   resourceTypeIds: Array<Scalars['String']>;
   fieldDefinitions?: Maybe<Array<FieldDefinitionInput>>;
+};
+
+export type TypeDefinitionQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<TypeDefinition>;
 };
 
 export type TypeUpdateAction = {
@@ -7052,6 +10679,32 @@ export type UpdateStagedOrderSyncInfoOutput = StagedOrderUpdateActionOutput & {
   externalId?: Maybe<Scalars['String']>;
 };
 
+export type UserProvidedIdentifiers = {
+  key?: Maybe<Scalars['String']>;
+  orderNumber?: Maybe<Scalars['String']>;
+  customerNumber?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
+  sku?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  slugAllLocales?: Maybe<Array<LocalizedString>>;
+};
+
+
+export type UserProvidedIdentifiersSlugArgs = {
+  locale?: Maybe<Scalars['Locale']>;
+  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
+};
+
+/** Versioned object have an ID and version and modification. Every update of this object changes it's version. */
+export type Versioned = {
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
 export type WhitespaceSuggestTokenizer = SuggestTokenizer & {
   type: Scalars['String'];
 };
@@ -7060,9 +10713,46 @@ export type WhitespaceSuggestTokenizerInput = {
   dummy?: Maybe<Scalars['String']>;
 };
 
+
+/** Zones allow defining ShippingRates for specific Locations. */
+export type Zone = Versioned & {
+  name: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  locations: Array<Location>;
+  id: Scalars['String'];
+  version: Scalars['Long'];
+  createdAt: Scalars['DateTime'];
+  lastModifiedAt: Scalars['DateTime'];
+  createdBy?: Maybe<Initiator>;
+  lastModifiedBy?: Maybe<Initiator>;
+};
+
+export type ZoneLimitWithCurrent = LimitWithCurrent & {
+  limit?: Maybe<Scalars['Long']>;
+  current: Scalars['Long'];
+};
+
+export type ZoneLimitsProjection = {
+  total: ZoneLimitWithCurrent;
+};
+
 export type ZoneLocation = {
   country: Scalars['Country'];
   state?: Maybe<Scalars['String']>;
+};
+
+export type ZoneQueryResult = {
+  offset: Scalars['Int'];
+  count: Scalars['Int'];
+  total: Scalars['Long'];
+  results: Array<Zone>;
+};
+
+export type ZoneRate = {
+  shippingRates: Array<ShippingRate>;
+  zoneRef?: Maybe<Reference>;
+  zone?: Maybe<Zone>;
 };
 
 export type ZoneRateDraft = {
@@ -7172,3694 +10862,19 @@ export type SetKey = {
   key?: Maybe<Scalars['String']>;
 };
 
-/** API Clients can be used to obtain OAuth 2 access tokens */
-export type ApiClientWithoutSecret = {
-  id: Scalars['String'];
-  name: Scalars['String'];
-  scope: Scalars['String'];
-  createdAt?: Maybe<Scalars['DateTime']>;
-  lastUsedAt?: Maybe<Scalars['Date']>;
-};
-
-export type ApiClientWithoutSecretQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<ApiClientWithoutSecret>;
-};
-
-export enum ActionType {
-  Update = 'Update',
-  Create = 'Create'
-}
-
-/** A field to access the active cart. */
-export type ActiveCartInterface = {
-  activeCart?: Maybe<Cart>;
-};
-
-/** An address represents a postal address. */
-export type Address = {
-  id?: Maybe<Scalars['String']>;
-  streetName?: Maybe<Scalars['String']>;
-  streetNumber?: Maybe<Scalars['String']>;
-  additionalStreetInfo?: Maybe<Scalars['String']>;
-  postalCode?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
-  country: Scalars['Country'];
-  company?: Maybe<Scalars['String']>;
-  department?: Maybe<Scalars['String']>;
-  building?: Maybe<Scalars['String']>;
-  apartment?: Maybe<Scalars['String']>;
-  pOBox?: Maybe<Scalars['String']>;
-  additionalAddressInfo?: Maybe<Scalars['String']>;
-  externalId?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Field 'contactInfo' is deprecated. Instead of using e.g. 'contactInfo.email' use 'email' directly. */
-  contactInfo?: Maybe<AddressContactInfo>;
-  phone?: Maybe<Scalars['String']>;
-  mobile?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  fax?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-  salutation?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  custom?: Maybe<CustomFieldsType>;
-};
-
-export type AddressContactInfo = {
-  phone?: Maybe<Scalars['String']>;
-  mobile?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  fax?: Maybe<Scalars['String']>;
-};
-
-export type Asset = {
-  id: Scalars['String'];
-  key?: Maybe<Scalars['String']>;
-  sources: Array<AssetSource>;
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales: Array<LocalizedString>;
-  description?: Maybe<Scalars['String']>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  tags: Array<Scalars['String']>;
-  /**
-   * This field would contain type data
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
-  custom?: Maybe<CustomFieldsType>;
-};
-
-
-export type AssetNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type AssetDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type AssetDimensions = {
-  width: Scalars['Int'];
-  height: Scalars['Int'];
-};
-
-export type AssetSource = {
-  uri: Scalars['String'];
-  key?: Maybe<Scalars['String']>;
-  dimensions?: Maybe<AssetDimensions>;
-  contentType?: Maybe<Scalars['String']>;
-};
-
-export enum AttributeConstraint {
-  /** No constraints are applied to the attribute */
-  None = 'None',
-  /** Attribute value should be different in each variant */
-  Unique = 'Unique',
-  /** A set of attributes, that have this constraint, should have different combinations in each variant */
-  CombinationUnique = 'CombinationUnique',
-  /** Attribute value should be the same in all variants */
-  SameForAll = 'SameForAll'
-}
-
-export type AttributeDefinition = {
-  type: AttributeDefinitionType;
-  name: Scalars['String'];
-  label?: Maybe<Scalars['String']>;
-  isRequired: Scalars['Boolean'];
-  attributeConstraint: AttributeConstraint;
-  inputTip?: Maybe<Scalars['String']>;
-  inputHint: TextInputHint;
-  isSearchable: Scalars['Boolean'];
-  labelAllLocales: Array<LocalizedString>;
-  inputTipAllLocales?: Maybe<Array<LocalizedString>>;
-};
-
-
-export type AttributeDefinitionLabelArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type AttributeDefinitionInputTipArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type AttributeDefinitionResult = {
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  total: Scalars['Int'];
-  results: Array<AttributeDefinition>;
-};
-
-/** (https://docs.commercetools.com/api/projects/productTypes#attributetype)[https://docs.commercetools.com/api/projects/productTypes#attributetype] */
-export type AttributeDefinitionType = {
-  name: Scalars['String'];
-};
-
-export type BaseMoney = {
-  type: Scalars['String'];
-  currencyCode: Scalars['Currency'];
-  centAmount: Scalars['Long'];
-  fractionDigits: Scalars['Int'];
-};
-
-export type BooleanAttributeDefinitionType = AttributeDefinitionType & {
-  name: Scalars['String'];
-};
-
-/** A shopping cart holds product variants and can be ordered. Each cart either belongs to a registered customer or is an anonymous cart. */
-export type Cart = Versioned & {
-  customerId?: Maybe<Scalars['String']>;
-  customer?: Maybe<Customer>;
-  customerEmail?: Maybe<Scalars['String']>;
-  anonymousId?: Maybe<Scalars['String']>;
-  lineItems: Array<LineItem>;
-  customLineItems: Array<CustomLineItem>;
-  totalPrice: Money;
-  taxedPrice?: Maybe<TaxedPrice>;
-  shippingAddress?: Maybe<Address>;
-  billingAddress?: Maybe<Address>;
-  inventoryMode: InventoryMode;
-  taxMode: TaxMode;
-  taxRoundingMode: RoundingMode;
-  taxCalculationMode: TaxCalculationMode;
-  customerGroup?: Maybe<CustomerGroup>;
-  customerGroupRef?: Maybe<Reference>;
-  country?: Maybe<Scalars['Country']>;
-  shippingInfo?: Maybe<ShippingInfo>;
-  discountCodes: Array<DiscountCodeInfo>;
-  refusedGifts: Array<CartDiscount>;
-  refusedGiftsRefs: Array<Reference>;
-  paymentInfo?: Maybe<PaymentInfo>;
-  locale?: Maybe<Scalars['Locale']>;
-  shippingRateInput?: Maybe<ShippingRateInput>;
-  origin: CartOrigin;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  storeRef?: Maybe<KeyReference>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  store?: Maybe<Store>;
-  itemShippingAddresses: Array<Address>;
-  cartState: CartState;
-  key?: Maybe<Scalars['String']>;
-  /**
-   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFieldsRaw?: Maybe<Array<RawCustomField>>;
-  /**
-   * This field would contain type data
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
-  custom?: Maybe<CustomFieldsType>;
-  deleteDaysAfterLastModification?: Maybe<Scalars['Int']>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/** A shopping cart holds product variants and can be ordered. Each cart either belongs to a registered customer or is an anonymous cart. */
-export type CartCustomFieldsRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-/**
- * Cart discounts are recalculated every time LineItems or CustomLineItems are added or removed from the Cart or an order is created from the cart.
- *
- * The number of active cart discounts that do not require a discount code (isActive=true and requiresDiscountCode=false) is limited to 100.
- */
-export type CartDiscount = Versioned & {
-  cartPredicate: Scalars['String'];
-  validFrom?: Maybe<Scalars['DateTime']>;
-  validUntil?: Maybe<Scalars['DateTime']>;
-  stackingMode: StackingMode;
-  isActive: Scalars['Boolean'];
-  requiresDiscountCode: Scalars['Boolean'];
-  sortOrder: Scalars['String'];
-  key?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  nameAllLocales: Array<LocalizedString>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  referenceRefs: Array<Reference>;
-  /**
-   * This field would contain type data
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
-  custom?: Maybe<CustomFieldsType>;
-  value: CartDiscountValue;
-  target?: Maybe<CartDiscountTarget>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/**
- * Cart discounts are recalculated every time LineItems or CustomLineItems are added or removed from the Cart or an order is created from the cart.
- *
- * The number of active cart discounts that do not require a discount code (isActive=true and requiresDiscountCode=false) is limited to 100.
- */
-export type CartDiscountNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-/**
- * Cart discounts are recalculated every time LineItems or CustomLineItems are added or removed from the Cart or an order is created from the cart.
- *
- * The number of active cart discounts that do not require a discount code (isActive=true and requiresDiscountCode=false) is limited to 100.
- */
-export type CartDiscountDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type CartDiscountLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type CartDiscountLimitsProjection = {
-  totalActiveWithoutDiscountCodes: CartDiscountLimitWithCurrent;
-};
-
-export type CartDiscountQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<CartDiscount>;
-};
-
-export type CartDiscountTarget = {
-  type: Scalars['String'];
-};
-
-export type CartDiscountValue = {
-  type: Scalars['String'];
-};
-
-export type CartLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type CartLimitsProjection = {
-  total: CartLimitWithCurrent;
-};
-
-export enum CartOrigin {
-  /** The cart was created by the merchant on behalf of the customer */
-  Merchant = 'Merchant',
-  /** The cart was created by the customer. This is the default value */
-  Customer = 'Customer'
-}
-
-/** Fields to access carts. Includes direct access to a single cart and searching for carts. */
-export type CartQueryInterface = {
-  cart?: Maybe<Cart>;
-  carts: CartQueryResult;
-};
-
-
-/** Fields to access carts. Includes direct access to a single cart and searching for carts. */
-export type CartQueryInterfaceCartArgs = {
-  id: Scalars['String'];
-};
-
-
-/** Fields to access carts. Includes direct access to a single cart and searching for carts. */
-export type CartQueryInterfaceCartsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type CartQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Cart>;
-};
-
-export enum CartState {
-  /** The cart was ordered. No further operations on the cart are allowed. */
-  Ordered = 'Ordered',
-  /** Anonymous cart whose content was merged into a customers cart on signin. No further operations on the cart are allowed. */
-  Merged = 'Merged',
-  /** The cart can be updated and ordered. It is the default state. */
-  Active = 'Active'
-}
-
-export type CartsConfiguration = {
-  deleteDaysAfterLastModification?: Maybe<Scalars['Int']>;
-  allowAddingUnpublishedProducts: Scalars['Boolean'];
-  countryTaxRateFallbackEnabled: Scalars['Boolean'];
-};
-
-export type Category = Versioned & {
-  id: Scalars['String'];
-  key?: Maybe<Scalars['String']>;
-  version: Scalars['Long'];
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales: Array<LocalizedString>;
-  description?: Maybe<Scalars['String']>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  slug?: Maybe<Scalars['String']>;
-  slugAllLocales: Array<LocalizedString>;
-  ancestorsRef: Array<Reference>;
-  ancestors: Array<Category>;
-  parentRef?: Maybe<Reference>;
-  parent?: Maybe<Category>;
-  orderHint: Scalars['String'];
-  externalId?: Maybe<Scalars['String']>;
-  metaTitle?: Maybe<Scalars['String']>;
-  metaTitleAllLocales?: Maybe<Array<LocalizedString>>;
-  metaKeywords?: Maybe<Scalars['String']>;
-  metaKeywordsAllLocales?: Maybe<Array<LocalizedString>>;
-  metaDescription?: Maybe<Scalars['String']>;
-  metaDescriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  /**
-   * Number of a products in the category subtree.
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. The returned number is representing only staged products. Use 'stagedProductCount' instead
-   */
-  productCount: Scalars['Int'];
-  /** Number of staged products in the category subtree. */
-  stagedProductCount: Scalars['Int'];
-  /** Number of direct child categories. */
-  childCount: Scalars['Int'];
-  /** Direct child categories. */
-  children?: Maybe<Array<Category>>;
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  assets: Array<Asset>;
-  /**
-   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFieldsRaw?: Maybe<Array<RawCustomField>>;
-  /**
-   * This field would contain type data
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
-  custom?: Maybe<CustomFieldsType>;
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-export type CategoryNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type CategoryDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type CategorySlugArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type CategoryMetaTitleArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type CategoryMetaKeywordsArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type CategoryMetaDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type CategoryCustomFieldsRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-export type CategoryLimitsProjection = {
-  maxCategories: Limit;
-};
-
-export type CategoryOrderHint = {
-  categoryId: Scalars['String'];
-  orderHint: Scalars['String'];
-};
-
-export type CategoryQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Category>;
-};
-
-export type CategorySearch = {
-  id: Scalars['String'];
-  key?: Maybe<Scalars['String']>;
-  version: Scalars['Long'];
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales: Array<LocalizedString>;
-  description?: Maybe<Scalars['String']>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  slug?: Maybe<Scalars['String']>;
-  slugAllLocales: Array<LocalizedString>;
-  ancestorsRef: Array<Reference>;
-  ancestors: Array<CategorySearch>;
-  parentRef?: Maybe<Reference>;
-  parent?: Maybe<CategorySearch>;
-  externalId?: Maybe<Scalars['String']>;
-  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. The returned number is representing only staged products. Use 'stagedProductCount' instead */
-  productCount: Scalars['Int'];
-  stagedProductCount: Scalars['Int'];
-  childCount: Scalars['Int'];
-  productTypeNames: Array<Scalars['String']>;
-  /** Direct child categories. */
-  children: Array<CategorySearch>;
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  orderHint: Scalars['String'];
-  assets: Array<Asset>;
-  custom?: Maybe<CustomFieldsType>;
-};
-
-
-export type CategorySearchNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type CategorySearchDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type CategorySearchSlugArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type CategorySearchResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Int'];
-  results: Array<CategorySearch>;
-};
-
-export type ChangeSubscription = {
-  resourceTypeId: Scalars['String'];
-};
-
-export type Channel = Versioned & ReviewTarget & {
-  id: Scalars['String'];
-  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'channelRef' to fetch the reference. */
-  typeId: Scalars['String'];
-  version: Scalars['Long'];
-  key: Scalars['String'];
-  roles: Array<ChannelRole>;
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales?: Maybe<Array<LocalizedString>>;
-  description?: Maybe<Scalars['String']>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  address?: Maybe<Address>;
-  geoLocation?: Maybe<Geometry>;
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  reviewRatingStatistics?: Maybe<ReviewRatingStatistics>;
-  custom?: Maybe<CustomFieldsType>;
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-export type ChannelNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type ChannelDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type ChannelQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Channel>;
-};
-
-export enum ChannelRole {
-  /** Role tells that this channel can be used to track inventory entries.Channels with this role can be treated as warehouses */
-  InventorySupply = 'InventorySupply',
-  /** Role tells that this channel can be used to expose products to a specific distribution channel. It can be used by the cart to select a product price. */
-  ProductDistribution = 'ProductDistribution',
-  /** Role tells that this channel can be used to track order export activities. */
-  OrderExport = 'OrderExport',
-  /** Role tells that this channel can be used to track order import activities. */
-  OrderImport = 'OrderImport',
-  /** This role can be combined with some other roles (e.g. with `InventorySupply`) to represent the fact that this particular channel is the primary/master channel among the channels of the same type. */
-  Primary = 'Primary'
-}
-
-
-
-export type CustomFieldsType = {
-  typeRef: Reference;
-  type?: Maybe<TypeDefinition>;
-  /** This field contains non-typed data. */
-  customFieldsRaw?: Maybe<Array<RawCustomField>>;
-  /**
-   * This field would contain type data
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Typed custom fields are no longer supported, please use customFieldsRaw instead.
-   */
-  customFields: Type;
-};
-
-
-export type CustomFieldsTypeCustomFieldsRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-/** A custom line item is a generic item that can be added to the cart but is not bound to a product. You can use it for discounts (negative money), vouchers, complex cart rules, additional services or fees. You control the lifecycle of this item. */
-export type CustomLineItem = {
-  id: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales: Array<LocalizedString>;
-  money: BaseMoney;
-  totalPrice: Money;
-  slug: Scalars['String'];
-  quantity: Scalars['Long'];
-  state: Array<ItemState>;
-  taxCategory?: Maybe<TaxCategory>;
-  taxCategoryRef?: Maybe<Reference>;
-  taxRate?: Maybe<TaxRate>;
-  taxedPrice?: Maybe<TaxedItemPrice>;
-  discountedPricePerQuantity: Array<DiscountedLineItemPriceForQuantity>;
-  /**
-   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFieldsRaw?: Maybe<Array<RawCustomField>>;
-  /**
-   * This field would contain type data
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
-  custom?: Maybe<CustomFieldsType>;
-  shippingDetails?: Maybe<ItemShippingDetails>;
-};
-
-
-/** A custom line item is a generic item that can be added to the cart but is not bound to a product. You can use it for discounts (negative money), vouchers, complex cart rules, additional services or fees. You control the lifecycle of this item. */
-export type CustomLineItemNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-/** A custom line item is a generic item that can be added to the cart but is not bound to a product. You can use it for discounts (negative money), vouchers, complex cart rules, additional services or fees. You control the lifecycle of this item. */
-export type CustomLineItemCustomFieldsRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-export type CustomObject = Versioned & {
-  container: Scalars['String'];
-  key: Scalars['String'];
-  value: Scalars['Json'];
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export type CustomObjectLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type CustomObjectLimitsProjection = {
-  total: CustomObjectLimitWithCurrent;
-};
-
-export type CustomObjectQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<CustomObject>;
-};
-
-/** A customer is a person purchasing products. Carts, Orders and Reviews can be associated to a customer. */
-export type Customer = Versioned & {
-  customerNumber?: Maybe<Scalars['String']>;
-  email: Scalars['String'];
-  password: Scalars['String'];
-  addresses: Array<Address>;
-  defaultShippingAddressId?: Maybe<Scalars['String']>;
-  defaultBillingAddressId?: Maybe<Scalars['String']>;
-  shippingAddressIds: Array<Scalars['String']>;
-  billingAddressIds: Array<Scalars['String']>;
-  isEmailVerified: Scalars['Boolean'];
-  customerGroupRef?: Maybe<Reference>;
-  externalId?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  middleName?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-  locale?: Maybe<Scalars['Locale']>;
-  salutation?: Maybe<Scalars['String']>;
-  dateOfBirth?: Maybe<Scalars['Date']>;
-  companyName?: Maybe<Scalars['String']>;
-  vatId?: Maybe<Scalars['String']>;
-  customerGroup?: Maybe<CustomerGroup>;
-  defaultShippingAddress?: Maybe<Address>;
-  defaultBillingAddress?: Maybe<Address>;
-  shippingAddresses: Array<Address>;
-  billingAddresses: Array<Address>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  storesRef: Array<KeyReference>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  stores: Array<Store>;
-  /**
-   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFieldsRaw?: Maybe<Array<RawCustomField>>;
-  /**
-   * This field would contain type data
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
-  custom?: Maybe<CustomFieldsType>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/** A customer is a person purchasing products. Carts, Orders and Reviews can be associated to a customer. */
-export type CustomerCustomFieldsRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-/** A field to access a customer's active cart. */
-export type CustomerActiveCartInterface = {
-  customerActiveCart?: Maybe<Cart>;
-};
-
-
-/** A field to access a customer's active cart. */
-export type CustomerActiveCartInterfaceCustomerActiveCartArgs = {
-  customerId: Scalars['String'];
-};
-
-/** A customer can be a member in a customer group (e.g. reseller, gold member). A customer group can be used in price calculations with special prices being assigned to certain customer groups. */
-export type CustomerGroup = Versioned & {
-  id: Scalars['String'];
-  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'customerGroupRef' to fetch the reference. */
-  typeId: Scalars['String'];
-  version: Scalars['Long'];
-  name: Scalars['String'];
-  key?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  custom?: Maybe<CustomFieldsType>;
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export type CustomerGroupLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type CustomerGroupLimitsProjection = {
-  total: CustomerGroupLimitWithCurrent;
-};
-
-export type CustomerGroupQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<CustomerGroup>;
-};
-
-export type CustomerLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type CustomerLimitsProjection = {
-  total: CustomerLimitWithCurrent;
-};
-
-/** Fields to access customer accounts. Includes direct access to a single customer and searching for customers. */
-export type CustomerQueryInterface = {
-  customer?: Maybe<Customer>;
-  customers: CustomerQueryResult;
-};
-
-
-/** Fields to access customer accounts. Includes direct access to a single customer and searching for customers. */
-export type CustomerQueryInterfaceCustomerArgs = {
-  emailToken?: Maybe<Scalars['String']>;
-  passwordToken?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-/** Fields to access customer accounts. Includes direct access to a single customer and searching for customers. */
-export type CustomerQueryInterfaceCustomersArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type CustomerQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Customer>;
-};
-
-
-export type DateAttributeDefinitionType = AttributeDefinitionType & {
-  name: Scalars['String'];
-};
-
-
-export type DateTimeAttributeDefinitionType = AttributeDefinitionType & {
-  name: Scalars['String'];
-};
-
-export type Delivery = {
-  id: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  items: Array<DeliveryItem>;
-  parcels: Array<Parcel>;
-  address?: Maybe<Address>;
-};
-
-export type DeliveryItem = {
-  id: Scalars['String'];
-  quantity: Scalars['Long'];
-};
-
-export type Destination = {
-  type: Scalars['String'];
-};
-
-export type Dimensions = {
-  width: Scalars['Int'];
-  height: Scalars['Int'];
-};
-
-/** With discount codes it is possible to give specific cart discounts to an eligible amount of users. They are defined by a string value which can be added to a cart so that specific cart discounts can be applied to the cart. */
-export type DiscountCode = Versioned & {
-  code: Scalars['String'];
-  isActive: Scalars['Boolean'];
-  maxApplications?: Maybe<Scalars['Long']>;
-  maxApplicationsPerCustomer?: Maybe<Scalars['Long']>;
-  cartPredicate?: Maybe<Scalars['String']>;
-  applicationVersion?: Maybe<Scalars['Long']>;
-  validFrom?: Maybe<Scalars['DateTime']>;
-  validUntil?: Maybe<Scalars['DateTime']>;
-  groups: Array<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  cartDiscounts: Array<CartDiscount>;
-  referenceRefs: Array<Reference>;
-  nameAllLocales?: Maybe<Array<LocalizedString>>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  /**
-   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFieldsRaw?: Maybe<Array<RawCustomField>>;
-  /**
-   * This field would contain type data
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
-  custom?: Maybe<CustomFieldsType>;
-  /** How many times this discount code was applied (only applications that were part of a successful checkout are considered) */
-  applicationCount: Scalars['Long'];
-  cartDiscountRefs: Array<Reference>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/** With discount codes it is possible to give specific cart discounts to an eligible amount of users. They are defined by a string value which can be added to a cart so that specific cart discounts can be applied to the cart. */
-export type DiscountCodeNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-/** With discount codes it is possible to give specific cart discounts to an eligible amount of users. They are defined by a string value which can be added to a cart so that specific cart discounts can be applied to the cart. */
-export type DiscountCodeDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-/** With discount codes it is possible to give specific cart discounts to an eligible amount of users. They are defined by a string value which can be added to a cart so that specific cart discounts can be applied to the cart. */
-export type DiscountCodeCustomFieldsRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-export type DiscountCodeInfo = {
-  discountCodeRef: Reference;
-  state?: Maybe<DiscountCodeState>;
-  discountCode?: Maybe<DiscountCode>;
-};
-
-export type DiscountCodeQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<DiscountCode>;
-};
-
-export enum DiscountCodeState {
-  /** The discount code is active and none of the discounts were applied because the discount application was stopped by one discount that has the StackingMode of StopAfterThisDiscount defined */
-  ApplicationStoppedByPreviousDiscount = 'ApplicationStoppedByPreviousDiscount',
-  /** The discount code is not valid or it does not contain any valid cart discounts. Validity is determined based on the validFrom and validUntil dates */
-  NotValid = 'NotValid',
-  /** maxApplications or maxApplicationsPerCustomer for discountCode has been reached. */
-  MaxApplicationReached = 'MaxApplicationReached',
-  /** The discount code is active and it contains at least one active and valid CartDiscount. The discount code cartPredicate matches the cart and at least one of the contained active discount’s cart predicates matches the cart. */
-  MatchesCart = 'MatchesCart',
-  /** The discount code is active and it contains at least one active and valid CartDiscount. But its cart predicate does not match the cart or none of the contained active discount’s cart predicates match the cart */
-  DoesNotMatchCart = 'DoesNotMatchCart',
-  /** The discount code is not active or it does not contain any active cart discounts. */
-  NotActive = 'NotActive'
-}
-
-export type DiscountedLineItemPortion = {
-  discount?: Maybe<CartDiscount>;
-  discountRef: Reference;
-  discountedAmount: BaseMoney;
-};
-
-export type DiscountedLineItemPrice = {
-  value: BaseMoney;
-  includedDiscounts: Array<DiscountedLineItemPortion>;
-};
-
-export type DiscountedLineItemPriceForQuantity = {
-  quantity: Scalars['Long'];
-  discountedPrice: DiscountedLineItemPrice;
-};
-
-export type DiscountedProductPriceValue = {
-  value: BaseMoney;
-  discountRef: Reference;
-  discount?: Maybe<ProductDiscount>;
-};
-
-export type EnumAttributeDefinitionType = AttributeDefinitionType & {
-  values: PlainEnumValueResult;
-  name: Scalars['String'];
-};
-
-
-export type EnumAttributeDefinitionTypeValuesArgs = {
-  includeKeys?: Maybe<Array<Scalars['String']>>;
-  excludeKeys?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-};
-
-export type Extension = Versioned & {
-  key?: Maybe<Scalars['String']>;
-  destination: ExtensionDestination;
-  triggers: Array<Trigger>;
-  timeoutInMs?: Maybe<Scalars['Int']>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export type ExtensionDestination = {
-  type: Scalars['String'];
-};
-
-export type ExtensionLimitsProjection = {
-  timeoutInMs: Limit;
-};
-
-export type ExtensionQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Extension>;
-};
-
-export type ExternalOAuth = {
-  url: Scalars['String'];
-  authorizationHeader: Scalars['String'];
-};
-
-/** Field definitions describe custom fields and allow you to define some meta-information associated with the field. */
-export type FieldDefinition = {
-  name: Scalars['String'];
-  required: Scalars['Boolean'];
-  inputHint: TextInputHint;
-  label?: Maybe<Scalars['String']>;
-  labelAllLocales: Array<LocalizedString>;
-  type: FieldType;
-};
-
-
-/** Field definitions describe custom fields and allow you to define some meta-information associated with the field. */
-export type FieldDefinitionLabelArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type FieldType = {
-  name: Scalars['String'];
-};
-
-export type Geometry = {
-  type: Scalars['String'];
-};
-
-export type Image = {
-  url: Scalars['String'];
-  dimensions: Dimensions;
-  label?: Maybe<Scalars['String']>;
-};
-
-export type InStore = CartQueryInterface & CustomerActiveCartInterface & OrderQueryInterface & CustomerQueryInterface & ShippingMethodsByCartInterface & MeFieldInterface & {
-  /**
-   * This field can only be used with an access token created with the password flow or with an anonymous session.
-   *
-   * It gives access to the data that is specific to the customer or the anonymous session linked to the access token.
-   */
-  me: InStoreMe;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  shippingMethodsByCart: Array<ShippingMethod>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  customer?: Maybe<Customer>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  customers: CustomerQueryResult;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  cart?: Maybe<Cart>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  carts: CartQueryResult;
-  customerActiveCart?: Maybe<Cart>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  order?: Maybe<Order>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  orders: OrderQueryResult;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  shoppingList?: Maybe<ShoppingList>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  shoppingLists: ShoppingListQueryResult;
-};
-
-
-export type InStoreShippingMethodsByCartArgs = {
-  id: Scalars['String'];
-};
-
-
-export type InStoreCustomerArgs = {
-  emailToken?: Maybe<Scalars['String']>;
-  passwordToken?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type InStoreCustomersArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type InStoreCartArgs = {
-  id: Scalars['String'];
-};
-
-
-export type InStoreCartsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type InStoreCustomerActiveCartArgs = {
-  customerId: Scalars['String'];
-};
-
-
-export type InStoreOrderArgs = {
-  id?: Maybe<Scalars['String']>;
-  orderNumber?: Maybe<Scalars['String']>;
-};
-
-
-export type InStoreOrdersArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type InStoreShoppingListArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type InStoreShoppingListsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type InStoreMe = MeQueryInterface & CartQueryInterface & ActiveCartInterface & OrderQueryInterface & ShoppingListQueryInterface & {
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  customer?: Maybe<Customer>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  cart?: Maybe<Cart>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  carts: CartQueryResult;
-  activeCart?: Maybe<Cart>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  order?: Maybe<Order>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  orders: OrderQueryResult;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  shoppingList?: Maybe<ShoppingList>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  shoppingLists: ShoppingListQueryResult;
-};
-
-
-export type InStoreMeCartArgs = {
-  id: Scalars['String'];
-};
-
-
-export type InStoreMeCartsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type InStoreMeOrderArgs = {
-  id?: Maybe<Scalars['String']>;
-  orderNumber?: Maybe<Scalars['String']>;
-};
-
-
-export type InStoreMeOrdersArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type InStoreMeShoppingListArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type InStoreMeShoppingListsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type Initiator = {
-  isPlatformClient?: Maybe<Scalars['Boolean']>;
-  externalUserId?: Maybe<Scalars['String']>;
-  anonymousId?: Maybe<Scalars['String']>;
-  clientId?: Maybe<Scalars['String']>;
-  customerRef?: Maybe<Reference>;
-  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'userRef' to fetch the reference. */
-  user?: Maybe<Reference>;
-  userRef?: Maybe<Reference>;
-};
-
-export type InterfaceInteractionsRaw = {
-  typeRef: Reference;
-  type?: Maybe<TypeDefinition>;
-  fields: Array<RawCustomField>;
-};
-
-
-export type InterfaceInteractionsRawFieldsArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-export type InterfaceInteractionsRawResult = {
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  total: Scalars['Int'];
-  results: Array<InterfaceInteractionsRaw>;
-};
-
-/** Inventory allows you to track stock quantity per SKU and optionally per supply channel */
-export type InventoryEntry = Versioned & {
-  sku: Scalars['String'];
-  quantityOnStock: Scalars['Long'];
-  availableQuantity: Scalars['Long'];
-  key?: Maybe<Scalars['String']>;
-  restockableInDays?: Maybe<Scalars['Int']>;
-  expectedDelivery?: Maybe<Scalars['DateTime']>;
-  supplyChannel?: Maybe<Channel>;
-  supplyChannelRef?: Maybe<Reference>;
-  custom?: Maybe<CustomFieldsType>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export type InventoryEntryQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<InventoryEntry>;
-};
-
-export enum InventoryMode {
-  /**
-   * Adding items to cart and ordering is independent of inventory. No inventory checks or modifications.
-   * This is the default mode for a new cart.
-   */
-  None = 'None',
-  /**
-   * Creating an order will fail with an OutOfStock error if an unavailable line item exists. Line items in the cart
-   * are only reserved for the duration of the ordering transaction.
-   */
-  ReserveOnOrder = 'ReserveOnOrder',
-  /**
-   * Orders are tracked on inventory. That means, ordering a LineItem will decrement the available quantity on the
-   * respective InventoryEntry. Creating an order will succeed even if the line item’s available quantity is zero or
-   * negative. But creating an order will fail with an OutOfStock error if no matching inventory entry exists for a
-   * line item.
-   */
-  TrackOnly = 'TrackOnly'
-}
-
-export type ItemShippingDetails = {
-  targets: Array<ItemShippingTarget>;
-  valid: Scalars['Boolean'];
-};
-
-export type ItemShippingTarget = {
-  addressKey: Scalars['String'];
-  quantity: Scalars['Long'];
-};
-
-export type ItemState = {
-  quantity: Scalars['Long'];
-  stateRef: Reference;
-  state?: Maybe<State>;
-};
-
-
-export type KeyReference = {
-  typeId: Scalars['String'];
-  key: Scalars['String'];
-};
-
-
-export type Limit = {
-  limit?: Maybe<Scalars['Long']>;
-};
-
-export type LimitWithCurrent = {
-  limit?: Maybe<Scalars['Long']>;
-  current?: Maybe<Scalars['Long']>;
-};
-
-/**
- * A line item is a snapshot of a product variant at the time it was added to the cart.
- *
- * Since a product variant may change at any time, the ProductVariant data is copied into the field variant.
- * The relation to the Product is kept but the line item will not automatically update if the product variant changes.
- * On the cart, the line item can be updated manually. The productSlug refers to the current version of the product.
- * It can be used to link to the product. If the product has been deleted, the line item remains but refers to a
- * non-existent product and the productSlug is left empty.
- *
- * Please also note that creating an order is impossible if the product or product variant a line item relates to has been deleted.
- */
-export type LineItem = {
-  id: Scalars['String'];
-  productId: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales: Array<LocalizedString>;
-  productSlug?: Maybe<Scalars['String']>;
-  productSlugAllLocales?: Maybe<Array<LocalizedString>>;
-  productType?: Maybe<ProductTypeDefinition>;
-  productTypeRef?: Maybe<Reference>;
-  variant?: Maybe<ProductVariant>;
-  price: ProductPrice;
-  taxedPrice?: Maybe<TaxedItemPrice>;
-  totalPrice?: Maybe<Money>;
-  quantity: Scalars['Long'];
-  addedAt?: Maybe<Scalars['DateTime']>;
-  lastModifiedAt?: Maybe<Scalars['DateTime']>;
-  state: Array<ItemState>;
-  taxRate?: Maybe<TaxRate>;
-  supplyChannel?: Maybe<Channel>;
-  supplyChannelRef?: Maybe<Reference>;
-  distributionChannel?: Maybe<Channel>;
-  distributionChannelRef?: Maybe<Reference>;
-  discountedPricePerQuantity: Array<DiscountedLineItemPriceForQuantity>;
-  lineItemMode: LineItemMode;
-  priceMode: LineItemPriceMode;
-  /**
-   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFieldsRaw?: Maybe<Array<RawCustomField>>;
-  /**
-   * This field would contain type data
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
-  custom?: Maybe<CustomFieldsType>;
-  shippingDetails?: Maybe<ItemShippingDetails>;
-  inventoryMode?: Maybe<ItemShippingDetails>;
-};
-
-
-/**
- * A line item is a snapshot of a product variant at the time it was added to the cart.
- *
- * Since a product variant may change at any time, the ProductVariant data is copied into the field variant.
- * The relation to the Product is kept but the line item will not automatically update if the product variant changes.
- * On the cart, the line item can be updated manually. The productSlug refers to the current version of the product.
- * It can be used to link to the product. If the product has been deleted, the line item remains but refers to a
- * non-existent product and the productSlug is left empty.
- *
- * Please also note that creating an order is impossible if the product or product variant a line item relates to has been deleted.
- */
-export type LineItemNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-/**
- * A line item is a snapshot of a product variant at the time it was added to the cart.
- *
- * Since a product variant may change at any time, the ProductVariant data is copied into the field variant.
- * The relation to the Product is kept but the line item will not automatically update if the product variant changes.
- * On the cart, the line item can be updated manually. The productSlug refers to the current version of the product.
- * It can be used to link to the product. If the product has been deleted, the line item remains but refers to a
- * non-existent product and the productSlug is left empty.
- *
- * Please also note that creating an order is impossible if the product or product variant a line item relates to has been deleted.
- */
-export type LineItemProductSlugArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-/**
- * A line item is a snapshot of a product variant at the time it was added to the cart.
- *
- * Since a product variant may change at any time, the ProductVariant data is copied into the field variant.
- * The relation to the Product is kept but the line item will not automatically update if the product variant changes.
- * On the cart, the line item can be updated manually. The productSlug refers to the current version of the product.
- * It can be used to link to the product. If the product has been deleted, the line item remains but refers to a
- * non-existent product and the productSlug is left empty.
- *
- * Please also note that creating an order is impossible if the product or product variant a line item relates to has been deleted.
- */
-export type LineItemCustomFieldsRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-export enum LineItemMode {
-  /**
-   * The line item was added automatically, because a discount has added a free gift to the cart.
-   * The quantity can not be increased, and it won’t be merged when the same product variant is added.
-   * If the gift is removed, an entry is added to the "refusedGifts" array and the discount won’t be applied again
-   * to the cart. The price can not be changed externally.
-   * All other updates, such as the ones related to custom fields, can be used.
-   */
-  GiftLineItem = 'GiftLineItem',
-  /**
-   * The line item was added during cart creation or with the update action addLineItem. Its quantity can be
-   * changed without restrictions.
-   */
-  Standard = 'Standard'
-}
-
-export enum LineItemPriceMode {
-  /** The price is selected form the product variant. This is the default mode. */
-  Platform = 'Platform',
-  /** The line item price was set externally. Cart discounts can apply to line items with this price mode. All update actions that change the quantity of a line item with this price mode require the externalPrice field to be given. */
-  ExternalPrice = 'ExternalPrice',
-  /** The line item price with the total was set externally. */
-  ExternalTotal = 'ExternalTotal'
-}
-
-
-export type LocalizableEnumAttributeDefinitionType = AttributeDefinitionType & {
-  values: LocalizableEnumValueTypeResult;
-  name: Scalars['String'];
-};
-
-
-export type LocalizableEnumAttributeDefinitionTypeValuesArgs = {
-  includeKeys?: Maybe<Array<Scalars['String']>>;
-  excludeKeys?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-};
-
-export type LocalizableEnumValueType = {
-  key: Scalars['String'];
-  label?: Maybe<Scalars['String']>;
-  labelAllLocales: Array<LocalizedString>;
-};
-
-
-export type LocalizableEnumValueTypeLabelArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type LocalizableEnumValueTypeResult = {
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  total: Scalars['Int'];
-  results: Array<LocalizableEnumValueType>;
-};
-
-export type LocalizableTextAttributeDefinitionType = AttributeDefinitionType & {
-  name: Scalars['String'];
-};
-
-export type LocalizedString = {
-  locale: Scalars['Locale'];
-  value: Scalars['String'];
-};
-
-export type LocalizedText = {
-  text: Scalars['String'];
-  locale: Scalars['Locale'];
-};
-
-export type Location = {
-  country: Scalars['Country'];
-  state?: Maybe<Scalars['String']>;
-};
-
-export type Me = MeQueryInterface & CartQueryInterface & ActiveCartInterface & OrderQueryInterface & ShoppingListQueryInterface & {
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  customer?: Maybe<Customer>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  cart?: Maybe<Cart>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  carts: CartQueryResult;
-  activeCart?: Maybe<Cart>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  order?: Maybe<Order>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  orders: OrderQueryResult;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  shoppingList?: Maybe<ShoppingList>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  shoppingLists: ShoppingListQueryResult;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  payment?: Maybe<MyPayment>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  payments: MyPaymentQueryResult;
-};
-
-
-export type MeCartArgs = {
-  id: Scalars['String'];
-};
-
-
-export type MeCartsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type MeOrderArgs = {
-  id?: Maybe<Scalars['String']>;
-  orderNumber?: Maybe<Scalars['String']>;
-};
-
-
-export type MeOrdersArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type MeShoppingListArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type MeShoppingListsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type MePaymentArgs = {
-  id: Scalars['String'];
-};
-
-
-export type MePaymentsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-/** The me field gives access to the data that is specific to the customer or anonymous session linked to the access token. */
-export type MeFieldInterface = {
-  me: MeQueryInterface;
-};
-
-export type MeQueryInterface = {
-  cart?: Maybe<Cart>;
-  carts: CartQueryResult;
-  activeCart?: Maybe<Cart>;
-  order?: Maybe<Order>;
-  orders: OrderQueryResult;
-  shoppingList?: Maybe<ShoppingList>;
-  shoppingLists: ShoppingListQueryResult;
-};
-
-
-export type MeQueryInterfaceCartArgs = {
-  id: Scalars['String'];
-};
-
-
-export type MeQueryInterfaceCartsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type MeQueryInterfaceOrderArgs = {
-  id?: Maybe<Scalars['String']>;
-  orderNumber?: Maybe<Scalars['String']>;
-};
-
-
-export type MeQueryInterfaceOrdersArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type MeQueryInterfaceShoppingListArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type MeQueryInterfaceShoppingListsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type Message = Versioned & {
-  id: Scalars['String'];
-  type: Scalars['String'];
-  sequenceNumber: Scalars['Long'];
-  resourceRef: Reference;
-  resourceVersion: Scalars['Long'];
-  userProvidedIdentifiers?: Maybe<UserProvidedIdentifiers>;
-  payload: MessagePayload;
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export type MessagePayload = {
-  type: Scalars['String'];
-};
-
-export type MessageQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Message>;
-};
-
-export type MessageSubscription = {
-  resourceTypeId: Scalars['String'];
-  types: Array<Scalars['String']>;
-};
-
-export type MessagesConfiguration = {
-  enabled: Scalars['Boolean'];
-  deleteDaysAfterCreation?: Maybe<Scalars['Int']>;
-};
-
-export type Money = BaseMoney & {
-  type: Scalars['String'];
-  currencyCode: Scalars['Currency'];
-  centAmount: Scalars['Long'];
-  /** For the `Money` it equals to the default number of fraction digits used with the currency. */
-  fractionDigits: Scalars['Int'];
-};
-
-export type MoneyAttributeDefinitionType = AttributeDefinitionType & {
-  name: Scalars['String'];
-};
-
-/**
- * My Payments endpoint provides access to payments scoped to a specific user.
- * [documentation](https://docs.commercetools.com/http-api-projects-me-payments#mypayment)
- */
-export type MyPayment = {
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  customerRef?: Maybe<Reference>;
-  customer?: Maybe<Customer>;
-  anonymousId?: Maybe<Scalars['String']>;
-  paymentMethodInfo: PaymentMethodInfo;
-  amountPlanned: Money;
-  transactions: Array<Transaction>;
-  custom?: Maybe<CustomFieldsType>;
-};
-
-export type MyPaymentQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<MyPayment>;
-};
-
-export type NestedAttributeDefinitionType = AttributeDefinitionType & {
-  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use 'typeRef' to fetch the reference. */
-  typeReference: Reference;
-  typeRef: Reference;
-  name: Scalars['String'];
-};
-
-export type NotificationFormat = {
-  type: Scalars['String'];
-};
-
-export type NumberAttributeDefinitionType = AttributeDefinitionType & {
-  name: Scalars['String'];
-};
-
-/**
- * An order can be created from a cart, usually after a checkout process has been completed.
- * [documentation](https://docs.commercetools.com/http-api-projects-orders.html)
- */
-export type Order = Versioned & {
-  customerId?: Maybe<Scalars['String']>;
-  customer?: Maybe<Customer>;
-  customerEmail?: Maybe<Scalars['String']>;
-  anonymousId?: Maybe<Scalars['String']>;
-  lineItems: Array<LineItem>;
-  customLineItems: Array<CustomLineItem>;
-  totalPrice: Money;
-  taxedPrice?: Maybe<TaxedPrice>;
-  shippingAddress?: Maybe<Address>;
-  billingAddress?: Maybe<Address>;
-  inventoryMode: InventoryMode;
-  taxMode: TaxMode;
-  taxRoundingMode: RoundingMode;
-  taxCalculationMode: TaxCalculationMode;
-  customerGroup?: Maybe<CustomerGroup>;
-  customerGroupRef?: Maybe<Reference>;
-  country?: Maybe<Scalars['Country']>;
-  shippingInfo?: Maybe<ShippingInfo>;
-  discountCodes: Array<DiscountCodeInfo>;
-  refusedGifts: Array<CartDiscount>;
-  refusedGiftsRefs: Array<Reference>;
-  paymentInfo?: Maybe<PaymentInfo>;
-  locale?: Maybe<Scalars['Locale']>;
-  shippingRateInput?: Maybe<ShippingRateInput>;
-  origin: CartOrigin;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  storeRef?: Maybe<KeyReference>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  store?: Maybe<Store>;
-  itemShippingAddresses: Array<Address>;
-  completedAt?: Maybe<Scalars['DateTime']>;
-  orderNumber?: Maybe<Scalars['String']>;
-  orderState: OrderState;
-  stateRef?: Maybe<Reference>;
-  state?: Maybe<State>;
-  shipmentState?: Maybe<ShipmentState>;
-  paymentState?: Maybe<PaymentState>;
-  syncInfo: Array<SyncInfo>;
-  returnInfo: Array<ReturnInfo>;
-  lastMessageSequenceNumber: Scalars['Long'];
-  cartRef?: Maybe<Reference>;
-  cart?: Maybe<Cart>;
-  /**
-   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFieldsRaw?: Maybe<Array<RawCustomField>>;
-  /**
-   * This field would contain type data
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
-  custom?: Maybe<CustomFieldsType>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/**
- * An order can be created from a cart, usually after a checkout process has been completed.
- * [documentation](https://docs.commercetools.com/http-api-projects-orders.html)
- */
-export type OrderCustomFieldsRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-export type OrderEdit = Versioned & {
-  key?: Maybe<Scalars['String']>;
-  resourceRef: Reference;
-  resource?: Maybe<Order>;
-  stagedActions: Array<StagedOrderUpdateActionOutput>;
-  result: OrderEditResult;
-  comment?: Maybe<Scalars['String']>;
-  custom?: Maybe<CustomFieldsType>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export type OrderEditLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type OrderEditLimitsProjection = {
-  total: OrderEditLimitWithCurrent;
-};
-
-export type OrderEditQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<OrderEdit>;
-};
-
-export type OrderEditResult = {
-  type: Scalars['String'];
-};
-
-/** Fields to access orders. Includes direct access to a single order and searching for orders. */
-export type OrderQueryInterface = {
-  order?: Maybe<Order>;
-  orders: OrderQueryResult;
-};
-
-
-/** Fields to access orders. Includes direct access to a single order and searching for orders. */
-export type OrderQueryInterfaceOrderArgs = {
-  id?: Maybe<Scalars['String']>;
-  orderNumber?: Maybe<Scalars['String']>;
-};
-
-
-/** Fields to access orders. Includes direct access to a single order and searching for orders. */
-export type OrderQueryInterfaceOrdersArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type OrderQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Order>;
-};
-
-export enum OrderState {
-  Confirmed = 'Confirmed',
-  Cancelled = 'Cancelled',
-  Complete = 'Complete',
-  Open = 'Open'
-}
-
-export type Parcel = {
-  id: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  measurements?: Maybe<ParcelMeasurements>;
-  trackingData?: Maybe<TrackingData>;
-  items: Array<DeliveryItem>;
-};
-
-export type ParcelMeasurements = {
-  heightInMillimeter?: Maybe<Scalars['Int']>;
-  lengthInMillimeter?: Maybe<Scalars['Int']>;
-  widthInMillimeter?: Maybe<Scalars['Int']>;
-  weightInGram?: Maybe<Scalars['Int']>;
-};
-
-/**
- * Payments hold information about the current state of receiving and/or refunding money.
- * [documentation](https://docs.commercetools.com/http-api-projects-payments)
- */
-export type Payment = Versioned & {
-  key?: Maybe<Scalars['String']>;
-  customerRef?: Maybe<Reference>;
-  customer?: Maybe<Customer>;
-  anonymousId?: Maybe<Scalars['String']>;
-  interfaceId?: Maybe<Scalars['String']>;
-  amountPlanned: Money;
-  paymentMethodInfo: PaymentMethodInfo;
-  paymentStatus: PaymentStatus;
-  transactions: Array<Transaction>;
-  interfaceInteractionsRaw: InterfaceInteractionsRawResult;
-  custom?: Maybe<CustomFieldsType>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/**
- * Payments hold information about the current state of receiving and/or refunding money.
- * [documentation](https://docs.commercetools.com/http-api-projects-payments)
- */
-export type PaymentInterfaceInteractionsRawArgs = {
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type PaymentInfo = {
-  payments: Array<Payment>;
-  paymentRefs: Array<Reference>;
-};
-
-export type PaymentMethodInfo = {
-  paymentInterface?: Maybe<Scalars['String']>;
-  method?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales?: Maybe<Array<LocalizedString>>;
-};
-
-
-export type PaymentMethodInfoNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type PaymentQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Payment>;
-};
-
-export enum PaymentState {
-  Paid = 'Paid',
-  CreditOwed = 'CreditOwed',
-  Pending = 'Pending',
-  Failed = 'Failed',
-  BalanceDue = 'BalanceDue'
-}
-
-export type PaymentStatus = {
-  interfaceCode?: Maybe<Scalars['String']>;
-  interfaceText?: Maybe<Scalars['String']>;
-  stateRef?: Maybe<Reference>;
-  state?: Maybe<State>;
-};
-
-export type PlainEnumValue = {
-  key: Scalars['String'];
-  label: Scalars['String'];
-};
-
-export type PlainEnumValueResult = {
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  total: Scalars['Int'];
-  results: Array<PlainEnumValue>;
-};
-
-export type Product = Versioned & ReviewTarget & {
-  id: Scalars['String'];
-  key?: Maybe<Scalars['String']>;
-  version: Scalars['Long'];
-  productTypeRef: Reference;
-  productType?: Maybe<ProductTypeDefinition>;
-  masterData: ProductCatalogData;
-  skus: Array<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  stateRef?: Maybe<Reference>;
-  state?: Maybe<State>;
-  taxCategoryRef?: Maybe<Reference>;
-  taxCategory?: Maybe<TaxCategory>;
-  reviewRatingStatistics?: Maybe<ReviewRatingStatistics>;
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export type ProductCatalogData = {
-  current?: Maybe<ProductData>;
-  staged?: Maybe<ProductData>;
-  published: Scalars['Boolean'];
-  hasStagedChanges: Scalars['Boolean'];
-};
-
-export type ProductData = {
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  nameAllLocales: Array<LocalizedString>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  slug?: Maybe<Scalars['String']>;
-  slugAllLocales: Array<LocalizedString>;
-  categoryOrderHint?: Maybe<Scalars['String']>;
-  categoryOrderHints: Array<CategoryOrderHint>;
-  categoriesRef: Array<Reference>;
-  categories: Array<Category>;
-  searchKeyword?: Maybe<Array<SearchKeyword>>;
-  searchKeywords: Array<SearchKeywords>;
-  metaTitle?: Maybe<Scalars['String']>;
-  metaTitleAllLocales?: Maybe<Array<LocalizedString>>;
-  metaKeywords?: Maybe<Scalars['String']>;
-  metaKeywordsAllLocales?: Maybe<Array<LocalizedString>>;
-  metaDescription?: Maybe<Scalars['String']>;
-  metaDescriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  masterVariant: ProductVariant;
-  variants: Array<ProductVariant>;
-  allVariants: Array<ProductVariant>;
-  variant?: Maybe<ProductVariant>;
-  skus: Array<Scalars['String']>;
-};
-
-
-export type ProductDataNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type ProductDataDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type ProductDataSlugArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type ProductDataCategoryOrderHintArgs = {
-  categoryId: Scalars['String'];
-};
-
-
-export type ProductDataSearchKeywordArgs = {
-  locale: Scalars['Locale'];
-};
-
-
-export type ProductDataMetaTitleArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type ProductDataMetaKeywordsArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type ProductDataMetaDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type ProductDataVariantsArgs = {
-  skus?: Maybe<Array<Scalars['String']>>;
-  isOnStock?: Maybe<Scalars['Boolean']>;
-  stockChannelIds?: Maybe<Array<Scalars['String']>>;
-  hasImages?: Maybe<Scalars['Boolean']>;
-};
-
-
-export type ProductDataAllVariantsArgs = {
-  skus?: Maybe<Array<Scalars['String']>>;
-  isOnStock?: Maybe<Scalars['Boolean']>;
-  stockChannelIds?: Maybe<Array<Scalars['String']>>;
-  hasImages?: Maybe<Scalars['Boolean']>;
-};
-
-
-export type ProductDataVariantArgs = {
-  sku?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-/**
- * A product price can be discounted in two ways:
- *
- * * with a relative or an absolute product discount, which will be automatically applied to all prices in a product that match a discount predicate.
- *   A relative discount reduces the matching price by a fraction (for example 10 % off). An absolute discount reduces the matching price by a fixed amount (for example 10€ off). If more than one product discount matches a price, the discount sort order determines which one will be applied.
- * * with an external product discount, which can then be used to explicitly set a discounted value on a particular product price.
- *
- * The discounted price is stored in the discounted field of the Product Price.
- *
- * Note that when a discount is created, updated or removed it can take up to 15 minutes to update all the prices with the discounts.
- *
- * The maximum number of ProductDiscounts that can be active at the same time is **200**.
- */
-export type ProductDiscount = Versioned & {
-  predicate: Scalars['String'];
-  validFrom?: Maybe<Scalars['DateTime']>;
-  validUntil?: Maybe<Scalars['DateTime']>;
-  isActive: Scalars['Boolean'];
-  isValid: Scalars['Boolean'];
-  sortOrder: Scalars['String'];
-  key?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  referenceRefs: Array<Reference>;
-  nameAllLocales: Array<LocalizedString>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  value: ProductDiscountValue;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/**
- * A product price can be discounted in two ways:
- *
- * * with a relative or an absolute product discount, which will be automatically applied to all prices in a product that match a discount predicate.
- *   A relative discount reduces the matching price by a fraction (for example 10 % off). An absolute discount reduces the matching price by a fixed amount (for example 10€ off). If more than one product discount matches a price, the discount sort order determines which one will be applied.
- * * with an external product discount, which can then be used to explicitly set a discounted value on a particular product price.
- *
- * The discounted price is stored in the discounted field of the Product Price.
- *
- * Note that when a discount is created, updated or removed it can take up to 15 minutes to update all the prices with the discounts.
- *
- * The maximum number of ProductDiscounts that can be active at the same time is **200**.
- */
-export type ProductDiscountNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-/**
- * A product price can be discounted in two ways:
- *
- * * with a relative or an absolute product discount, which will be automatically applied to all prices in a product that match a discount predicate.
- *   A relative discount reduces the matching price by a fraction (for example 10 % off). An absolute discount reduces the matching price by a fixed amount (for example 10€ off). If more than one product discount matches a price, the discount sort order determines which one will be applied.
- * * with an external product discount, which can then be used to explicitly set a discounted value on a particular product price.
- *
- * The discounted price is stored in the discounted field of the Product Price.
- *
- * Note that when a discount is created, updated or removed it can take up to 15 minutes to update all the prices with the discounts.
- *
- * The maximum number of ProductDiscounts that can be active at the same time is **200**.
- */
-export type ProductDiscountDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type ProductDiscountLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type ProductDiscountLimitsProjection = {
-  totalActive: ProductDiscountLimitWithCurrent;
-};
-
-export type ProductDiscountQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<ProductDiscount>;
-};
-
-export type ProductDiscountValue = {
-  type: Scalars['String'];
-};
-
-export type ProductLimitsProjection = {
-  pricesPerVariant: Limit;
-  variants: Limit;
-};
-
-export type ProductPrice = {
-  id?: Maybe<Scalars['String']>;
-  value: BaseMoney;
-  country?: Maybe<Scalars['Country']>;
-  customerGroup?: Maybe<CustomerGroup>;
-  customerGroupRef?: Maybe<Reference>;
-  channel?: Maybe<Channel>;
-  channelRef?: Maybe<Reference>;
-  validFrom?: Maybe<Scalars['DateTime']>;
-  validUntil?: Maybe<Scalars['DateTime']>;
-  discounted?: Maybe<DiscountedProductPriceValue>;
-  tiers?: Maybe<Array<ProductPriceTier>>;
-  /**
-   * This field contains non-typed data. Consider using `customFields` as a typed alternative.
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFieldsRaw?: Maybe<Array<RawCustomField>>;
-  /**
-   * This field would contain type data
-   * @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Please use 'custom.customFieldsRaw'
-   */
-  customFields?: Maybe<Type>;
-  custom?: Maybe<CustomFieldsType>;
-};
-
-
-export type ProductPriceCustomFieldsRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-export type ProductPriceTier = {
-  minimumQuantity: Scalars['Int'];
-  value: BaseMoney;
-};
-
-export type ProductQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Product>;
-};
-
-export type ProductTypeDefinition = Versioned & {
-  key?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-  description: Scalars['String'];
-  attributeDefinitions: AttributeDefinitionResult;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-export type ProductTypeDefinitionAttributeDefinitionsArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-};
-
-export type ProductTypeDefinitionQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<ProductTypeDefinition>;
-};
-
-export type ProductVariant = {
-  id: Scalars['Int'];
-  key?: Maybe<Scalars['String']>;
-  sku?: Maybe<Scalars['String']>;
-  prices?: Maybe<Array<ProductPrice>>;
-  /** Returns a single price based on the price selection rules. */
-  price?: Maybe<ProductPrice>;
-  images: Array<Image>;
-  assets: Array<Asset>;
-  availability?: Maybe<ProductVariantAvailabilityWithChannels>;
-  /** This field contains raw attributes data */
-  attributesRaw: Array<RawProductAttribute>;
-};
-
-
-export type ProductVariantPriceArgs = {
-  currency: Scalars['Currency'];
-  country?: Maybe<Scalars['Country']>;
-  customerGroupId?: Maybe<Scalars['String']>;
-  channelId?: Maybe<Scalars['String']>;
-  date?: Maybe<Scalars['DateTime']>;
-};
-
-
-export type ProductVariantAttributesRawArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-/** Product variant availabilities */
-export type ProductVariantAvailabilitiesResult = {
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  total: Scalars['Int'];
-  results: Array<ProductVariantAvailabilityWithChannel>;
-};
-
-/** Product variant availability */
-export type ProductVariantAvailability = {
-  isOnStock: Scalars['Boolean'];
-  restockableInDays?: Maybe<Scalars['Int']>;
-  availableQuantity?: Maybe<Scalars['Long']>;
-};
-
-export type ProductVariantAvailabilityWithChannel = {
-  channelRef: Reference;
-  channel?: Maybe<Channel>;
-  availability: ProductVariantAvailability;
-};
-
-export type ProductVariantAvailabilityWithChannels = {
-  noChannel?: Maybe<ProductVariantAvailability>;
-  channels: ProductVariantAvailabilitiesResult;
-};
-
-
-export type ProductVariantAvailabilityWithChannelsChannelsArgs = {
-  includeChannelIds?: Maybe<Array<Scalars['String']>>;
-  excludeChannelIds?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-/** Contains information about the limits of your project. */
-export type ProjectCustomLimitsProjection = {
-  query: QueryLimitsProjection;
-  products: ProductLimitsProjection;
-  shoppingLists: ShoppingListLimitsProjection;
-  extensions: ExtensionLimitsProjection;
-  productDiscounts: ProductDiscountLimitsProjection;
-  cartDiscounts: CartDiscountLimitsProjection;
-  orderEdits: OrderEditLimitsProjection;
-  stores: StoreLimitsProjection;
-  customers: CustomerLimitsProjection;
-  customerGroups: CustomerGroupLimitsProjection;
-  zones: ZoneLimitsProjection;
-  taxCategories: TaxCategoryLimitsProjection;
-  refreshTokens: RefreshTokenLimitsProjection;
-  shippingMethods: ShippingMethodLimitsProjection;
-  carts: CartLimitsProjection;
-  customObjects: CustomObjectLimitsProjection;
-  search: SearchLimitsProjection;
-  category: CategoryLimitsProjection;
-};
-
-/** Project contains information about project. */
-export type ProjectProjection = {
-  key: Scalars['String'];
-  name: Scalars['String'];
-  languages: Array<Scalars['Locale']>;
-  createdAt: Scalars['DateTime'];
-  trialUntil?: Maybe<Scalars['YearMonth']>;
-  carts: CartsConfiguration;
-  shoppingLists: ShoppingListsConfiguration;
-  version: Scalars['Long'];
-  externalOAuth?: Maybe<ExternalOAuth>;
-  searchIndexing?: Maybe<SearchIndexingConfiguration>;
-  messages: MessagesConfiguration;
-  countries: Array<Scalars['Country']>;
-  currencies: Array<Scalars['Currency']>;
-  shippingRateInputType?: Maybe<ShippingRateInputType>;
-};
-
-export type Query = CartQueryInterface & CustomerActiveCartInterface & OrderQueryInterface & CustomerQueryInterface & ShoppingListQueryInterface & ShippingMethodsByCartInterface & MeFieldInterface & {
-  /**
-   * This field can only be used with an access token created with the password flow or with an anonymous session.
-   *
-   * It gives access to the data that is specific to the customer or the anonymous session linked to the access token.
-   */
-  me: Me;
-  /** This field gives access to the resources (such as carts) that are inside the given store. Currently in beta. */
-  inStore: InStore;
-  /** This field gives access to the resources (such as carts) that are inside one of the given stores. Currently in beta. */
-  inStores: InStore;
-  customerGroup?: Maybe<CustomerGroup>;
-  customerGroups: CustomerGroupQueryResult;
-  category?: Maybe<Category>;
-  categories: CategoryQueryResult;
-  /** Autocomplete the categories based on category fields like name, description, etc. */
-  categoryAutocomplete: CategorySearchResult;
-  /** Search the categories using full-text search, filtering and sorting */
-  categorySearch: CategorySearchResult;
-  channel?: Maybe<Channel>;
-  channels: ChannelQueryResult;
-  customObject?: Maybe<CustomObject>;
-  customObjects: CustomObjectQueryResult;
-  productType?: Maybe<ProductTypeDefinition>;
-  productTypes: ProductTypeDefinitionQueryResult;
-  typeDefinition?: Maybe<TypeDefinition>;
-  typeDefinitions: TypeDefinitionQueryResult;
-  shippingMethod?: Maybe<ShippingMethod>;
-  shippingMethods: ShippingMethodQueryResult;
-  shippingMethodsByCart: Array<ShippingMethod>;
-  shippingMethodsByLocation: Array<ShippingMethod>;
-  zone?: Maybe<Zone>;
-  zones: ZoneQueryResult;
-  taxCategory?: Maybe<TaxCategory>;
-  taxCategories: TaxCategoryQueryResult;
-  discountCode?: Maybe<DiscountCode>;
-  discountCodes: DiscountCodeQueryResult;
-  cartDiscount?: Maybe<CartDiscount>;
-  cartDiscounts: CartDiscountQueryResult;
-  productDiscount?: Maybe<ProductDiscount>;
-  productDiscounts: ProductDiscountQueryResult;
-  product?: Maybe<Product>;
-  products: ProductQueryResult;
-  state?: Maybe<State>;
-  states: StateQueryResult;
-  customer?: Maybe<Customer>;
-  customers: CustomerQueryResult;
-  inventoryEntry?: Maybe<InventoryEntry>;
-  inventoryEntries: InventoryEntryQueryResult;
-  cart?: Maybe<Cart>;
-  carts: CartQueryResult;
-  customerActiveCart?: Maybe<Cart>;
-  message?: Maybe<Message>;
-  messages: MessageQueryResult;
-  order?: Maybe<Order>;
-  orders: OrderQueryResult;
-  orderEdit?: Maybe<OrderEdit>;
-  orderEdits: OrderEditQueryResult;
-  shoppingList?: Maybe<ShoppingList>;
-  shoppingLists: ShoppingListQueryResult;
-  payment?: Maybe<Payment>;
-  payments: PaymentQueryResult;
-  productProjectionsSuggest: SuggestResult;
-  project: ProjectProjection;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  store?: Maybe<Store>;
-  /** BETA: This feature can be subject to change and should be used carefully in production. https://docs.commercetools.com/api/contract#beta-features */
-  stores: StoreQueryResult;
-  review?: Maybe<Review>;
-  reviews: ReviewQueryResult;
-  subscription?: Maybe<Subscription>;
-  subscriptions: SubscriptionQueryResult;
-  extension?: Maybe<Extension>;
-  extensions: ExtensionQueryResult;
-  apiClient?: Maybe<ApiClientWithoutSecret>;
-  apiClients: ApiClientWithoutSecretQueryResult;
-  limits: ProjectCustomLimitsProjection;
-};
-
-
-export type QueryInStoreArgs = {
-  key: Scalars['KeyReferenceInput'];
-};
-
-
-export type QueryInStoresArgs = {
-  keys: Array<Scalars['KeyReferenceInput']>;
-};
-
-
-export type QueryCustomerGroupArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryCustomerGroupsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryCategoryArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryCategoriesArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryCategoryAutocompleteArgs = {
-  locale: Scalars['Locale'];
-  text: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  filters?: Maybe<Array<Scalars['SearchFilter']>>;
-};
-
-
-export type QueryCategorySearchArgs = {
-  fulltext?: Maybe<LocalizedText>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  queryFilters?: Maybe<Array<Scalars['SearchFilter']>>;
-  filters?: Maybe<Array<Scalars['SearchFilter']>>;
-  sorts?: Maybe<Array<Scalars['SearchSort']>>;
-};
-
-
-export type QueryChannelArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryChannelsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryCustomObjectArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-  container?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryCustomObjectsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  container: Scalars['String'];
-};
-
-
-export type QueryProductTypeArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryProductTypesArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryTypeDefinitionArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryTypeDefinitionsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryShippingMethodArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryShippingMethodsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryShippingMethodsByCartArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryShippingMethodsByLocationArgs = {
-  country: Scalars['Country'];
-  state?: Maybe<Scalars['String']>;
-  currency?: Maybe<Scalars['Currency']>;
-};
-
-
-export type QueryZoneArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryZonesArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryTaxCategoryArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryTaxCategoriesArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryDiscountCodeArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryDiscountCodesArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryCartDiscountArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryCartDiscountsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryProductDiscountArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryProductDiscountsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryProductArgs = {
-  sku?: Maybe<Scalars['String']>;
-  variantKey?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryProductsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  skus?: Maybe<Array<Scalars['String']>>;
-};
-
-
-export type QueryStateArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryStatesArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryCustomerArgs = {
-  emailToken?: Maybe<Scalars['String']>;
-  passwordToken?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryCustomersArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryInventoryEntryArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryInventoryEntriesArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryCartArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryCartsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryCustomerActiveCartArgs = {
-  customerId: Scalars['String'];
-};
-
-
-export type QueryMessageArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryMessagesArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryOrderArgs = {
-  id?: Maybe<Scalars['String']>;
-  orderNumber?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryOrdersArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryOrderEditArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryOrderEditsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryShoppingListArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryShoppingListsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryPaymentArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryPaymentsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryProductProjectionsSuggestArgs = {
-  searchKeywords: Array<SearchKeywordArgument>;
-  fuzzy?: Maybe<Scalars['Boolean']>;
-  limit?: Maybe<Scalars['Int']>;
-  staged?: Maybe<Scalars['Boolean']>;
-};
-
-
-export type QueryStoreArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryStoresArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryReviewArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryReviewsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QuerySubscriptionArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QuerySubscriptionsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryExtensionArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryExtensionsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryApiClientArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryApiClientsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type QueryLimitsProjection = {
-  offset: Limit;
-};
-
-export type RawCustomField = {
-  name: Scalars['String'];
-  value: Scalars['Json'];
-};
-
-export type RawProductAttribute = {
-  name: Scalars['String'];
-  value: Scalars['Json'];
-  attributeDefinition?: Maybe<AttributeDefinition>;
-};
-
-export type Reference = {
-  typeId: Scalars['String'];
-  id: Scalars['String'];
-};
-
-export type ReferenceAttributeDefinitionType = AttributeDefinitionType & {
-  referenceTypeId: Scalars['String'];
-  name: Scalars['String'];
-};
-
-export type RefreshTokenLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type RefreshTokenLimitsProjection = {
-  total: RefreshTokenLimitWithCurrent;
-};
-
-/** Stores information about returns connected to this order. */
-export type ReturnInfo = {
-  items: Array<ReturnItem>;
-  returnTrackingId?: Maybe<Scalars['String']>;
-  returnDate?: Maybe<Scalars['DateTime']>;
-};
-
-export type ReturnItem = {
-  type: Scalars['String'];
-  id: Scalars['String'];
-  quantity: Scalars['Long'];
-  comment?: Maybe<Scalars['String']>;
-  shipmentState: ReturnShipmentState;
-  paymentState: ReturnPaymentState;
-  lastModifiedAt: Scalars['DateTime'];
-  createdAt: Scalars['DateTime'];
-};
-
-export enum ReturnPaymentState {
-  NotRefunded = 'NotRefunded',
-  Refunded = 'Refunded',
-  Initial = 'Initial',
-  NonRefundable = 'NonRefundable'
-}
-
-export enum ReturnShipmentState {
-  Unusable = 'Unusable',
-  BackInStock = 'BackInStock',
-  Returned = 'Returned',
-  Advised = 'Advised'
-}
-
-export type Review = Versioned & {
-  key?: Maybe<Scalars['String']>;
-  uniquenessValue?: Maybe<Scalars['String']>;
-  locale?: Maybe<Scalars['Locale']>;
-  authorName?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-  text?: Maybe<Scalars['String']>;
-  targetRef?: Maybe<Reference>;
-  target?: Maybe<ReviewTarget>;
-  rating?: Maybe<Scalars['Int']>;
-  stateRef?: Maybe<Reference>;
-  state?: Maybe<State>;
-  includedInStatistics: Scalars['Boolean'];
-  customerRef?: Maybe<Reference>;
-  customer?: Maybe<Customer>;
-  custom?: Maybe<CustomFieldsType>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export type ReviewQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Review>;
-};
-
-export type ReviewRatingStatistics = {
-  averageRating: Scalars['Float'];
-  highestRating: Scalars['Int'];
-  lowestRating: Scalars['Int'];
-  count: Scalars['Long'];
-  ratingsDistribution: Scalars['Json'];
-};
-
-export type ReviewTarget = {
-  id: Scalars['String'];
-};
-
-export enum RoundingMode {
-  /** [Round half down](https://en.wikipedia.org/wiki/Rounding#Round_half_down). Rounding mode used by, e.g., [Avalara Sales TaxII](https://help.avalara.com/kb/001/How_does_Rounding_with_SalesTaxII_work%3F) */
-  HalfDown = 'HalfDown',
-  /** [Round half up](https://en.wikipedia.org/wiki/Rounding#Round_half_up) */
-  HalfUp = 'HalfUp',
-  /** [Round half to even](https://en.wikipedia.org/wiki/Rounding#Round_half_to_even). Default rounding mode as used in IEEE 754 computing functions and operators. */
-  HalfEven = 'HalfEven'
-}
-
-
-export type SearchIndexingConfiguration = {
-  products?: Maybe<SearchIndexingConfigurationValues>;
-};
-
-export type SearchIndexingConfigurationValues = {
-  status?: Maybe<SearchIndexingStatus>;
-  lastModifiedAt?: Maybe<Scalars['DateTime']>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export enum SearchIndexingStatus {
-  Activated = 'Activated',
-  Indexing = 'Indexing',
-  Deactivated = 'Deactivated'
-}
-
-export type SearchKeyword = {
-  text: Scalars['String'];
-  suggestTokenizer?: Maybe<SuggestTokenizer>;
-};
-
-export type SearchKeywordArgument = {
-  searchKeyword: Scalars['String'];
-  locale: Scalars['Locale'];
-};
-
-export type SearchKeywords = {
-  locale: Scalars['Locale'];
-  searchKeywords: Array<SearchKeyword>;
-};
-
-export type SearchLimitsProjection = {
-  maxTextSize: Limit;
-};
-
-
-export type SetAttributeDefinitionType = AttributeDefinitionType & {
-  elementType: AttributeDefinitionType;
-  name: Scalars['String'];
-};
-
-export enum ShipmentState {
-  Delayed = 'Delayed',
-  Backorder = 'Backorder',
-  Partial = 'Partial',
-  Pending = 'Pending',
-  Ready = 'Ready',
-  Shipped = 'Shipped'
-}
-
-export type ShippingInfo = {
-  shippingMethodName: Scalars['String'];
-  price: Money;
-  shippingRate: ShippingRate;
-  taxRate?: Maybe<TaxRate>;
-  deliveries: Array<Delivery>;
-  discountedPrice?: Maybe<DiscountedLineItemPrice>;
-  taxedPrice?: Maybe<TaxedItemPrice>;
-  shippingMethodState: ShippingMethodState;
-  shippingMethod?: Maybe<ShippingMethod>;
-  shippingMethodRef?: Maybe<Reference>;
-  taxCategory?: Maybe<TaxCategory>;
-  taxCategoryRef?: Maybe<Reference>;
-};
-
-export type ShippingMethod = Versioned & {
-  name: Scalars['String'];
-  zoneRates: Array<ZoneRate>;
-  isDefault: Scalars['Boolean'];
-  predicate?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-  taxCategoryRef?: Maybe<Reference>;
-  localizedDescriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  /** @deprecated This field has been removed and will return a HTTP code 400 with X-DEPRECATION-NOTICE when used. Use localizedDescription */
-  description?: Maybe<Scalars['String']>;
-  localizedDescription?: Maybe<Scalars['String']>;
-  taxCategory?: Maybe<TaxCategory>;
-  custom?: Maybe<CustomFieldsType>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-export type ShippingMethodLocalizedDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type ShippingMethodLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type ShippingMethodLimitsProjection = {
-  total: ShippingMethodLimitWithCurrent;
-};
-
-export type ShippingMethodQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<ShippingMethod>;
-};
-
-export enum ShippingMethodState {
-  /** Either there is no predicate defined for the ShippingMethod or the given predicate matches the cart */
-  MatchesCart = 'MatchesCart',
-  /** The ShippingMethod predicate does not match the cart. Ordering this cart will fail with error ShippingMethodDoesNotMatchCart */
-  DoesNotMatchCart = 'DoesNotMatchCart'
-}
-
-/** A field to retrieve available shipping methods for a cart. */
-export type ShippingMethodsByCartInterface = {
-  shippingMethodsByCart: Array<ShippingMethod>;
-};
-
-
-/** A field to retrieve available shipping methods for a cart. */
-export type ShippingMethodsByCartInterfaceShippingMethodsByCartArgs = {
-  id: Scalars['String'];
-};
-
-/** Shipping Rate */
-export type ShippingRate = {
-  price: Money;
-  freeAbove?: Maybe<Money>;
-  isMatching?: Maybe<Scalars['Boolean']>;
-  tiers: Array<ShippingRatePriceTier>;
-};
-
-export type ShippingRateInput = {
-  type: Scalars['String'];
-};
-
-export type ShippingRateInputType = {
-  type: Scalars['String'];
-};
-
-export type ShippingRatePriceTier = {
-  type: Scalars['String'];
-};
-
-export type ShoppingList = Versioned & {
-  key?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales: Array<LocalizedString>;
-  description?: Maybe<Scalars['String']>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  slug?: Maybe<Scalars['String']>;
-  slugAllLocales?: Maybe<Array<LocalizedString>>;
-  customerRef?: Maybe<Reference>;
-  customer?: Maybe<Customer>;
-  storeRef?: Maybe<KeyReference>;
-  store?: Maybe<Store>;
-  anonymousId?: Maybe<Scalars['String']>;
-  lineItems: Array<ShoppingListLineItem>;
-  textLineItems: Array<TextLineItem>;
-  custom?: Maybe<CustomFieldsType>;
-  deleteDaysAfterLastModification?: Maybe<Scalars['Int']>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-export type ShoppingListNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type ShoppingListDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type ShoppingListSlugArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type ShoppingListLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type ShoppingListLimitsProjection = {
-  lineItems: Limit;
-  textLineItems: Limit;
-  total: ShoppingListLimitWithCurrent;
-};
-
-export type ShoppingListLineItem = {
-  id: Scalars['String'];
-  productId: Scalars['String'];
-  variantId?: Maybe<Scalars['Int']>;
-  productTypeRef: Reference;
-  productType: ProductTypeDefinition;
-  quantity: Scalars['Int'];
-  addedAt: Scalars['DateTime'];
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales: Array<LocalizedString>;
-  deactivatedAt?: Maybe<Scalars['DateTime']>;
-  custom?: Maybe<CustomFieldsType>;
-  productSlug?: Maybe<Scalars['String']>;
-  productSlugAllLocales?: Maybe<Array<LocalizedString>>;
-  variant?: Maybe<ProductVariant>;
-};
-
-
-export type ShoppingListLineItemNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type ShoppingListLineItemProductSlugArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-/** Fields to access shopping lists. Includes direct access to a single list and searching for shopping lists. */
-export type ShoppingListQueryInterface = {
-  shoppingList?: Maybe<ShoppingList>;
-  shoppingLists: ShoppingListQueryResult;
-};
-
-
-/** Fields to access shopping lists. Includes direct access to a single list and searching for shopping lists. */
-export type ShoppingListQueryInterfaceShoppingListArgs = {
-  id?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-};
-
-
-/** Fields to access shopping lists. Includes direct access to a single list and searching for shopping lists. */
-export type ShoppingListQueryInterfaceShoppingListsArgs = {
-  where?: Maybe<Scalars['String']>;
-  sort?: Maybe<Array<Scalars['String']>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type ShoppingListQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<ShoppingList>;
-};
-
-export type ShoppingListsConfiguration = {
-  deleteDaysAfterLastModification?: Maybe<Scalars['Int']>;
-};
-
-/** Describes how this discount interacts with other discounts */
-export enum StackingMode {
-  /** Don’t apply any more matching discounts after this one. */
-  StopAfterThisDiscount = 'StopAfterThisDiscount',
-  /** Default. Continue applying other matching discounts after applying this one. */
-  Stacking = 'Stacking'
-}
-
-export type StagedOrderUpdateActionOutput = {
-  type: Scalars['String'];
-};
-
-/** [State](https://docs.commercetools.com/api/projects/states) */
-export type State = Versioned & {
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  key?: Maybe<Scalars['String']>;
-  type: StateType;
-  roles: Array<StateRole>;
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales?: Maybe<Array<LocalizedString>>;
-  description?: Maybe<Scalars['String']>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  builtIn: Scalars['Boolean'];
-  transitionsRef?: Maybe<Array<Reference>>;
-  transitions?: Maybe<Array<State>>;
-  initial: Scalars['Boolean'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/** [State](https://docs.commercetools.com/api/projects/states) */
-export type StateNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-/** [State](https://docs.commercetools.com/api/projects/states) */
-export type StateDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type StateQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<State>;
-};
-
-export enum StateRole {
-  Return = 'Return',
-  ReviewIncludedInStatistics = 'ReviewIncludedInStatistics'
-}
-
-export enum StateType {
-  OrderState = 'OrderState',
-  ProductState = 'ProductState',
-  ReviewState = 'ReviewState',
-  PaymentState = 'PaymentState',
-  LineItemState = 'LineItemState'
-}
-
-/** [BETA] Stores allow defining different contexts for a project. */
-export type Store = Versioned & {
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  key: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales?: Maybe<Array<LocalizedString>>;
-  languages?: Maybe<Array<Scalars['Locale']>>;
-  distributionChannelsRef: Array<Reference>;
-  distributionChannels: Array<Channel>;
-  supplyChannelsRef: Array<Reference>;
-  supplyChannels: Array<Channel>;
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  custom?: Maybe<CustomFieldsType>;
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/** [BETA] Stores allow defining different contexts for a project. */
-export type StoreNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type StoreLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type StoreLimitsProjection = {
-  total: StoreLimitWithCurrent;
-};
-
-export type StoreQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Store>;
-};
-
-export type SubRate = {
-  name: Scalars['String'];
-  amount: Scalars['Float'];
-};
-
-export type Subscription = Versioned & {
-  key?: Maybe<Scalars['String']>;
-  destination: Destination;
-  messages: Array<MessageSubscription>;
-  changes: Array<ChangeSubscription>;
-  format: NotificationFormat;
-  status: SubscriptionHealthStatus;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export enum SubscriptionHealthStatus {
-  TemporaryError = 'TemporaryError',
-  ConfigurationErrorDeliveryStopped = 'ConfigurationErrorDeliveryStopped',
-  ConfigurationError = 'ConfigurationError',
-  Healthy = 'Healthy'
-}
-
-export type SubscriptionQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Subscription>;
-};
-
-export type SuggestResult = {
-  searchKeywords: Array<SuggestResultEntry>;
-};
-
-export type SuggestResultEntry = {
-  locale: Scalars['Locale'];
-  suggestions: Array<Suggestion>;
-};
-
-export type SuggestTokenizer = {
-  type: Scalars['String'];
-};
-
-export type Suggestion = {
-  text: Scalars['String'];
-};
-
-/** Stores information about order synchronization activities (like export or import). */
-export type SyncInfo = {
-  channelRef: Reference;
-  channel?: Maybe<Channel>;
-  externalId?: Maybe<Scalars['String']>;
-  syncedAt: Scalars['DateTime'];
-};
-
-export enum TaxCalculationMode {
-  /**
-   * This calculation mode calculates the taxes on the unit price before multiplying with the quantity.
-   * E.g. `($1.08 * 1.19 = $1.2852 -> $1.29 rounded) * 3 = $3.87`
-   */
-  UnitPriceLevel = 'UnitPriceLevel',
-  /**
-   * Default. This calculation mode calculates the taxes after the unit price is multiplied with the quantity.
-   * E.g. `($1.08 * 3 = $3.24) * 1.19 = $3.8556 -> $3.86 rounded`
-   */
-  LineItemLevel = 'LineItemLevel'
-}
-
-/** Tax Categories define how products are to be taxed in different countries. */
-export type TaxCategory = Versioned & {
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  rates: Array<TaxRate>;
-  key?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export type TaxCategoryLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type TaxCategoryLimitsProjection = {
-  total: TaxCategoryLimitWithCurrent;
-};
-
-export type TaxCategoryQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<TaxCategory>;
-};
-
-export enum TaxMode {
-  /** No taxes are added to the cart. */
-  Disabled = 'Disabled',
-  /**
-   * The tax amounts and the tax rates as well as the tax portions are set externally per ExternalTaxAmountDraft.
-   * A cart with this tax mode can only be ordered if the cart itself and all line items, all custom line items and
-   * the shipping method have an external tax amount and rate set
-   */
-  ExternalAmount = 'ExternalAmount',
-  /**
-   * The tax rates are set externally per ExternalTaxRateDraft. A cart with this tax mode can only be ordered if all
-   * line items, all custom line items and the shipping method have an external tax rate set. The totalNet and
-   * totalGross as well as the taxPortions fields are calculated by the platform according to the taxRoundingMode.
-   */
-  External = 'External',
-  /**
-   * The tax rates are selected by the platform from the TaxCategories based on the cart shipping address.
-   * The totalNet and totalGross as well as the taxPortions fields are calculated by the platform according to the
-   * taxRoundingMode.
-   */
-  Platform = 'Platform'
-}
-
-/**
- * Represents the portions that sum up to the totalGross field of a TaxedPrice. The portions are calculated
- * from the TaxRates. If a tax rate has SubRates, they are used and can be identified by name. Tax portions
- * from line items that have the same rate and name will be accumulated to the same tax portion.
- */
-export type TaxPortion = {
-  rate: Scalars['Float'];
-  amount: Money;
-  name?: Maybe<Scalars['String']>;
-};
-
-export type TaxRate = {
-  name: Scalars['String'];
-  amount: Scalars['Float'];
-  includedInPrice: Scalars['Boolean'];
-  country: Scalars['Country'];
-  state?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
-  subRates: Array<SubRate>;
-};
-
-export type TaxedItemPrice = {
-  totalNet: Money;
-  totalGross: Money;
-};
-
-export type TaxedPrice = {
-  totalNet: Money;
-  totalGross: Money;
-  taxPortions: Array<TaxPortion>;
-};
-
-export type TextAttributeDefinitionType = AttributeDefinitionType & {
-  name: Scalars['String'];
-};
-
-/** UI hint telling what kind of edit control should be displayed for a text attribute. */
-export enum TextInputHint {
-  SingleLine = 'SingleLine',
-  MultiLine = 'MultiLine'
-}
-
-export type TextLineItem = {
-  id: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  nameAllLocales: Array<LocalizedString>;
-  description?: Maybe<Scalars['String']>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  quantity: Scalars['Int'];
-  custom?: Maybe<CustomFieldsType>;
-  addedAt: Scalars['DateTime'];
-};
-
-
-export type TextLineItemNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-export type TextLineItemDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-export type TimeAttributeDefinitionType = AttributeDefinitionType & {
-  name: Scalars['String'];
-};
-
-export type TrackingData = {
-  trackingId?: Maybe<Scalars['String']>;
-  carrier?: Maybe<Scalars['String']>;
-  provider?: Maybe<Scalars['String']>;
-  providerTransaction?: Maybe<Scalars['String']>;
-  isReturn: Scalars['Boolean'];
-};
-
-export type Transaction = {
-  id: Scalars['String'];
-  timestamp?: Maybe<Scalars['DateTime']>;
-  type?: Maybe<TransactionType>;
-  amount: Money;
-  interactionId?: Maybe<Scalars['String']>;
-  state: TransactionState;
-};
-
-export enum TransactionState {
-  Failure = 'Failure',
-  Success = 'Success',
-  Pending = 'Pending',
-  Initial = 'Initial'
-}
-
-export enum TransactionType {
-  Chargeback = 'Chargeback',
-  Refund = 'Refund',
-  Charge = 'Charge',
-  CancelAuthorization = 'CancelAuthorization',
-  Authorization = 'Authorization'
-}
-
-export type Trigger = {
-  resourceTypeId: Scalars['String'];
-  actions: Array<ActionType>;
-};
-
-export type Type = {
-  typeRef: Reference;
-  type?: Maybe<TypeDefinition>;
-};
-
-/** Types define the structure of custom fields which can be attached to different entities throughout the platform. */
-export type TypeDefinition = Versioned & {
-  key: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  nameAllLocales: Array<LocalizedString>;
-  descriptionAllLocales?: Maybe<Array<LocalizedString>>;
-  resourceTypeIds: Array<Scalars['String']>;
-  fieldDefinitions: Array<FieldDefinition>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/** Types define the structure of custom fields which can be attached to different entities throughout the platform. */
-export type TypeDefinitionNameArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-/** Types define the structure of custom fields which can be attached to different entities throughout the platform. */
-export type TypeDefinitionDescriptionArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-
-/** Types define the structure of custom fields which can be attached to different entities throughout the platform. */
-export type TypeDefinitionFieldDefinitionsArgs = {
-  includeNames?: Maybe<Array<Scalars['String']>>;
-  excludeNames?: Maybe<Array<Scalars['String']>>;
-};
-
-export type TypeDefinitionQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<TypeDefinition>;
-};
-
-export type UserProvidedIdentifiers = {
-  key?: Maybe<Scalars['String']>;
-  orderNumber?: Maybe<Scalars['String']>;
-  customerNumber?: Maybe<Scalars['String']>;
-  externalId?: Maybe<Scalars['String']>;
-  sku?: Maybe<Scalars['String']>;
-  slug?: Maybe<Scalars['String']>;
-  slugAllLocales?: Maybe<Array<LocalizedString>>;
-};
-
-
-export type UserProvidedIdentifiersSlugArgs = {
-  locale?: Maybe<Scalars['Locale']>;
-  acceptLanguage?: Maybe<Array<Scalars['Locale']>>;
-};
-
-/** Versioned object have an ID and version and modification. Every update of this object changes it's version. */
-export type Versioned = {
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-
-/** Zones allow defining ShippingRates for specific Locations. */
-export type Zone = Versioned & {
-  name: Scalars['String'];
-  key?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  locations: Array<Location>;
-  id: Scalars['String'];
-  version: Scalars['Long'];
-  createdAt: Scalars['DateTime'];
-  lastModifiedAt: Scalars['DateTime'];
-  createdBy?: Maybe<Initiator>;
-  lastModifiedBy?: Maybe<Initiator>;
-};
-
-export type ZoneLimitWithCurrent = LimitWithCurrent & {
-  limit?: Maybe<Scalars['Long']>;
-  current: Scalars['Long'];
-};
-
-export type ZoneLimitsProjection = {
-  total: ZoneLimitWithCurrent;
-};
-
-export type ZoneQueryResult = {
-  offset: Scalars['Int'];
-  count: Scalars['Int'];
-  total: Scalars['Long'];
-  results: Array<Zone>;
-};
-
-export type ZoneRate = {
-  shippingRates: Array<ShippingRate>;
-  zoneRef?: Maybe<Reference>;
-  zone?: Maybe<Zone>;
-};
-
-
+export type ProductPricesFragment = (
+  Pick<Product, 'id' | 'version'>
+  & { masterData: { current?: Maybe<(
+      Pick<ProductData, 'name'>
+      & { allVariants: Array<(
+        Pick<ProductVariant, 'id' | 'sku'>
+        & { attributesRaw: Array<Pick<RawProductAttribute, 'name' | 'value'>>, prices?: Maybe<Array<(
+          Pick<ProductPrice, 'id' | 'validFrom' | 'validUntil'>
+          & { value: Pick<HighPrecisionMoney, 'type' | 'currencyCode' | 'centAmount' | 'fractionDigits'> | Pick<Money, 'type' | 'currencyCode' | 'centAmount' | 'fractionDigits'>, channel?: Maybe<Pick<Channel, 'id' | 'name'>> }
+        )>> }
+      )> }
+    )> } }
+);
 
 export type AddProductBundleMutationVariables = Exact<{
   name: Scalars['String'];
@@ -10879,6 +10894,16 @@ export type SetProductAttributesMutationVariables = Exact<{
 
 
 export type SetProductAttributesMutation = { updateProduct?: Maybe<Pick<Product, 'id' | 'version'>> };
+
+export type SetProductPricesMutationVariables = Exact<{
+  id?: Maybe<Scalars['String']>;
+  version: Scalars['Long'];
+  actions: Array<ProductUpdateAction> | ProductUpdateAction;
+  locale?: Maybe<Scalars['Locale']>;
+}>;
+
+
+export type SetProductPricesMutation = { updateProduct?: Maybe<ProductPricesFragment> };
 
 export type GetCategoriesQueryVariables = Exact<{
   locale?: Maybe<Scalars['Locale']>;
@@ -10900,19 +10925,7 @@ export type GetProductPricesQueryVariables = Exact<{
 }>;
 
 
-export type GetProductPricesQuery = { product?: Maybe<(
-    Pick<Product, 'id' | 'version'>
-    & { masterData: { current?: Maybe<(
-        Pick<ProductData, 'name'>
-        & { allVariants: Array<(
-          Pick<ProductVariant, 'id' | 'sku'>
-          & { attributesRaw: Array<Pick<RawProductAttribute, 'name' | 'value'>>, prices?: Maybe<Array<(
-            Pick<ProductPrice, 'id' | 'validFrom' | 'validUntil'>
-            & { value: Pick<HighPrecisionMoney, 'type' | 'currencyCode' | 'centAmount' | 'fractionDigits'> | Pick<Money, 'type' | 'currencyCode' | 'centAmount' | 'fractionDigits'>, channel?: Maybe<Pick<Channel, 'id' | 'name'>> }
-          )>> }
-        )> }
-      )> } }
-  )> };
+export type GetProductPricesQuery = { product?: Maybe<ProductPricesFragment> };
 
 export type GetProductTypeDefinitionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -10958,7 +10971,40 @@ export type GetVariantsQuery = { products: (
     )> }
   ) };
 
-
+export const ProductPricesFragmentDoc = gql`
+    fragment ProductPrices on Product {
+  id
+  version
+  masterData {
+    current {
+      name(locale: $locale)
+      allVariants {
+        id
+        sku
+        attributesRaw(includeNames: ["Storage", "ColorDescription"]) {
+          name
+          value
+        }
+        prices {
+          id
+          value {
+            type
+            currencyCode
+            centAmount
+            fractionDigits
+          }
+          channel {
+            id
+            name(locale: $locale)
+          }
+          validFrom
+          validUntil
+        }
+      }
+    }
+  }
+}
+    `;
 export const AddProductBundleDocument = gql`
     mutation AddProductBundle($name: String!, $slug: String!, $productReferences: String!) {
   createProduct(
@@ -10991,7 +11037,8 @@ export type AddProductBundleMutationFn = Apollo.MutationFunction<AddProductBundl
  * });
  */
 export function useAddProductBundleMutation(baseOptions?: Apollo.MutationHookOptions<AddProductBundleMutation, AddProductBundleMutationVariables>) {
-        return Apollo.useMutation<AddProductBundleMutation, AddProductBundleMutationVariables>(AddProductBundleDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddProductBundleMutation, AddProductBundleMutationVariables>(AddProductBundleDocument, options);
       }
 export type AddProductBundleMutationHookResult = ReturnType<typeof useAddProductBundleMutation>;
 export type AddProductBundleMutationResult = Apollo.MutationResult<AddProductBundleMutation>;
@@ -11031,11 +11078,48 @@ export type SetProductAttributesMutationFn = Apollo.MutationFunction<SetProductA
  * });
  */
 export function useSetProductAttributesMutation(baseOptions?: Apollo.MutationHookOptions<SetProductAttributesMutation, SetProductAttributesMutationVariables>) {
-        return Apollo.useMutation<SetProductAttributesMutation, SetProductAttributesMutationVariables>(SetProductAttributesDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetProductAttributesMutation, SetProductAttributesMutationVariables>(SetProductAttributesDocument, options);
       }
 export type SetProductAttributesMutationHookResult = ReturnType<typeof useSetProductAttributesMutation>;
 export type SetProductAttributesMutationResult = Apollo.MutationResult<SetProductAttributesMutation>;
 export type SetProductAttributesMutationOptions = Apollo.BaseMutationOptions<SetProductAttributesMutation, SetProductAttributesMutationVariables>;
+export const SetProductPricesDocument = gql`
+    mutation setProductPrices($id: String, $version: Long!, $actions: [ProductUpdateAction!]!, $locale: Locale) {
+  updateProduct(id: $id, version: $version, actions: $actions) {
+    ...ProductPrices
+  }
+}
+    ${ProductPricesFragmentDoc}`;
+export type SetProductPricesMutationFn = Apollo.MutationFunction<SetProductPricesMutation, SetProductPricesMutationVariables>;
+
+/**
+ * __useSetProductPricesMutation__
+ *
+ * To run a mutation, you first call `useSetProductPricesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetProductPricesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setProductPricesMutation, { data, loading, error }] = useSetProductPricesMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      version: // value for 'version'
+ *      actions: // value for 'actions'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useSetProductPricesMutation(baseOptions?: Apollo.MutationHookOptions<SetProductPricesMutation, SetProductPricesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetProductPricesMutation, SetProductPricesMutationVariables>(SetProductPricesDocument, options);
+      }
+export type SetProductPricesMutationHookResult = ReturnType<typeof useSetProductPricesMutation>;
+export type SetProductPricesMutationResult = Apollo.MutationResult<SetProductPricesMutation>;
+export type SetProductPricesMutationOptions = Apollo.BaseMutationOptions<SetProductPricesMutation, SetProductPricesMutationVariables>;
 export const GetCategoriesDocument = gql`
     query getCategories($locale: Locale, $where: String) {
   categories(limit: 500, where: $where) {
@@ -11071,10 +11155,12 @@ export const GetCategoriesDocument = gql`
  * });
  */
 export function useGetCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-        return Apollo.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
       }
 export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-          return Apollo.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
         }
 export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
 export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
@@ -11082,39 +11168,10 @@ export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, Ge
 export const GetProductPricesDocument = gql`
     query getProductPrices($locale: Locale, $id: String) {
   product(id: $id) {
-    id
-    version
-    masterData {
-      current {
-        name(locale: $locale)
-        allVariants {
-          id
-          sku
-          attributesRaw(includeNames: ["Storage", "ColorDescription"]) {
-            name
-            value
-          }
-          prices {
-            id
-            value {
-              type
-              currencyCode
-              centAmount
-              fractionDigits
-            }
-            channel {
-              id
-              name(locale: $locale)
-            }
-            validFrom
-            validUntil
-          }
-        }
-      }
-    }
+    ...ProductPrices
   }
 }
-    `;
+    ${ProductPricesFragmentDoc}`;
 
 /**
  * __useGetProductPricesQuery__
@@ -11134,10 +11191,12 @@ export const GetProductPricesDocument = gql`
  * });
  */
 export function useGetProductPricesQuery(baseOptions?: Apollo.QueryHookOptions<GetProductPricesQuery, GetProductPricesQueryVariables>) {
-        return Apollo.useQuery<GetProductPricesQuery, GetProductPricesQueryVariables>(GetProductPricesDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProductPricesQuery, GetProductPricesQueryVariables>(GetProductPricesDocument, options);
       }
 export function useGetProductPricesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductPricesQuery, GetProductPricesQueryVariables>) {
-          return Apollo.useLazyQuery<GetProductPricesQuery, GetProductPricesQueryVariables>(GetProductPricesDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProductPricesQuery, GetProductPricesQueryVariables>(GetProductPricesDocument, options);
         }
 export type GetProductPricesQueryHookResult = ReturnType<typeof useGetProductPricesQuery>;
 export type GetProductPricesLazyQueryHookResult = ReturnType<typeof useGetProductPricesLazyQuery>;
@@ -11172,10 +11231,12 @@ export const GetProductTypeDefinitionsDocument = gql`
  * });
  */
 export function useGetProductTypeDefinitionsQuery(baseOptions?: Apollo.QueryHookOptions<GetProductTypeDefinitionsQuery, GetProductTypeDefinitionsQueryVariables>) {
-        return Apollo.useQuery<GetProductTypeDefinitionsQuery, GetProductTypeDefinitionsQueryVariables>(GetProductTypeDefinitionsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProductTypeDefinitionsQuery, GetProductTypeDefinitionsQueryVariables>(GetProductTypeDefinitionsDocument, options);
       }
 export function useGetProductTypeDefinitionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductTypeDefinitionsQuery, GetProductTypeDefinitionsQueryVariables>) {
-          return Apollo.useLazyQuery<GetProductTypeDefinitionsQuery, GetProductTypeDefinitionsQueryVariables>(GetProductTypeDefinitionsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProductTypeDefinitionsQuery, GetProductTypeDefinitionsQueryVariables>(GetProductTypeDefinitionsDocument, options);
         }
 export type GetProductTypeDefinitionsQueryHookResult = ReturnType<typeof useGetProductTypeDefinitionsQuery>;
 export type GetProductTypeDefinitionsLazyQueryHookResult = ReturnType<typeof useGetProductTypeDefinitionsLazyQuery>;
@@ -11219,10 +11280,12 @@ export const GetProductsDocument = gql`
  * });
  */
 export function useGetProductsQuery(baseOptions?: Apollo.QueryHookOptions<GetProductsQuery, GetProductsQueryVariables>) {
-        return Apollo.useQuery<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, options);
       }
 export function useGetProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductsQuery, GetProductsQueryVariables>) {
-          return Apollo.useLazyQuery<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, options);
         }
 export type GetProductsQueryHookResult = ReturnType<typeof useGetProductsQuery>;
 export type GetProductsLazyQueryHookResult = ReturnType<typeof useGetProductsLazyQuery>;
@@ -11251,10 +11314,12 @@ export const GetProjectDocument = gql`
  * });
  */
 export function useGetProjectQuery(baseOptions?: Apollo.QueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
-        return Apollo.useQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, options);
       }
 export function useGetProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectQuery, GetProjectQueryVariables>) {
-          return Apollo.useLazyQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProjectQuery, GetProjectQueryVariables>(GetProjectDocument, options);
         }
 export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
 export type GetProjectLazyQueryHookResult = ReturnType<typeof useGetProjectLazyQuery>;
@@ -11298,10 +11363,12 @@ export const GetVariantsDocument = gql`
  * });
  */
 export function useGetVariantsQuery(baseOptions?: Apollo.QueryHookOptions<GetVariantsQuery, GetVariantsQueryVariables>) {
-        return Apollo.useQuery<GetVariantsQuery, GetVariantsQueryVariables>(GetVariantsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetVariantsQuery, GetVariantsQueryVariables>(GetVariantsDocument, options);
       }
 export function useGetVariantsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetVariantsQuery, GetVariantsQueryVariables>) {
-          return Apollo.useLazyQuery<GetVariantsQuery, GetVariantsQueryVariables>(GetVariantsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetVariantsQuery, GetVariantsQueryVariables>(GetVariantsDocument, options);
         }
 export type GetVariantsQueryHookResult = ReturnType<typeof useGetVariantsQuery>;
 export type GetVariantsLazyQueryHookResult = ReturnType<typeof useGetVariantsLazyQuery>;
