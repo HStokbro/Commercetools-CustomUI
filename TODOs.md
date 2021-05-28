@@ -24,41 +24,21 @@
 - OK - Build redux setup
 - OK - Build types for reference state
 - OK - Remove reference types - Not using it anyway
-- Build example for updating several variant prices at once (With price pr. channel)
-- Build price handler example
-  - OK - Products view
-    - Add indicator for no prices
-    - OK - Can open Price view
-  - Price view
-    - OK - References
-      - OK - Multi select field to make references
-      - OK - Can open Reference view
-      - OK - Can remove references
-    - Price fields
-      - Variant price fields (For without references)
-      - Fields for matrix of variants & reference variants
-      - Update when references are updated
-  - Reference view
-    - OK - Multi select product list
-    - Preselect the current references
-  - Save custom object with references and prices
-  - Make reference to custom object on product
-  - How to delete prices when deleting products?
-- Build quick variant builder example
-  - Vælg produkt
-  - Udfyld farver med komma, udfyld storage
+- Build POC example for updating several variant prices at once (With price pr. channel)
+  - OK - Build money input component to hide away field & money complexity
+  - OK - Update prices in redux on money input blur?
+  - OK - Update ProductPrices after saving new prices
 - Init redux state at route start component. Remove data used in other components
-- Hosting somewhere
-- Add custom app to trial
-- Investigate Custom Objects (Field with reference to key value object)
-- Make util for slug escaping
-- Plan UI & styling
+- UI & styling
 - Build routes and menu
 - Make a reusable wrapper component for loading data.
   - Send it an array of lazy query hooks to handle, along with where to store the result
   - Component takes care of state, ui, errors
+- Setup hosting for custom app
+- Add custom app to Merchant Center
   
 # Note - Things to look out for
 
 - Slug and variant key have to be unique
-- Version no. is only updated at initial load
+- SimpleMoneyInput component does not handle currencies. Remove "currencies" from MoneyInput to disable currency being editable
+- Weird bug: Tabbing from input to input does not work when Chrome Developer Tools is open
