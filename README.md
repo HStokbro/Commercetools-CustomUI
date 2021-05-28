@@ -204,4 +204,6 @@ Use SimpleMoneyInput for making money format handling transparent.
 
 ## That's it
 
-Have fun building a custom app in CommerceTools
+Good luck
+
+<img alt="I am rooting for you" src="https://media.giphy.com/media/12XDYvMJNcmLgQ/giphy.gif">
