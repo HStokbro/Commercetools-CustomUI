@@ -1,3 +1,6 @@
+# GraphiQL query variables:
+# { "name": "bundle-iPhone 12 Pro", "slug": "slug-iPhone-12-Pro", productReferences: "[{\"id\":\"fcc5e2ea-30e1-4cb3-8808-71ed1f0c41dd\",\"typeId\":\"product\"}]" }
+
 mutation AddProductBundle($name: String!, $slug: String!, $productReferences: String!) {
   createProduct(
     draft: {

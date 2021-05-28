@@ -1,3 +1,6 @@
+# GraphiQL query variables:
+# { "locale": "da", "where": "id=\"e4627167-c8f4-4abe-959f-6e780f5cae3d\"" }
+
 query getVariants($locale: Locale, $where: String) {
   products(limit: 500, where: $where) {
     total

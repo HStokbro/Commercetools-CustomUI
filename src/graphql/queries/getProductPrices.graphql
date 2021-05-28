@@ -1,34 +1,9 @@
+# GraphiQL query variables:
+# { "locale": "da", "id": "e4627167-c8f4-4abe-959f-6e780f5cae3d"}
+
+#import "../fragments/productPrices.graphql"
 query getProductPrices($locale: Locale, $id: String) {
   product(id: $id) {
-    id
-    version
-    masterData {
-      current {
-        name(locale: $locale)
-        allVariants {
-          id
-          sku
-          attributesRaw(includeNames: ["Storage", "ColorDescription"]) {
-            name
-            value
-          }
-          prices {
-            id
-            value {
-              type
-              currencyCode
-              centAmount
-              fractionDigits
-            }
-            channel {
-              id
-              name(locale: $locale)
-            }
-            validFrom
-            validUntil
-          }
-        }
-      }
-    }
+    ...ProductPrices
   }
 }

@@ -1,3 +1,6 @@
+# GraphiQL query variables:
+# { "id": "740647cb-b07d-4672-b96e-77141699e8a8", "version": 1226, "fieldName": "product-bundle-data", "value": "\"[{\\\"name\\\":\\\"Extra simkort\\\"}]\""}
+
 mutation setProductAttributes($id: String, $version: Long!, $fieldName: String!, $value: String!) {
   updateProduct(
     id: $id

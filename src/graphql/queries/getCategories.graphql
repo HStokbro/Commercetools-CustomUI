@@ -1,3 +1,6 @@
+# GraphiQL query variables:
+# { "locale": "da", "where": "parent is not defined"}
+
 query getCategories($locale: Locale, $where: String) {
   categories(limit: 500, where: $where) {
     total
