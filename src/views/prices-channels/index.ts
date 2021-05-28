@@ -1,1 +1,1 @@
-export { default } from './prices-channels-start';
+export { default } from './prices-start';

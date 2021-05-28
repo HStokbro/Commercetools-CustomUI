@@ -3,12 +3,12 @@ import {
   GetProjectQuery,
   GetProductsQuery,
   GetProductTypeDefinitionsQuery,
-  GetProductPricesQuery,
   Maybe,
   Product,
   ProductData,
   ProductTypeDefinition,
   Category,
+  ProductPricesFragment,
 } from './generated/graphql';
 
 // Copied from GetProductsQuery results in graphql.tsx
@@ -42,7 +42,7 @@ export type ReduxState = {
   productsQuery: GetProductsQuery;
   productTypesQuery: GetProductTypeDefinitionsQuery;
   categoriesQuery: GetCategoriesQuery;
-  pricesQuery: GetProductPricesQuery;
+  productPrices: ProductPricesFragment;
 
   selectedProduct: ListProduct;
 };

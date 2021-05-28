@@ -1,24 +1,31 @@
+/**
+ * Handles loading prices
+ */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingSpinner from '@commercetools-uikit/loading-spinner';
-import { setProductPricesQuery } from '../../redux/customAppPrices';
+import { setProductPrices } from '../../redux/customAppPrices';
 import useNotify from '../../utils/useNotify';
 import { ListProduct, ReduxState } from '../../types';
 import {
   useGetProductPricesLazyQuery,
   GetProductPricesQueryVariables,
-  GetProductPricesQuery,
+  ProductPricesFragment,
 } from '../../generated/graphql';
 import { GQLQueryOptions, GQLCurrentLocale } from '../../utils/gqlHelpers';
-import PricesChannelsUpdatePrices from './prices-channels-update-prices';
+import PricesUpdate from './prices-update';
 
-const PricesChannelsLoadPrices = (): JSX.Element => {
+const PricesLoad = (): JSX.Element => {
   const [isDataFetchStarted, setIsDataFetchStarted] = useState<boolean>(false);
   const locale = GQLCurrentLocale();
   const dispatch = useDispatch();
 
-  const selectedProduct: ListProduct = useSelector((state) => (state.customAppPrices as ReduxState)?.selectedProduct);
-  const pricesQuery: GetProductPricesQuery = useSelector((state) => (state.customAppPrices as ReduxState)?.pricesQuery);
+  const selectedProduct: ListProduct = useSelector(
+    (state: any) => (state.customAppPrices as ReduxState)?.selectedProduct,
+  );
+  const productPrices: ProductPricesFragment = useSelector(
+    (state: any) => (state.customAppPrices as ReduxState)?.productPrices,
+  );
 
   // Setup data fetching
   const [getPricesQuery, pricesState] = useGetProductPricesLazyQuery(GQLQueryOptions);
@@ -43,17 +50,17 @@ const PricesChannelsLoadPrices = (): JSX.Element => {
   // Storing data in redux
   useEffect(() => {
     if (isDataFetchStarted && !pricesState.loading && !pricesState.error) {
-      dispatch(setProductPricesQuery(pricesState.data));
+      dispatch(setProductPrices(pricesState.data.product));
     }
   }, [pricesState.loading]);
 
   // UI
   if (pricesState.error) return <>An error occurred</>;
-  if (pricesState.loading) return <LoadingSpinner size="s">Loading prices</LoadingSpinner>;
-  if (!pricesQuery) return null;
+  if (pricesState.loading) return <LoadingSpinner scale="s">Loading prices</LoadingSpinner>;
+  if (!productPrices) return null;
 
-  return <PricesChannelsUpdatePrices />;
+  return <PricesUpdate />;
 };
 
-PricesChannelsLoadPrices.displayName = 'PricesChannelsLoadPrices';
-export default PricesChannelsLoadPrices;
+PricesLoad.displayName = 'PricesLoad';
+export default PricesLoad;

@@ -1,18 +1,24 @@
+/**
+ * Handles listing products and product selection
+ */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { InfoModalPage } from '@commercetools-frontend/application-components';
+import { CustomFormModalPage, InfoModalPage } from '@commercetools-frontend/application-components';
 import { setSelectedProduct } from '../../redux/customAppPrices';
 import ProductsTable from '../../components/products-table';
 import { ListProduct, ReduxState } from '../../types';
-import PricesChannelsLoadPrices from './prices-channels-load-prices';
+import PricesLoad from './prices-load';
+import MoneyInput from '@commercetools-uikit/money-input';
+import TextInput from '@commercetools-uikit/text-input';
 
-const PricesChannelsSelectProduct = (): JSX.Element => {
+const PricesSelectProduct = (): JSX.Element => {
   const dispatch = useDispatch();
 
-  const products = useSelector((state) => (state.customAppPrices as ReduxState)?.productsQuery.products.results);
-  const selectedProduct = useSelector((state) => (state.customAppPrices as ReduxState)?.selectedProduct);
+  const products = useSelector((state: any) => (state.customAppPrices as ReduxState)?.productsQuery.products.results);
+  const selectedProduct = useSelector((state: any) => (state.customAppPrices as ReduxState)?.selectedProduct);
   const hasSelectedProduct = !!selectedProduct;
 
+  // UI
   return (
     <>
       <ProductsTable
@@ -30,11 +36,11 @@ const PricesChannelsSelectProduct = (): JSX.Element => {
         topBarCurrentPathLabel={selectedProduct?.masterData.current.name}
         topBarPreviousPathLabel="Back"
       >
-        <PricesChannelsLoadPrices />
+        <PricesLoad />
       </InfoModalPage>
     </>
   );
 };
 
-PricesChannelsSelectProduct.displayName = 'PricesChannelsSelectProduct';
-export default PricesChannelsSelectProduct;
+PricesSelectProduct.displayName = 'PricesSelectProduct';
+export default PricesSelectProduct;

@@ -7,7 +7,8 @@ import {
   GetProductsQuery,
   GetProductTypeDefinitionsQuery,
   GetProjectQuery,
-  GetProductPricesQuery,
+  BaseMoney,
+  ProductPricesFragment,
 } from '../generated/graphql';
 import { ListProduct, ReduxState } from '../types';
 
@@ -16,7 +17,7 @@ const initialState: ReduxState = {
   productsQuery: null,
   productTypesQuery: null,
   categoriesQuery: null,
-  pricesQuery: null,
+  productPrices: null,
 
   selectedProduct: null,
 };
@@ -42,15 +43,14 @@ const customAppPrices = createSlice({
     setSelectedProduct: (state, action: PayloadAction<ListProduct>) => {
       state.selectedProduct = action.payload;
     },
-    setProductPricesQuery: (state, action: PayloadAction<GetProductPricesQuery>) => {
-      state.pricesQuery = action.payload;
+    setProductPrices: (state, action: PayloadAction<ProductPricesFragment>) => {
+      state.productPrices = action.payload;
     },
-    setPrice: (state, action: PayloadAction<{ variantId: number; priceId: string; value: number }>) => {
-      const variant = state.pricesQuery.product.masterData.current.allVariants.find(
-        (x) => x.id === action.payload.variantId,
-      );
-      const price = variant.prices.find((x) => x.id === action.payload.priceId);
-      price.value.centAmount = action.payload.value;
+    updatePriceValue: (state, action: PayloadAction<{ variantId: number; priceId: string; priceValue: BaseMoney }>) => {
+      const price = state.productPrices.masterData.current.allVariants
+        .find((x) => x.id === action.payload.variantId)
+        .prices.find((y) => y.id === action.payload.priceId);
+      price.value = action.payload.priceValue;
     },
   },
 });
@@ -61,6 +61,7 @@ export const {
   setProductTypesQuery,
   setCategoriesQuery,
   setSelectedProduct,
-  setProductPricesQuery,
+  setProductPrices,
+  updatePriceValue,
 } = customAppPrices.actions;
 export default customAppPrices.reducer;

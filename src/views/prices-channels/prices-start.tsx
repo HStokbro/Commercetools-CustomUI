@@ -1,3 +1,6 @@
+/**
+ * Handles loading project and products
+ */
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Text from '@commercetools-uikit/text';
@@ -6,9 +9,9 @@ import { useGetProjectLazyQuery, useGetProductsLazyQuery, GetProductsQueryVariab
 import { GQLQueryOptions, GQLCurrentLocale } from '../../utils/gqlHelpers';
 import useNotify from '../../utils/useNotify';
 import { setProductsQuery, setProjectQuery } from '../../redux/customAppPrices';
-import PricesChannelsSelectProduct from './prices-channels-select-product';
+import PricesSelectProduct from './prices-select-product';
 
-const PricesChannelsStart = (): JSX.Element => {
+const PricesStart = (): JSX.Element => {
   const [isDataFetchStarted, setIsDataFetchStarted] = useState<boolean>(false);
   const [isDataReady, setIsDataReady] = useState<boolean>(false);
   const locale = GQLCurrentLocale();
@@ -56,17 +59,17 @@ const PricesChannelsStart = (): JSX.Element => {
     <>
       <Text.Headline as="h2">Prices</Text.Headline>
 
-      {isLoading && <LoadingSpinner size="s">Loading products</LoadingSpinner>}
+      {isLoading && <LoadingSpinner scale="s">Loading products</LoadingSpinner>}
 
       {isDataReady && (
         <>
           <Text.Body>Select a product</Text.Body>
-          <PricesChannelsSelectProduct />
+          <PricesSelectProduct />
         </>
       )}
     </>
   );
 };
 
-PricesChannelsStart.displayName = 'PricesChannelsStart';
-export default PricesChannelsStart;
+PricesStart.displayName = 'PricesStart';
+export default PricesStart;
