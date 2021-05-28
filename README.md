@@ -12,19 +12,23 @@ It's a Single Page App built with React (hooks), npm & GraphQL.
 
 All CommerceTools components and ui components are built in React, so it is not possible to switch to Vue for instance.
 
-What you get out of the box:
-- A way to embed custom functionality inside CommerceTools
+You get this out of the box:
+- A way to embed custom functionality inside CommerceTools Merchant Center
 - Single Sign On to merchant center
 - UI Component building blocks for everything you see in Merchant Center
 - Events for things like notifications
 - Menu setup & routing
+- Price format handling
+- GraphQL client
 - Internalization
 - Jest test setup
 - etc.
 
 ## Custom application with enhancements
 
-This is that CommerceTools template, but with a lot of enhancements:
+This code is built on top of that CommerceTools template, but with a lot of enhancements:
+
+Enhancements:
 - Linting setup
 - Prettier setup
 - Typescript setup
@@ -40,27 +44,26 @@ This is that CommerceTools template, but with a lot of enhancements:
   - logger.ts - a proxy for all logging, if we want to move where errors are stored.
   - useNotify - hooks to show notifications
   - usePrevious - standard hook to get last value (https://usehooks.com/usePrevious/) 
-- Examples
+- POC Examples
 - Documentation
 - etc.
 
 ## Being a developer
 
 These are the technologies you should know to build a Commercetools Custom App
-- React https://reactjs.org/
-- React Hooks https://reactjs.org/docs/hooks-intro.html
-- React Redux https://react-redux.js.org/
-- Redux toolkit https://redux-toolkit.js.org/
-- GraphQl https://graphql.org/
-- Typescript https://www.typescriptlang.org/
-- npm https://www.npmjs.com/
-- Intl https://formatjs.io/
-- Jest https://jestjs.io/
+- React - https://reactjs.org/
+- React Hooks - https://reactjs.org/docs/hooks-intro.html
+- React Redux - https://react-redux.js.org/
+- Redux toolkit - https://redux-toolkit.js.org/
+- GraphQL - https://graphql.org/
+- Typescript - https://www.typescriptlang.org/
+- npm - https://www.npmjs.com/
+- Jest - https://jestjs.io/
 
-Install these extensions in Chrome
-- React Developer Tools https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi
-- Redux devtools https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
-- Apollo https://chrome.google.com/webstore/detail/apollo-client-devtools/jdkknkkbebbapilgoeccciglkfbmbnfm
+Extensions in Chrome that will help you
+- React Developer Tools - https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi
+- Redux devtools - https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
+- Apollo - https://chrome.google.com/webstore/detail/apollo-client-devtools/jdkknkkbebbapilgoeccciglkfbmbnfm
 
 ## Installation
 
@@ -73,9 +76,10 @@ Navigate to http://localhost:3001
 
 ## Update GraphQL schema
 
-CommerceTools update the system all the time, so regularly. It is good to update the schema.
+CommerceTools update the system all the time, so you should update the schema regularly.
 
-1. Log into merchant center in a browser, and copy a token from the cookie `mcAccessToken`
+Update the schema
+1. Log into CT Merchant Center in a browser, and copy a token from the cookie `mcAccessToken`
 2. Paste the token into `codegen-generate-schema.yml`, as the `Cookie` header
 3. Run this script:
 
@@ -92,8 +96,8 @@ The `custom-application-config.json` is configured to use the HTTP APIs in the G
 Run the following command to run the tests:
 
 ```bash
-$ yarn test
-$ yarn test:watch
+$ npm test
+$ npm test:watch
 ```
 
 ## Build the production bundles
@@ -101,8 +105,10 @@ $ yarn test:watch
 Run the following command to build the production bundles with webpack:
 
 ```bash
-$ yarn build
+$ npm build
 ```
+
+There are no tests at the moment.
 
 ## Adjust the configuration for production
 
@@ -112,10 +118,10 @@ The `custom-application-config.json` has a `env.production` configuration object
 - Documentation - https://docs.commercetools.com/custom-applications/
 - The original template - https://github.com/commercetools/merchant-center-application-kit/tree/main/application-templates/starter
 - UI-kit - https://uikit.commercetools.com/
-- UI-components - https://docs.commercetools.com/custom-applications/components/application-shell
+- More UI-components - https://docs.commercetools.com/custom-applications/components/application-shell
 - GraphQL schema & typescript generator - https://graphql-code-generator.com/
 - GraphiQL (test GraphQL queries & mutations) - https://impex.europe-west1.gcp.commercetools.com/graphiql
-- - Try testing with a query from "graphql" folder. Every graphql file has example query variables in the comments at the top.
+  - Try testing with a query from "graphql" folder. Every graphql file has example query variables in the comments at the top.
 
 ## What happens at startup
 - index.js - renders EntryPoint component
@@ -173,7 +179,7 @@ Notes:
 - The fields do not work in ui, and there is no handling of data
 - This was made, when we thought prices would be stored in json in a custom field
 
-### POC Route - references (Loading with use of redux)
+### POC Route - references (Loading with redux)
 
 The focus here was to make POC for use of redux.
 
