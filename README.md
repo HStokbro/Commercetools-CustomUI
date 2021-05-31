@@ -10,23 +10,23 @@ CommerceTools has a small template for building Custom Apps [here](https://githu
 
 It's a Single Page App built with React (hooks), npm & GraphQL.
 
-All CommerceTools components and ui components are built in React, so it is not possible to switch to Vue for instance.
+All Commercetools components and ui components are built in React, so it is not possible to switch to Vue for instance.
 
 You get this out of the box:
-- A way to embed custom functionality inside CommerceTools Merchant Center
+- A way to embed custom functionality inside Commercetools Merchant Center
 - Single Sign On to merchant center
 - UI Component building blocks for everything you see in Merchant Center
 - Events for things like notifications
 - Menu setup & routing
 - Price format handling
-- GraphQL client
+- GraphQL client setup.
 - Internalization
 - Jest test setup
 - etc.
 
 ## Custom application with enhancements
 
-This code is built on top of that CommerceTools template, but with a lot of enhancements:
+This code is built on top of that Commercetools template, but with a lot of enhancements:
 
 Enhancements:
 - Linting setup
@@ -38,7 +38,7 @@ Enhancements:
   - Hooks for easy GraphQL querying and mutation. Just add some GraphQL in `graphql` folder, and you will get an auto generated hook to use in `generated/graphql.tsx`.
   - This auto generation script runs concurrently in `npm start`, so while developing graphql, it will update typescript and hooks instantly.
 - Apollo Client IDE setup for auto completion
-- Redux setup by injecting a reducer into an already setup CommerceTools Redux store
+- Redux setup by injecting a reducer into an already setup Commercetools Redux store
 - Utilities
   - gqlHelpers.ts - Query options and variable helpers to get locale, etc.
   - logger.ts - a proxy for all logging, if we want to move where errors are stored.
@@ -65,6 +65,15 @@ Extensions in Chrome that will help you
 - Redux devtools - https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
 - Apollo - https://chrome.google.com/webstore/detail/apollo-client-devtools/jdkknkkbebbapilgoeccciglkfbmbnfm
 
+### Access to Commercetools Merchant Center
+You should get access to Commercetools Merchant Center through one of your colleagues, who already have it.
+
+Get access to these projects:
+- CustomApp
+  - This is a trial, and could be expired, when you read this
+  - Two of the POC's specifically use custom fields. That are only in this project
+- "The customer"-development
+
 ## Installation
 
 ```bash
@@ -76,7 +85,7 @@ Navigate to http://localhost:3001
 
 ## Update GraphQL schema
 
-CommerceTools update the system all the time, so you should update the schema regularly.
+Commercetools update the system all the time, so you should update the schema regularly.
 
 Update the schema
 1. Log into CT Merchant Center in a browser, and copy a token from the cookie `mcAccessToken`
@@ -193,13 +202,31 @@ User selection in the view, saves the selected product to redux.
 
 ### POC Route - prices-channels
 
-This is the newest POC.
-
 The focus here was to update prices on several variants and for several channels.
 
-Uses and improves the use of redux.
+Prerequisites:
+- This was built for the `"The customer"-development` trial project, and relies on the product fields and structure in that project.
 
-Use SimpleMoneyInput for making money format handling transparent.
+Notes:
+- This is the newest POC, and the one you should build on.
+- Uses and improves the use of redux.
+- Use SimpleMoneyInput for making money format handling transparent.
+
+#### View PriceUpdate
+
+It can handle showing all variant prices, and you can update them all and save. 
+
+Functionality works but ui needs work.
+
+#### View PricesUpdateTable
+
+Below PriceUpdate view is PricesUpdateTable. 
+
+It can show a table with variant storages and linked channels.
+
+It can simulate a UI, where a user can add and remove time limited prices.
+
+UI and functionality needs work.
 
 
 ## That's it

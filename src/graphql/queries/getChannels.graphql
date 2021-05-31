@@ -1,0 +1,19 @@
+# GraphiQL query variables:
+# { "locale": "da", "where": "id in(\"7245a509-4b75-41e7-b82a-7e62101aec07\", \"712234f1-6509-40f5-a835-559f085d7d93\")"}
+
+query getChannels($locale: Locale, $where: String) {
+  channels(limit: 500, where: $where) {
+    total
+    results {
+      id
+      version
+      name(locale: $locale)
+      custom {
+        customFieldsRaw(includeNames: ["Products"]) {
+          name
+          value
+        }
+      }
+    }
+  }
+}

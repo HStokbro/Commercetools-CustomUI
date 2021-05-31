@@ -10919,6 +10919,20 @@ export type GetCategoriesQuery = { categories: (
     )> }
   ) };
 
+export type GetChannelsQueryVariables = Exact<{
+  locale?: Maybe<Scalars['Locale']>;
+  where?: Maybe<Scalars['String']>;
+}>;
+
+
+export type GetChannelsQuery = { channels: (
+    Pick<ChannelQueryResult, 'total'>
+    & { results: Array<(
+      Pick<Channel, 'id' | 'version' | 'name'>
+      & { custom?: Maybe<{ customFieldsRaw?: Maybe<Array<Pick<RawCustomField, 'name' | 'value'>>> }> }
+    )> }
+  ) };
+
 export type GetProductPricesQueryVariables = Exact<{
   locale?: Maybe<Scalars['Locale']>;
   id?: Maybe<Scalars['String']>;
@@ -10981,7 +10995,7 @@ export const ProductPricesFragmentDoc = gql`
       allVariants {
         id
         sku
-        attributesRaw(includeNames: ["Storage", "ColorDescription"]) {
+        attributesRaw(includeNames: ["Storage", "ColorDescription", "Subscriptions"]) {
           name
           value
         }
@@ -11165,6 +11179,53 @@ export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
 export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
 export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
+export const GetChannelsDocument = gql`
+    query getChannels($locale: Locale, $where: String) {
+  channels(limit: 500, where: $where) {
+    total
+    results {
+      id
+      version
+      name(locale: $locale)
+      custom {
+        customFieldsRaw(includeNames: ["Products"]) {
+          name
+          value
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetChannelsQuery__
+ *
+ * To run a query within a React component, call `useGetChannelsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetChannelsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetChannelsQuery({
+ *   variables: {
+ *      locale: // value for 'locale'
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetChannelsQuery(baseOptions?: Apollo.QueryHookOptions<GetChannelsQuery, GetChannelsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetChannelsQuery, GetChannelsQueryVariables>(GetChannelsDocument, options);
+      }
+export function useGetChannelsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetChannelsQuery, GetChannelsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetChannelsQuery, GetChannelsQueryVariables>(GetChannelsDocument, options);
+        }
+export type GetChannelsQueryHookResult = ReturnType<typeof useGetChannelsQuery>;
+export type GetChannelsLazyQueryHookResult = ReturnType<typeof useGetChannelsLazyQuery>;
+export type GetChannelsQueryResult = Apollo.QueryResult<GetChannelsQuery, GetChannelsQueryVariables>;
 export const GetProductPricesDocument = gql`
     query getProductPrices($locale: Locale, $id: String) {
   product(id: $id) {

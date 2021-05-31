@@ -12,7 +12,6 @@ import { setProductsQuery, setProjectQuery } from '../../redux/customAppPrices';
 import PricesSelectProduct from './prices-select-product';
 
 const PricesStart = (): JSX.Element => {
-  const [isDataFetchStarted, setIsDataFetchStarted] = useState<boolean>(false);
   const [isDataReady, setIsDataReady] = useState<boolean>(false);
   const locale = GQLCurrentLocale();
   const dispatch = useDispatch();
@@ -21,6 +20,7 @@ const PricesStart = (): JSX.Element => {
   const [getProjectQuery, projectState] = useGetProjectLazyQuery(GQLQueryOptions);
   const [getProductsQuery, productsState] = useGetProductsLazyQuery(GQLQueryOptions);
 
+  const hasCalled = projectState.called || productsState.called;
   const hasError = projectState.error || productsState.error;
   const isLoading = projectState.loading || productsState.loading;
 
@@ -30,8 +30,6 @@ const PricesStart = (): JSX.Element => {
 
     const variables: GetProductsQueryVariables = { locale };
     getProductsQuery({ variables });
-
-    setIsDataFetchStarted(true);
   }, []);
 
   // CommerceTools UI Error handling
@@ -45,7 +43,7 @@ const PricesStart = (): JSX.Element => {
 
   // Storing data in redux
   useEffect(() => {
-    if (isDataFetchStarted && !isLoading && !hasError) {
+    if (hasCalled && !isLoading && !hasError) {
       dispatch(setProjectQuery(projectState.data));
       dispatch(setProductsQuery(productsState.data));
 
@@ -59,7 +57,7 @@ const PricesStart = (): JSX.Element => {
     <>
       <Text.Headline as="h2">Prices</Text.Headline>
 
-      {isLoading && <LoadingSpinner scale="s">Loading products</LoadingSpinner>}
+      {isLoading && <LoadingSpinner>Loading products</LoadingSpinner>}
 
       {isDataReady && (
         <>

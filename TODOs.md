@@ -24,11 +24,12 @@
 - OK - Build redux setup
 - OK - Build types for reference state
 - OK - Remove reference types - Not using it anyway
-- Build POC example for updating several variant prices at once (With price pr. channel)
+- OK - Build POC example for updating several variant prices at once
   - OK - Build money input component to hide away field & money complexity
   - OK - Update prices in redux on money input blur?
   - OK - Update ProductPrices after saving new prices
-- Init redux state at route start component. Remove data used in other components
+- OK - Build POC example for displaying a table with prices for storage / subscription matrix
+- OK - Update package versions
 - UI & styling
 - Build routes and menu
 - Make a reusable wrapper component for loading data.

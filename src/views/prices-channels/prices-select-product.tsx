@@ -3,13 +3,11 @@
  */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CustomFormModalPage, InfoModalPage } from '@commercetools-frontend/application-components';
-import { setSelectedProduct } from '../../redux/customAppPrices';
+import { InfoModalPage } from '@commercetools-frontend/application-components';
+import { setSelectedProduct, removeSelectedProduct } from '../../redux/customAppPrices';
 import ProductsTable from '../../components/products-table';
 import { ListProduct, ReduxState } from '../../types';
 import PricesLoad from './prices-load';
-import MoneyInput from '@commercetools-uikit/money-input';
-import TextInput from '@commercetools-uikit/text-input';
 
 const PricesSelectProduct = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -32,7 +30,7 @@ const PricesSelectProduct = (): JSX.Element => {
       <InfoModalPage
         title={`Prices: ${selectedProduct?.masterData.current.name}`}
         isOpen={hasSelectedProduct}
-        onClose={() => dispatch(setSelectedProduct(null))}
+        onClose={() => dispatch(removeSelectedProduct())}
         topBarCurrentPathLabel={selectedProduct?.masterData.current.name}
         topBarPreviousPathLabel="Back"
       >

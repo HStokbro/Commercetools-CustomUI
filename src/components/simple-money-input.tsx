@@ -15,8 +15,8 @@ type MoneyInputValue = { amount: string; currencyCode: string };
 
 type Props = {
   price: ProductPrice;
-  onBlur: (priceValue: BaseMoney) => void;
-  isDisabled: boolean;
+  onValueUpdated: (priceValue: BaseMoney) => void;
+  isDisabled?: boolean;
 };
 
 const SimpleMoneyInput = (props: Props): JSX.Element => {
@@ -42,7 +42,9 @@ const SimpleMoneyInput = (props: Props): JSX.Element => {
         // Is called twice. Once for currency. Once for amount.
         if (event.target.name.endsWith('.amount')) {
           const value: BaseMoney = MoneyInput.convertToMoneyValue(inputValue, localeForMoney);
-          props.onBlur(value);
+          if (value.centAmount !== props.price.value.centAmount) {
+            props.onValueUpdated(value);
+          }
         }
       }}
       isDisabled={props.isDisabled}
@@ -50,6 +52,10 @@ const SimpleMoneyInput = (props: Props): JSX.Element => {
       horizontalConstraint={4}
     />
   );
+};
+
+SimpleMoneyInput.defaultProps = {
+  isDisabled: false,
 };
 
 SimpleMoneyInput.displayName = 'SimpleMoneyInput';

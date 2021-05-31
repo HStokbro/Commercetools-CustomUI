@@ -74,7 +74,7 @@ const PricesUpdate = (): JSX.Element => {
   if (!variants) return null;
   return (
     <>
-      {loading && <LoadingSpinner scale="s">Saving prices</LoadingSpinner>}
+      {loading && <LoadingSpinner>Saving prices</LoadingSpinner>}
 
       <PrimaryButton label="Save" onClick={() => save()} isDisabled={loading} />
 
@@ -110,7 +110,7 @@ const PricesUpdate = (): JSX.Element => {
                   <SimpleMoneyInput
                     price={price as ProductPrice}
                     isDisabled={loading}
-                    onBlur={(priceValue) => {
+                    onValueUpdated={(priceValue) => {
                       dispatch(updatePriceValue({ variantId: variant.id, priceId: price.id, priceValue }));
                     }}
                   />

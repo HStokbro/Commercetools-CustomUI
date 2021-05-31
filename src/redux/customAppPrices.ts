@@ -43,6 +43,10 @@ const customAppPrices = createSlice({
     setSelectedProduct: (state, action: PayloadAction<ListProduct>) => {
       state.selectedProduct = action.payload;
     },
+    removeSelectedProduct: (state) => {
+      state.selectedProduct = null;
+      state.productPrices = null;
+    },
     setProductPrices: (state, action: PayloadAction<ProductPricesFragment>) => {
       state.productPrices = action.payload;
     },
@@ -61,6 +65,7 @@ export const {
   setProductTypesQuery,
   setCategoriesQuery,
   setSelectedProduct,
+  removeSelectedProduct,
   setProductPrices,
   updatePriceValue,
 } = customAppPrices.actions;
